@@ -10,21 +10,6 @@
 </head>
 
 <body>
-    <div class="tab-buttons-container">
-        <button id="tab-btn-1" class="tab-button">1</button>
-        <button id="tab-btn-2" class="tab-button">2</button>
-        <button id="tab-btn-3" class="tab-button">3</button>
-    </div>
-    <div>
-        <div id="tab-cnt-1" class="tab-content">1</div>
-        <div id="tab-cnt-2" class="tab-content">2</div>
-        <div id="tab-cnt-3" class="tab-content">3</div>
-    </div>
-    <img id="img-1" />
-
-    <!-- Скрипт обработки вкладок -->
-    <script src="common/tabs.js"></script>
-
     <!-- SVG-картинки -->
     <script src="common/svg.js"></script>
     <script>
@@ -40,29 +25,73 @@
         });
     </script>
 
+    <!-- Рендер HTML -->
+    <script src="common/render.js"></script>
+    <!-- Настройка вкладок -->
+    <script src="common/tabs.js"></script>
     <script>
-        const tabs = [1, 2, 3].map(i => ({
-            button: document.getElementById(`tab-btn-${i}`),
-            content: document.getElementById(`tab-cnt-${i}`),
+        const testContentForTabs = {
+            [1]: {
+                title: 'Точки',
+                content: [
+                    SVGIcons.POINT_DISABLED,
+                    SVGIcons.POINT_DISABLED,
+                    SVGIcons.POINT_ACTIVE,
+                    SVGIcons.POINT_ACTIVE,
+                    SVGIcons.POINT_EMPTY,
+                    SVGIcons.POINT_EMPTY,
+                ],
+            },
+            [2]: {
+                title: 'Кнопки',
+                content: [
+                    SVGIcons.BUTTON_ADD_ENABLED,
+                    SVGIcons.BUTTON_ADD_DISABLED,
+                    SVGIcons.BUTTON_SUB_ENABLED,
+                    SVGIcons.BUTTON_SUB_DISABLED,
+                ],
+            },
+            [3]: {
+                title: 'Квадратики',
+                content: [
+                    SVGIcons.RECT,
+                    SVGIcons.RECT,
+                    SVGIcons.RECT,
+                ],
+            },
+        }
+
+        const tabs = Object.keys(testContentForTabs).map(key => ({
+            button: render(
+                HTMLTags.Div,
+                { class: 'tab-button' },
+                testContentForTabs[key].title,
+            ),
+            content: render(
+                HTMLTags.Div,
+                { class: 'tab-content' },
+                testContentForTabs[key].content.map(src => render(HTMLTags.Img, { src })),
+            ),
         }));
+
+        document.body.append(
+            render(
+                HTMLTags.Div,
+                { class: 'tab-buttons-container' },
+                tabs.map(x => x.button),
+            ),
+            render(
+                HTMLTags.Div,
+                {},
+                tabs.map(x => x.content),
+            ),
+        );
 
         configureTabsAndButtons({
             tabs: tabs,
             activeTabIndex: 0,
             activeStyleClass: 'active',
         });
-
-        const img = document.getElementById('img-1');
-        let i = 0;
-        const svgItems = Object.values(SVGIcons);
-
-        img.src = svgItems[i];
-
-        img.onclick = function () {
-            i++;
-            if (i >= svgItems.length) i = 0;
-            img.src = svgItems[i];
-        }
     </script>
 </body>
 

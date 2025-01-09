@@ -20,9 +20,25 @@
         <div id="tab-cnt-2" class="tab-content">2</div>
         <div id="tab-cnt-3" class="tab-content">3</div>
     </div>
+    <img id="img-1" />
 
-    <!--Скрипт обработки вкладок -->
+    <!-- Скрипт обработки вкладок -->
     <script src="common/tabs.js"></script>
+
+    <!-- SVG-картинки -->
+    <script src="common/svg.js"></script>
+    <script>
+        const SVGIcons = Object.freeze({
+            POINT_EMPTY: SVGtoData(SVG_POINT_EMPTY),
+            POINT_ACTIVE: SVGtoData(SVG_POINT_ACTIVE),
+            POINT_DISABLED: SVGtoData(SVG_POINT_DISABLED),
+            BUTTON_ADD_ENABLED: SVGtoData(SVG_BUTTON_ADD_ENABLED),
+            BUTTON_ADD_DISABLED: SVGtoData(SVG_BUTTON_ADD_DISABLED),
+            BUTTON_SUB_ENABLED: SVGtoData(SVG_BUTTON_SUB_ENABLED),
+            BUTTON_SUB_DISABLED: SVGtoData(SVG_BUTTON_SUB_DISABLED),
+            RECT: SVGtoData(SVG_RECT),
+        });
+    </script>
 
     <script>
         const tabs = [1, 2, 3].map(i => ({
@@ -35,6 +51,18 @@
             activeTabIndex: 0,
             activeStyleClass: 'active',
         });
+
+        const img = document.getElementById('img-1');
+        let i = 0;
+        const svgItems = Object.values(SVGIcons);
+
+        img.src = svgItems[i];
+
+        img.onclick = function () {
+            i++;
+            if (i >= svgItems.length) i = 0;
+            img.src = svgItems[i];
+        }
     </script>
 </body>
 

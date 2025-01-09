@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark MtA Char Sheet</title>
+</head>
+
+<style>
+    /* Стили вкладок */
+    .tab-buttons-container {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    .tab-button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+    }
+
+    .tab-button:hover {
+        background-color: #ddd;
+    }
+
+    .tab-button.tab-button-active {
+        background-color: #ccc;
+    }
+
+    .tab-content {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+</style>
+
+<body>
+    <div class="tab-buttons-container">
+        <button id="tab-btn-1" class="tab-button">1</button>
+        <button id="tab-btn-2" class="tab-button">2</button>
+        <button id="tab-btn-3" class="tab-button">3</button>
+    </div>
+    <div>
+        <div id="tab-cnt-1" class="tab-content">1</div>
+        <div id="tab-cnt-2" class="tab-content">2</div>
+        <div id="tab-cnt-3" class="tab-content">3</div>
+    </div>
+</body>
+
+<!--Скрипт обработки вкладок -->
+<script>
+    function configureTabsAndButtons(tabs, activeTabIndex) {
+        const ACTIVE_BUTTON_CLASS = ' tab-button-active';
+        const EMPTY = '';
+        const DISPLAY_NONE = 'none';
+        const DISPLAY_BLOCK = 'block';
+
+        for (const curTab of tabs) {
+            curTab.button.onclick = function () {
+                for (const tab of tabs) {
+                    tab.button.className = tab.button.className.replace(ACTIVE_BUTTON_CLASS, EMPTY);
+                    tab.content.style.display = DISPLAY_NONE;
+                }
+
+                curTab.button.className += ACTIVE_BUTTON_CLASS;
+                curTab.content.style.display = DISPLAY_BLOCK;
+            };
+        }
+
+        tabs?.[activeTabIndex]?.button?.click();
+    }
+</script>
+
+
+<script>
+    const tabs = [1, 2, 3].map(i => ({
+        button: document.getElementById(`tab-btn-${i}`),
+        content: document.getElementById(`tab-cnt-${i}`),
+    }));
+
+    configureTabsAndButtons(tabs, 0);
+</script>
+
+</html>

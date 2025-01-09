@@ -39,6 +39,10 @@
         border: 1px solid #ccc;
         border-top: none;
     }
+
+    .display-block {
+        display: block;
+    }
 </style>
 
 <body>
@@ -52,40 +56,37 @@
         <div id="tab-cnt-2" class="tab-content">2</div>
         <div id="tab-cnt-3" class="tab-content">3</div>
     </div>
-</body>
 
-<!--Скрипт обработки вкладок -->
-<script>
-    function configureTabsAndButtons(tabs, activeTabIndex) {
-        const ACTIVE_BUTTON_CLASS = ' tab-button-active';
-        const EMPTY = '';
-        const DISPLAY_NONE = 'none';
-        const DISPLAY_BLOCK = 'block';
+    <!--Скрипт обработки вкладок -->
+    <script>
+        function configureTabsAndButtons(tabs, activeTabIndex) {
+            const ACTIVE_BUTTON_CLASS = 'tab-button-active';
+            const DISPLAY_BLOCK_CLASS = 'display-block';
 
-        for (const curTab of tabs) {
-            curTab.button.onclick = function () {
-                for (const tab of tabs) {
-                    tab.button.className = tab.button.className.replace(ACTIVE_BUTTON_CLASS, EMPTY);
-                    tab.content.style.display = DISPLAY_NONE;
-                }
+            for (const curTab of tabs) {
+                curTab.button.onclick = function () {
+                    for (const tab of tabs) {
+                        tab.button.classList.remove(ACTIVE_BUTTON_CLASS);
+                        tab.content.classList.remove(DISPLAY_BLOCK_CLASS);
+                    }
 
-                curTab.button.className += ACTIVE_BUTTON_CLASS;
-                curTab.content.style.display = DISPLAY_BLOCK;
-            };
+                    curTab.button.classList.add(ACTIVE_BUTTON_CLASS);
+                    curTab.content.classList.add(DISPLAY_BLOCK_CLASS);
+                };
+            }
+
+            tabs?.[activeTabIndex]?.button?.click();
         }
+    </script>
 
-        tabs?.[activeTabIndex]?.button?.click();
-    }
-</script>
+    <script>
+        const tabs = [1, 2, 3].map(i => ({
+            button: document.getElementById(`tab-btn-${i}`),
+            content: document.getElementById(`tab-cnt-${i}`),
+        }));
 
-
-<script>
-    const tabs = [1, 2, 3].map(i => ({
-        button: document.getElementById(`tab-btn-${i}`),
-        content: document.getElementById(`tab-cnt-${i}`),
-    }));
-
-    configureTabsAndButtons(tabs, 0);
-</script>
+        configureTabsAndButtons(tabs, 0);
+    </script>
+</body>
 
 </html>

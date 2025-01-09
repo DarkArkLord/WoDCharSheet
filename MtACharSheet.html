@@ -59,9 +59,8 @@
 
     <!--Скрипт обработки вкладок -->
     <script>
-        function configureTabsAndButtons(tabs, activeTabIndex) {
-            const ACTIVE_BUTTON_CLASS = 'tab-button-active';
-            const DISPLAY_BLOCK_CLASS = 'display-block';
+        function configureTabsAndButtons(tabs, activeTabIndex, styles) {
+            const { ACTIVE_BUTTON_CLASS, DISPLAY_BLOCK_CLASS } = styles;
 
             for (const curTab of tabs) {
                 curTab.button.onclick = function () {
@@ -85,7 +84,7 @@
             content: document.getElementById(`tab-cnt-${i}`),
         }));
 
-        configureTabsAndButtons(tabs, 0);
+        configureTabsAndButtons(tabs, 0, { ACTIVE_BUTTON_CLASS: 'tab-button-active', DISPLAY_BLOCK_CLASS: 'display-block' });
     </script>
 </body>
 

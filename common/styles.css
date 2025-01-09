@@ -19,7 +19,7 @@
     background-color: #ddd;
 }
 
-.tab-button.tab-button-active {
+.tab-button.active {
     background-color: #ccc;
 }
 
@@ -30,7 +30,6 @@
     border-top: none;
 }
 
-/* Общее */
-.display-block {
+.tab-content.active {
     display: block;
 }

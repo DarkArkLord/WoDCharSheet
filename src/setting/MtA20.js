@@ -32,4 +32,31 @@ export const charConfig = Object.freeze({
             },
         ],
     },
+    skills: {
+        title: 'Abilities',
+        translation: 'Способности',
+        sections: [
+            {
+                title: 'Talents',
+                translation: 'Таланты',
+                values: [
+                    { title: 'Alertness', translation: 'Внимательность', },
+                ]
+            },
+            {
+                title: 'Skills',
+                translation: 'Навыки',
+                values: [
+                    { title: 'Crafts', translation: 'Ремесло', },
+                ]
+            },
+            {
+                title: 'Knowledges',
+                translation: 'Знания',
+                values: [
+                    { title: 'Academics', translation: 'Академизм', },
+                ]
+            },
+        ],
+    }
 });

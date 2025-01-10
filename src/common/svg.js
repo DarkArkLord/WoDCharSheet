@@ -189,3 +189,14 @@ function SVGtoData(svg) {
     // return `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svg.outerHTML)))}`;
     return `data:image/svg+xml;base64,${window.btoa(svg.outerHTML)}`;
 }
+
+export const SVGIcons = Object.freeze({
+    POINT_EMPTY: SVGtoData(SVG_POINT_EMPTY),
+    POINT_ACTIVE: SVGtoData(SVG_POINT_ACTIVE),
+    POINT_DISABLED: SVGtoData(SVG_POINT_DISABLED),
+    BUTTON_ADD_ENABLED: SVGtoData(SVG_BUTTON_ADD_ENABLED),
+    BUTTON_ADD_DISABLED: SVGtoData(SVG_BUTTON_ADD_DISABLED),
+    BUTTON_SUB_ENABLED: SVGtoData(SVG_BUTTON_SUB_ENABLED),
+    BUTTON_SUB_DISABLED: SVGtoData(SVG_BUTTON_SUB_DISABLED),
+    RECT: SVGtoData(SVG_RECT),
+});

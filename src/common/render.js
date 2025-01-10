@@ -1,4 +1,4 @@
-const HTMLTags = {
+export const HTMLTags = {
     Div: 'div',
     Table: 'table',
     TableRow: 'tr',
@@ -9,7 +9,7 @@ const HTMLTags = {
     Button: 'button',
 };
 
-function render(tag, attributes, ...childs) {
+export function render(tag, attributes, ...childs) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }

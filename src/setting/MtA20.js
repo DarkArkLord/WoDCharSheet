@@ -41,6 +41,16 @@ export const charConfig = Object.freeze({
                 translation: 'Таланты',
                 values: [
                     { title: 'Alertness', translation: 'Внимательность', },
+                    { title: 'Art', translation: 'Искусство', },
+                    { title: 'Athletics', translation: 'Атлетика', },
+                    { title: 'Awareness', translation: 'Шестое чувство', },
+                    { title: 'Brawl', translation: 'Драка', },
+                    { title: 'Empathy', translation: 'Эмпатия', },
+                    { title: 'Expression', translation: 'Красноречие', },
+                    { title: 'Intimidation', translation: 'Запугивание', },
+                    { title: 'Leadership', translation: 'Лидерство', },
+                    { title: 'Streetwise', translation: 'Знание улиц', },
+                    { title: 'Subterfuge', translation: 'Хитрость', },
                 ]
             },
             {
@@ -48,6 +58,7 @@ export const charConfig = Object.freeze({
                 translation: 'Навыки',
                 values: [
                     { title: 'Crafts', translation: 'Ремесло', },
+                    { title: 'Aaaaaaaa', translation: 'Aaaaaaaa', },
                 ]
             },
             {
@@ -55,6 +66,7 @@ export const charConfig = Object.freeze({
                 translation: 'Знания',
                 values: [
                     { title: 'Academics', translation: 'Академизм', },
+                    { title: 'Aaaaaaaa', translation: 'Aaaaaaaa', },
                 ]
             },
         ],

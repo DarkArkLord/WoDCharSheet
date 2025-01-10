@@ -58,7 +58,16 @@ export const charConfig = Object.freeze({
                 translation: 'Навыки',
                 values: [
                     { title: 'Crafts', translation: 'Ремесло', },
-                    { title: 'Aaaaaaaa', translation: 'Aaaaaaaa', },
+                    { title: 'Drive', translation: 'Вождение', },
+                    { title: 'Etiquette', translation: 'Этикет', },
+                    { title: 'Firearms', translation: 'Стрельба', },
+                    { title: 'Martial Arts', translation: 'Боевые искусства', },
+                    { title: 'Meditation', translation: 'Медитация', },
+                    { title: 'Melee', translation: 'Фехтование', },
+                    { title: 'Research', translation: 'Исследование', },
+                    { title: 'Stealth', translation: 'Скрытность', },
+                    { title: 'Survival', translation: 'Выживание', },
+                    { title: 'Technology', translation: 'Электроника', },
                 ]
             },
             {
@@ -66,7 +75,16 @@ export const charConfig = Object.freeze({
                 translation: 'Знания',
                 values: [
                     { title: 'Academics', translation: 'Академизм', },
-                    { title: 'Aaaaaaaa', translation: 'Aaaaaaaa', },
+                    { title: 'Computer', translation: 'Информатика', },
+                    { title: 'Cosmology', translation: 'Космология', },
+                    { title: 'Enigmas', translation: 'Загадки', },
+                    { title: 'Esoterica', translation: 'Эзотерика', },
+                    { title: 'Investigation', translation: 'Расследование', },
+                    { title: 'Law', translation: 'Законы', },
+                    { title: 'Medicine', translation: 'Медицина', },
+                    { title: 'Occult', translation: 'Оккультизм', },
+                    { title: 'Politics', translation: 'Политика', },
+                    { title: 'Science', translation: 'Наука', },
                 ]
             },
         ],

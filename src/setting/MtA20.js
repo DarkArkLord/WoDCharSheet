@@ -88,5 +88,26 @@ export const charConfig = Object.freeze({
                 ]
             },
         ],
+    },
+    spheres: {
+        title: 'Spheres',
+        translation: 'Сферы',
+        columns: [
+            [
+                { title: 'Correspondence', translation: 'Связи', },
+                { title: 'Entropy', translation: 'Энтропия', },
+                { title: 'Forces', translation: 'Силы', },
+            ],
+            [
+                { title: 'Life', translation: 'Жизнь', },
+                { title: 'Matter', translation: 'Материя', },
+                { title: 'Mind', translation: 'Разум', },
+            ],
+            [
+                { title: 'Prime', translation: 'Основы', },
+                { title: 'Spirit', translation: 'Дух', },
+                { title: 'Time', translation: 'Время', },
+            ],
+        ],
     }
 });

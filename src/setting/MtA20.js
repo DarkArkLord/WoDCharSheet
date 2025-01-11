@@ -1,4 +1,21 @@
-export const charConfig = Object.freeze({
+export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
+    header: [
+        [
+            { id: 'Name', translation: 'Имя', },
+            { id: 'Player', translation: 'Игрок', },
+            { id: 'Chronicle', translation: 'Хроника', },
+        ],
+        [
+            { id: 'Nature', translation: 'Натура', },
+            { id: 'Demeanor', translation: 'Маска', },
+            { id: 'Essence', translation: 'Аватар', },
+        ],
+        [
+            { id: 'Affiliation', translation: 'Фракция', },
+            { id: 'Sect', translation: 'Секта', },
+            { id: 'Concept', translation: 'Концепция', },
+        ],
+    ],
     states: {
         id: 'Attributes',
         translation: 'Атрибуты',
@@ -109,5 +126,34 @@ export const charConfig = Object.freeze({
                 { id: 'Time', translation: 'Время', },
             ],
         ],
-    }
+    },
+    footer: {
+        backgrounds: {
+            id: 'Backgrounds',
+            translation: 'Факты биографии',
+            variants: [
+                { id: 'Avatar', translation: 'Аватар', },
+            ]
+        },
+        arete: { id: 'Arete', translation: 'Арете', },
+        willpower: { id: 'Willpower', translation: 'Сила воли', },
+        quintessence: { id: 'Quintessence', translation: 'Квинтэссенция', },
+        paradox: { id: 'Paradox', translation: 'Парадокс', },
+        health: {
+            id: 'Health',
+            translation: 'Здоровье',
+            levels: [
+                { id: 'Bruised', translation: 'Задет', penalty: '-0', },
+                { id: 'Hurt', translation: 'Поврежден', penalty: '-1', },
+                { id: 'Injured', translation: 'Ранен', penalty: '-1', },
+                { id: 'Wounded', translation: 'Тяжело ранен', penalty: '-2', },
+                { id: 'Mauled', translation: 'Травмирован', penalty: '-2', },
+                { id: 'Crippled', translation: 'Искалечен', penalty: '-5', },
+                { id: 'Incapacitated', translation: 'Недееспособен', penalty: '  ', },
+            ]
+        },
+        experience: { id: 'Experience', translation: 'Опыт', },
+    },
+    // Add second page and other
+    aaaaaaaaa: { id: 'Aaaaaaa', translation: 'Aaaaaaaaa', },
 });

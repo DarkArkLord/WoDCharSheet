@@ -16,7 +16,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             { id: 'Concept', translation: 'Концепция', },
         ],
     ],
-    states: {
+    attributes: {
         id: 'Attributes',
         translation: 'Атрибуты',
         sections: [
@@ -49,7 +49,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             },
         ],
     },
-    skills: {
+    abilities: {
         id: 'Abilities',
         translation: 'Способности',
         sections: [
@@ -156,4 +156,151 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
     },
     // Add second page and other
     aaaaaaaaa: { id: 'Aaaaaaa', translation: 'Aaaaaaaaa', },
+});
+
+export const CHAR_EDIT_STATES = Object.freeze({
+    BASE: 'base',
+    POINTS: 'points',
+    EXP: 'exp',
+    RESULT: 'result'
+});
+
+export const CHAR_EDIT_STATES_TRANSLATIONS = Object.freeze({
+    [CHAR_EDIT_STATES.BASE]: 'Основа',
+    [CHAR_EDIT_STATES.POINTS]: 'Свободные точки',
+    [CHAR_EDIT_STATES.EXP]: 'Опыт',
+    [CHAR_EDIT_STATES.RESULT]: 'Итог',
+});
+
+export const CHAR_SETTINGS_TRANSLATIONS = 'Настройки';
+
+export const CHAR_VALIDATIONS = Object.freeze({
+    [CHAR_EDIT_STATES.BASE]: {
+        editable: true,
+        prev: [],
+        next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
+        attributes: {
+            sectionPoints: [7, 5, 3],
+            min: 1,
+            max: 5,
+            price: (total, prevTotal) => 1,
+        },
+        abilities: {
+            sectionPoints: [13, 9, 5],
+            min: 0,
+            max: 3,
+            price: (total, prevTotal) => 1,
+        },
+        spheres: {
+            freePoints: 6,
+            price: (total, prevTotal) => 1,
+        },
+        footer: {
+            backgrounds: {
+                freePoints: 7,
+                price: (total, prevTotal) => 1,
+            },
+            arete: {
+                min: 1,
+            },
+            willpower: {
+                min: 5,
+            }
+        },
+    },
+    [CHAR_EDIT_STATES.POINTS]: {
+        editable: true,
+        prev: [CHAR_EDIT_STATES.BASE],
+        next: [CHAR_EDIT_STATES.EXP],
+        freePoints: 15,
+        attributes: {
+            min: 0,
+            price: (total, prevTotal) => 5,
+        },
+        abilities: {
+            min: 0,
+            price: (total, prevTotal) => 2,
+        },
+        spheres: {
+            min: 0,
+            price: (total, prevTotal) => 7,
+        },
+        footer: {
+            backgrounds: {
+                min: 1,
+                price: (total, prevTotal) => 1,
+            },
+            arete: {
+                min: 0,
+                totalMax: 3,
+                price: (total, prevTotal) => 4,
+            },
+            willpower: {
+                min: 0,
+                price: (total, prevTotal) => 1,
+            }
+        },
+    },
+    [CHAR_EDIT_STATES.EXP]: {
+        editable: true,
+        prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
+        next: [],
+        attributes: {
+            min: 0,
+            price: (total, prevTotal) => total * 4,
+        },
+        abilities: {
+            min: 0,
+            price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 3 : total * 2,
+        },
+        spheres: {
+            min: 0,
+            price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
+        },
+        footer: {
+            backgrounds: {
+                min: 1,
+                price: (total, prevTotal) => total * 3,
+            },
+            arete: {
+                min: 0,
+                price: (total, prevTotal) => total * 8,
+            },
+            willpower: {
+                min: 0,
+                price: (total, prevTotal) => total,
+            }
+        },
+    },
+    [CHAR_EDIT_STATES.RESULT]: {
+        editable: false,
+        prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
+        next: [],
+        attributes: {
+            totalMin: 1,
+            totalMax: 5,
+        },
+        abilities: {
+            totalMin: 0,
+            totalMax: 5,
+        },
+        spheres: {
+            totalMin: 0,
+            totalMax: 5,
+        },
+        footer: {
+            backgrounds: {
+                totalMin: 0,
+                totalMax: 5,
+            },
+            arete: {
+                totalMin: 1,
+                totalMax: 10,
+            },
+            willpower: {
+                totalMin: 0,
+                totalMax: 10,
+            }
+        },
+    },
 });

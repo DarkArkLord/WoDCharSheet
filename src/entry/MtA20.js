@@ -12,6 +12,8 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { configureTabsAndButtons } from '../common/tabs.js'
 
+import { UIPointsLine } from '../common/elements.js'
+
 const testContentForTabs = {
     [1]: {
         title: 'Точки',
@@ -55,6 +57,19 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
         testContentForTabs[key].content.map(src => render(HTMLTags.Img, { src })),
     ),
 }));
+
+const pointsLine = new UIPointsLine(5);
+pointsLine.element.style.display = 'inline-block';
+
+tabs.unshift({
+    button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),
+    content: render(
+        HTMLTags.Div,
+        { class: 'tab-content' },
+        'Тут лежат картинки',
+        pointsLine.element,
+    ),
+});
 
 document.body.append(
     render(

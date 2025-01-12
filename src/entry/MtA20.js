@@ -1,4 +1,4 @@
-import '../common/styles.css'
+import '../common/styles.js'
 
 const CHAR_SHEET_NAME = 'Dark MtA 20th Char Sheet'
 const CHAR_SHEET_VERSION = 'v0.1';
@@ -59,15 +59,45 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
 }));
 
 const pointsLine = new UIPointsLine(5);
-pointsLine.element.style.display = 'inline-block';
+// pointsLine.element.style.display = 'inline-block';
 
 tabs.unshift({
     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),
     content: render(
         HTMLTags.Div,
         { class: 'tab-content' },
-        'Тут лежат картинки',
-        pointsLine.element,
+        render(
+            HTMLTags.Div,
+            { class: 'table' },
+            render(
+                HTMLTags.Div,
+                { class: 'tr' },
+                render(
+                    HTMLTags.Div,
+                    { class: 'td' },
+                    'Тут лежат картинки абобусы',
+                ),
+                render(
+                    HTMLTags.Div,
+                    { class: 'td' },
+                    pointsLine.element,
+                ),
+            ),
+            render(
+                HTMLTags.Div,
+                { class: 'tr' },
+                render(
+                    HTMLTags.Div,
+                    { class: 'td' },
+                    'Тут лежат картинки',
+                ),
+                render(
+                    HTMLTags.Div,
+                    { class: 'td' },
+                    (new UIPointsLine(7)).element,
+                ),
+            ),
+        ),
     ),
 });
 

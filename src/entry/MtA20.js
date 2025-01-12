@@ -59,7 +59,12 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
 }));
 
 const pointsLine = new UIPointsLine(5);
-// pointsLine.element.style.display = 'inline-block';
+pointsLine.addButton.setOnClickEvent(() => {
+    pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
+});
+pointsLine.subButton.setOnClickEvent(() => {
+    pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
+});
 
 tabs.unshift({
     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),

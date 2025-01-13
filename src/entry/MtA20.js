@@ -12,7 +12,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { configureTabsAndButtons } from '../common/tabs.js'
 
-import { UIPointsLine } from '../common/elements.js'
+import { UIPointsLine } from '../common/uiElements.js'
 
 const testContentForTabs = {
     [1]: {
@@ -65,6 +65,7 @@ pointsLine.addButton.setOnClickEvent(() => {
 pointsLine.subButton.setOnClickEvent(() => {
     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
 });
+pointsLine.setValue(2, 2);
 
 tabs.unshift({
     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),

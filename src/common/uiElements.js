@@ -1,7 +1,9 @@
 import { HTMLTags, render } from './render.js'
 import { SVGIcons } from './svg.js'
 
-const HIDDEN_ELEMENT_CLASS = 'hidden';
+const CSS = Object.freeze({
+    HIDDEN: 'hidden',
+});
 
 class UIIcon {
     constructor(baseImage) {
@@ -58,9 +60,9 @@ class UIButton extends UIIcon {
     setVisible(isVisible) {
         this.isVisible = isVisible;
         if (isVisible) {
-            this.element.classList.remove(HIDDEN_ELEMENT_CLASS);
+            this.element.classList.remove(CSS.HIDDEN);
         } else {
-            this.element.classList.add(HIDDEN_ELEMENT_CLASS);
+            this.element.classList.add(CSS.HIDDEN);
         }
     }
 
@@ -84,5 +86,19 @@ export class UIPointsLine {
             this.points.map(e => e.element),
             this.addButton.element,
         );
+    }
+
+    setValue(disabled, active) {
+        for (const point of this.points) {
+            point.setEmpty();
+        }
+
+        for (let i = 0; i < disabled; i++) {
+            this.points[i]?.setDisable();
+        }
+
+        for (let i = 0; i < active; i++) {
+            this.points[disabled + i]?.setActive();
+        }
     }
 }

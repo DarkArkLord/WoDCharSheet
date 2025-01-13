@@ -12,7 +12,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { configureTabsAndButtons } from '../common/tabs.js'
 
-import { UIPointsLine } from '../common/uiElementsBase.js'
+import { UIText, UIPointsLine } from '../common/uiElementsBase.js'
 
 const testContentForTabs = {
     [1]: {
@@ -58,7 +58,7 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
     ),
 }));
 
-const pointsLine = new UIPointsLine(5, true);
+const pointsLine = new UIPointsLine(5, true, { class: 'td left-padding-5px' });
 pointsLine.addButton.setOnClickEvent(() => {
     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
 });
@@ -78,30 +78,14 @@ tabs.unshift({
             render(
                 HTMLTags.Div,
                 { class: 'tr' },
-                render(
-                    HTMLTags.Div,
-                    { class: 'td' },
-                    'Тут лежат картинки абобусы',
-                ),
-                render(
-                    HTMLTags.Div,
-                    { class: 'td' },
-                    pointsLine.element,
-                ),
+                (new UIText('Тут лежат картинки абобусы', { class: 'td' })).element,
+                pointsLine.element,
             ),
             render(
                 HTMLTags.Div,
                 { class: 'tr' },
-                render(
-                    HTMLTags.Div,
-                    { class: 'td' },
-                    'Тут лежат картинки',
-                ),
-                render(
-                    HTMLTags.Div,
-                    { class: 'td' },
-                    (new UIPointsLine(7, false)).element,
-                ),
+                (new UIText('Тут лежат картинки', { class: 'td' })).element,
+                (new UIPointsLine(7, false, { class: 'td left-padding-5px' })).element,
             ),
         ),
     ),

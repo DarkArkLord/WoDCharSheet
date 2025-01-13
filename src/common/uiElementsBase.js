@@ -5,6 +5,16 @@ const CSS = Object.freeze({
     HIDDEN: 'hidden',
 });
 
+export class UIText {
+    constructor(text, wrapAttrubutes) {
+        this.element = render(HTMLTags.Div, wrapAttrubutes, text);
+    }
+
+    setText(text) {
+        this.element.innerHTML = text;
+    }
+}
+
 export class UIIcon {
     constructor(baseImage) {
         this.element = render(HTMLTags.Img, { src: baseImage });
@@ -72,7 +82,7 @@ export class UIButton extends UIIcon {
 }
 
 export class UIPointsLine {
-    constructor(pointsCount, showButtons) {
+    constructor(pointsCount, showButtons, wrapAttrubutes = {}) {
         this.pointsCount = pointsCount;
 
         this.subButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
@@ -84,7 +94,7 @@ export class UIPointsLine {
 
         this.element = render(
             HTMLTags.Div,
-            {},
+            wrapAttrubutes,
             this.subButton.element,
             this.points.map(e => e.element),
             this.addButton.element,

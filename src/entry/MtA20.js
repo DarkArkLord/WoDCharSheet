@@ -12,7 +12,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { configureTabsAndButtons } from '../common/tabs.js'
 
-import { UIPointsLine } from '../common/uiElements.js'
+import { UIPointsLine } from '../common/uiElementsBase.js'
 
 const testContentForTabs = {
     [1]: {
@@ -58,7 +58,7 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
     ),
 }));
 
-const pointsLine = new UIPointsLine(5);
+const pointsLine = new UIPointsLine(5, true);
 pointsLine.addButton.setOnClickEvent(() => {
     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
 });
@@ -100,7 +100,7 @@ tabs.unshift({
                 render(
                     HTMLTags.Div,
                     { class: 'td' },
-                    (new UIPointsLine(7)).element,
+                    (new UIPointsLine(7, false)).element,
                 ),
             ),
         ),

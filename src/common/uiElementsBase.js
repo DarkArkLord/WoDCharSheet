@@ -5,7 +5,7 @@ const CSS = Object.freeze({
     HIDDEN: 'hidden',
 });
 
-class UIIcon {
+export class UIIcon {
     constructor(baseImage) {
         this.element = render(HTMLTags.Img, { src: baseImage });
     }
@@ -15,7 +15,7 @@ class UIIcon {
     }
 }
 
-class UIPoint extends UIIcon {
+export class UIPoint extends UIIcon {
     constructor() {
         super(SVGIcons.POINT_EMPTY);
     }
@@ -33,7 +33,7 @@ class UIPoint extends UIIcon {
     }
 }
 
-class UIButton extends UIIcon {
+export class UIButton extends UIIcon {
     constructor(enableImage, disableImage) {
         super(enableImage);
 
@@ -72,12 +72,15 @@ class UIButton extends UIIcon {
 }
 
 export class UIPointsLine {
-    constructor(pointsCount) {
+    constructor(pointsCount, showButtons) {
         this.pointsCount = pointsCount;
 
         this.subButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         this.points = Array.from(Array(pointsCount)).map(_ => new UIPoint());
         this.addButton = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+
+        this.subButton.setVisible(showButtons);
+        this.addButton.setVisible(showButtons);
 
         this.element = render(
             HTMLTags.Div,

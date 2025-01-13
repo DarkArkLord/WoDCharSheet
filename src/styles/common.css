@@ -1,3 +1,7 @@
 .hidden {
     display: none;
 }
+
+.left-padding-5px {
+    padding-left: 5px;
+}

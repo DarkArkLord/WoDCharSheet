@@ -14,21 +14,14 @@ export class UITextInput {
     constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined) {
         this.input = render(HTMLTags.Input, { type, min, max });
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
-
-        this.isVisible = true;
     }
 
     getValue() {
         return this.input.value;
     }
 
-    setVisible(isVisible) {
-        this.isVisible = isVisible;
-        if (isVisible) {
-            this.element.classList.remove(CSS.HIDDEN);
-        } else {
-            this.element.classList.add(CSS.HIDDEN);
-        }
+    setReadOnly(isReadOnly) {
+        this.element.readOnly = isReadOnly;
     }
 }
 

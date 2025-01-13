@@ -12,7 +12,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { configureTabsAndButtons } from '../common/tabs.js'
 
-import { UIText, UIPointsLine } from '../common/uiElementsBase.js'
+import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElementsBase.js'
 
 const testContentForTabs = {
     [1]: {
@@ -79,12 +79,16 @@ tabs.unshift({
                 HTMLTags.Div,
                 { class: 'tr' },
                 (new UIText('Тут лежат картинки абобусы', { class: 'td' })).element,
+                (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Number, 0, 6)).element,
+                (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
                 pointsLine.element,
             ),
             render(
                 HTMLTags.Div,
                 { class: 'tr' },
                 (new UIText('Тут лежат картинки', { class: 'td' })).element,
+                (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
+                (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Text)).element,
                 (new UIPointsLine(7, false, { class: 'td left-padding-5px' })).element,
             ),
         ),

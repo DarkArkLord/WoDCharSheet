@@ -5,6 +5,22 @@ const CSS = Object.freeze({
     HIDDEN: 'hidden',
 });
 
+export const UITextInputType = Object.freeze({
+    Text: 'text',
+    Number: 'number',
+});
+
+export class UITextInput {
+    constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined) {
+        this.input = render(HTMLTags.Input, { type, min, max });
+        this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
+    }
+
+    getValue() {
+        return this.input.value;
+    }
+}
+
 export class UIText {
     constructor(text, wrapAttrubutes) {
         this.element = render(HTMLTags.Div, wrapAttrubutes, text);

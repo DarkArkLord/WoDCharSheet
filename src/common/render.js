@@ -1,12 +1,7 @@
 export const HTMLTags = {
     Div: 'div',
-    Table: 'table',
-    TableRow: 'tr',
-    TableData: 'td',
     Img: 'img',
-    h2: 'h2',
-    TextArea: 'textarea',
-    Button: 'button',
+    Input: 'input',
 };
 
 export function render(tag, attributes, ...childs) {

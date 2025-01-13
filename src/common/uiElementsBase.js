@@ -14,6 +14,8 @@ export class UITextInput {
     constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined) {
         this.input = render(HTMLTags.Input, { type, min, max });
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
+
+        this.isVisible = true;
     }
 
     getValue() {
@@ -22,6 +24,15 @@ export class UITextInput {
 
     setReadOnly(isReadOnly) {
         this.element.readOnly = isReadOnly;
+    }
+
+    setVisible(isVisible) {
+        this.isVisible = isVisible;
+        if (isVisible) {
+            this.element.classList.remove(CSS.HIDDEN);
+        } else {
+            this.element.classList.add(CSS.HIDDEN);
+        }
     }
 }
 

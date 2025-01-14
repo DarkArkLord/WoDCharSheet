@@ -60,10 +60,21 @@ export class UITextInput {
 export class UIText {
     constructor(text, wrapAttrubutes) {
         this.element = render(HTMLTags.Div, wrapAttrubutes, text);
+
+        this.isVisible = true;
     }
 
     setText(text) {
         this.element.innerHTML = text;
+    }
+
+    setVisible(isVisible) {
+        this.isVisible = isVisible;
+        if (isVisible) {
+            this.element.classList.remove(CSS.HIDDEN);
+        } else {
+            this.element.classList.add(CSS.HIDDEN);
+        }
     }
 }
 

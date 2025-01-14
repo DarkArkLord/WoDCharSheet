@@ -62,9 +62,13 @@ class CharValueWrapper {
     }
 }
 
+const DEFAULT_POINTS_COUNT = 5;
+
 export class CharValueElement {
     constructor(keeper, valueInfo, validations, validationsField, editValudations, editState) {
         // this.input = { keeper, valueInfo, validations, validationsField, editValudations, editState, };
+        const instance = this;
+
         this.info = valueInfo;
 
         this.validations = editValudations[editState];
@@ -74,9 +78,42 @@ export class CharValueElement {
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
         this.wrapper = new CharValueWrapper(this.data, editState, this.valueValidations?.min, this.validations?.prev, this.validations?.next);
 
+        const pointsCount = this.totalValidations?.totalMax ?? DEFAULT_POINTS_COUNT;
+        const isPointsEditable = !!this.valueValidations;
+
         this.text = new UIText('', { class: CSS.TABLE_DATA });
         this.specialty = new UITextInput({ class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
-        this.points = new UIPointsLine(5, true, { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
+        this.points = new UIPointsLine(pointsCount, isPointsEditable, { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
+        this.pointsText = new UIText('', { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
+
+        this.pointsText.setVisible(isPointsEditable);
+
+        this.specialty.setOnChangedEvent(() => {
+            const specialty = instance.specialty.getValue();
+            instance.wrapper.setSpecialty(specialty);
+
+            instance.update();
+            // validate
+            // global update
+        });
+
+        this.points.subButton.setOnClickEvent(() => {
+            const value = instance.wrapper.getValue();
+            instance.wrapper.setValue(value - 1);
+
+            instance.update();
+            // validate
+            // global update
+        });
+
+        this.points.subButton.setOnClickEvent(() => {
+            const value = instance.wrapper.getValue();
+            instance.wrapper.setValue(value + 1);
+
+            instance.update();
+            // validate
+            // global update
+        });
 
         this.element = render(
             HTMLTags.Div,
@@ -87,6 +124,7 @@ export class CharValueElement {
                 this.text,
                 this.specialty,
                 this.points,
+                this.pointsText,
             ),
         );
 
@@ -98,12 +136,14 @@ export class CharValueElement {
         const value = this.wrapper.getValue()
         const hasNextValue = !!this.wrapper.getNextValue();
 
-        const specialty = this.valueValidations?.specialty;
-        if (specialty) {
+        this.pointsText.setText(`(${value})`);
+
+        const specialtyEditableFrom = this.valueValidations?.specialty;
+        if (specialtyEditableFrom) {
             this.specialty.setVisible(true);
             this.specialty.setValue(this.wrapper.getSpecialty());
 
-            const isSpecialtyEditable = this.wrapper.getTotalValue() >= specialty;
+            const isSpecialtyEditable = this.wrapper.getTotalValue() >= specialtyEditableFrom;
             this.specialty.setReadOnly(isSpecialtyEditable && !hasNextValue);
 
             this.text.setText(this.info.translation);

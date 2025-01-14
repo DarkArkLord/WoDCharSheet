@@ -117,10 +117,10 @@ export class CharValueElement {
 
         this.element = render(
             HTMLTags.Div,
-            CSS.TABLE,
+            { class: CSS.TABLE },
             render(
                 HTMLTags.Div,
-                CSS.TABLE_ROW,
+                { class: CSS.TABLE_ROW },
                 this.text,
                 this.specialty,
                 this.points,

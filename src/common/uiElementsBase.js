@@ -12,6 +12,8 @@ export const UITextInputType = Object.freeze({
 
 export class UITextInput {
     constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined) {
+        const instance = this;
+
         this.input = render(HTMLTags.Input, { type, min, max });
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
 

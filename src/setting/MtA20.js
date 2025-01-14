@@ -175,7 +175,6 @@ export const CHAR_SETTINGS_TRANSLATIONS = 'Настройки';
 
 export const CHAR_VALIDATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: {
-        editable: true,
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         attributes: {
@@ -209,7 +208,6 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
     },
     [CHAR_EDIT_STATES.POINTS]: {
-        editable: true,
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
@@ -244,7 +242,6 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
     },
     [CHAR_EDIT_STATES.EXP]: {
-        editable: true,
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         attributes: {

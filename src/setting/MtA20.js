@@ -179,7 +179,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         attributes: {
             sectionPoints: [7, 5, 3],
-            specialties: 4,
+            specialty: 4,
             min: 1,
             max: 5,
             price: (total, prevTotal) => 1,
@@ -212,12 +212,12 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
         attributes: {
-            specialties: 4,
+            specialty: 4,
             min: 0,
             price: (total, prevTotal) => 5,
         },
         abilities: {
-            specialties: 4,
+            specialty: 4,
             min: 0,
             price: (total, prevTotal) => 2,
         },
@@ -245,12 +245,12 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         attributes: {
-            specialties: 4,
+            specialty: 4,
             min: 0,
             price: (total, prevTotal) => total * 4,
         },
         abilities: {
-            specialties: 4,
+            specialty: 4,
             min: 0,
             price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 3 : total * 2,
         },

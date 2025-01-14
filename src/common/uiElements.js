@@ -71,7 +71,7 @@ export class CharValueElement {
 
         this.info = valueInfo;
 
-        this.validations = editValudations[editState];
+        this.validations = editValudations?.[editState];
         this.valueValidations = this.validations?.[validationsField];
         this.totalValidations = validations?.[validationsField];
 
@@ -106,7 +106,7 @@ export class CharValueElement {
             // global update
         });
 
-        this.points.subButton.setOnClickEvent(() => {
+        this.points.addButton.setOnClickEvent(() => {
             const value = instance.wrapper.getValue();
             instance.wrapper.setValue(value + 1);
 
@@ -121,10 +121,10 @@ export class CharValueElement {
             render(
                 HTMLTags.Div,
                 { class: CSS.TABLE_ROW },
-                this.text,
-                this.specialty,
-                this.points,
-                this.pointsText,
+                this.text.element,
+                this.specialty.element,
+                this.points.element,
+                this.pointsText.element,
             ),
         );
 
@@ -144,7 +144,7 @@ export class CharValueElement {
             this.specialty.setValue(this.wrapper.getSpecialty());
 
             const isSpecialtyEditable = this.wrapper.getTotalValue() >= specialtyEditableFrom;
-            this.specialty.setReadOnly(isSpecialtyEditable && !hasNextValue);
+            this.specialty.setReadOnly(!isSpecialtyEditable || hasNextValue);
 
             this.text.setText(this.info.translation);
         } else {
@@ -159,9 +159,7 @@ export class CharValueElement {
 
         this.points.setValue(prevValue, value);
 
-        this.points.subButton.setVisible(!hasNextValue);
         this.points.subButton.setActive(!hasNextValue);
-        this.points.addButton.setVisible(!hasNextValue);
         this.points.addButton.setActive(!hasNextValue);
     }
 }

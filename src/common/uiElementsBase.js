@@ -22,6 +22,10 @@ export class UITextInput {
         return this.input.value;
     }
 
+    setValue(text) {
+        this.input.value = text;
+    }
+
     setReadOnly(isReadOnly) {
         this.element.readOnly = isReadOnly;
     }

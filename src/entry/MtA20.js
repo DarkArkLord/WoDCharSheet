@@ -12,6 +12,9 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElementsBase.js'
+import { CharValueElement } from '../common/uiElements.js'
+
+import { CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
 
 const testContentForTabs = {
     [1]: {
@@ -57,40 +60,60 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
     ),
 }));
 
-const pointsLine = new UIPointsLine(5, true, { class: 'td left-padding-5px' });
-pointsLine.addButton.setOnClickEvent(() => {
-    pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
-});
-pointsLine.subButton.setOnClickEvent(() => {
-    pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
-});
-pointsLine.setValue(2, 2);
+// const pointsLine = new UIPointsLine(5, true, { class: 'td left-padding-5px' });
+// pointsLine.addButton.setOnClickEvent(() => {
+//     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
+// });
+// pointsLine.subButton.setOnClickEvent(() => {
+//     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
+// });
+// pointsLine.setValue(2, 2);
+
+// tabs.unshift({
+//     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),
+//     content: render(
+//         HTMLTags.Div,
+//         { class: 'tab-content' },
+//         render(
+//             HTMLTags.Div,
+//             { class: 'table' },
+//             render(
+//                 HTMLTags.Div,
+//                 { class: 'tr' },
+//                 (new UIText('Тут лежат картинки абобусы', { class: 'td' })).element,
+//                 (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Number, 0, 6)).element,
+//                 (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
+//                 pointsLine.element,
+//             ),
+//             render(
+//                 HTMLTags.Div,
+//                 { class: 'tr' },
+//                 (new UIText('Тут лежат картинки', { class: 'td' })).element,
+//                 (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
+//                 (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Text)).element,
+//                 (new UIPointsLine(7, false, { class: 'td left-padding-5px' })).element,
+//             ),
+//         ),
+//     ),
+// });
+
+const character = {};
+const charValue = CHAR_VALUES_TRANSLATIONS.attributes.sections[0];
+
+const e1 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes', CHAR_VALIDATIONS, CHAR_EDIT_STATES.BASE);
+const e2 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes', CHAR_VALIDATIONS, CHAR_EDIT_STATES.POINTS);
+const e3 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes', CHAR_VALIDATIONS, CHAR_EDIT_STATES.EXP);
+const e4 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes');
 
 tabs.unshift({
     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),
     content: render(
         HTMLTags.Div,
         { class: 'tab-content' },
-        render(
-            HTMLTags.Div,
-            { class: 'table' },
-            render(
-                HTMLTags.Div,
-                { class: 'tr' },
-                (new UIText('Тут лежат картинки абобусы', { class: 'td' })).element,
-                (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Number, 0, 6)).element,
-                (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
-                pointsLine.element,
-            ),
-            render(
-                HTMLTags.Div,
-                { class: 'tr' },
-                (new UIText('Тут лежат картинки', { class: 'td' })).element,
-                (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
-                (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Text)).element,
-                (new UIPointsLine(7, false, { class: 'td left-padding-5px' })).element,
-            ),
-        ),
+        e1.element,
+        e2.element,
+        e3.element,
+        e4.element,
     ),
 });
 

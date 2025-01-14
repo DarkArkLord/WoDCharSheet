@@ -162,25 +162,24 @@ export const CHAR_EDIT_STATES = Object.freeze({
     BASE: 'base',
     POINTS: 'points',
     EXP: 'exp',
-    RESULT: 'result'
 });
 
 export const CHAR_EDIT_STATES_TRANSLATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: 'Основа',
     [CHAR_EDIT_STATES.POINTS]: 'Свободные точки',
     [CHAR_EDIT_STATES.EXP]: 'Опыт',
-    [CHAR_EDIT_STATES.RESULT]: 'Итог',
 });
 
+export const CHAR_SETTINGS_RESULT = 'Итог';
 export const CHAR_SETTINGS_TRANSLATIONS = 'Настройки';
 
 export const CHAR_VALIDATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: {
-        editable: true,
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         attributes: {
             sectionPoints: [7, 5, 3],
+            specialties: true,
             min: 1,
             max: 5,
             price: (total, prevTotal) => 1,
@@ -209,15 +208,16 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
     },
     [CHAR_EDIT_STATES.POINTS]: {
-        editable: true,
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
         attributes: {
+            specialties: true,
             min: 0,
             price: (total, prevTotal) => 5,
         },
         abilities: {
+            specialties: true,
             min: 0,
             price: (total, prevTotal) => 2,
         },
@@ -242,14 +242,15 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
     },
     [CHAR_EDIT_STATES.EXP]: {
-        editable: true,
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         attributes: {
+            specialties: true,
             min: 0,
             price: (total, prevTotal) => total * 4,
         },
         abilities: {
+            specialties: true,
             min: 0,
             price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 3 : total * 2,
         },
@@ -272,35 +273,37 @@ export const CHAR_VALIDATIONS = Object.freeze({
             }
         },
     },
-    [CHAR_EDIT_STATES.RESULT]: {
-        editable: false,
-        prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
-        next: [],
-        attributes: {
+});
+
+
+export const CHAR_VALIDATIONS_TOTAL = Object.freeze({
+    editable: false,
+    prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
+    next: [],
+    attributes: {
+        totalMin: 1,
+        totalMax: 5,
+    },
+    abilities: {
+        totalMin: 0,
+        totalMax: 5,
+    },
+    spheres: {
+        totalMin: 0,
+        totalMax: 5,
+    },
+    footer: {
+        backgrounds: {
+            totalMin: 0,
+            totalMax: 5,
+        },
+        arete: {
             totalMin: 1,
-            totalMax: 5,
+            totalMax: 10,
         },
-        abilities: {
+        willpower: {
             totalMin: 0,
-            totalMax: 5,
-        },
-        spheres: {
-            totalMin: 0,
-            totalMax: 5,
-        },
-        footer: {
-            backgrounds: {
-                totalMin: 0,
-                totalMax: 5,
-            },
-            arete: {
-                totalMin: 1,
-                totalMax: 10,
-            },
-            willpower: {
-                totalMin: 0,
-                totalMax: 10,
-            }
-        },
+            totalMax: 10,
+        }
     },
 });

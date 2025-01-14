@@ -16,6 +16,14 @@ export class UITextInput {
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
 
         this.isVisible = true;
+        this.isActive = true;
+        this.onChangedFunc = undefined;
+
+        this.element.oninput = function () {
+            if (instance.isActive && instance.onChangedFunc) {
+                instance.onChangedFunc();
+            }
+        }
     }
 
     getValue() {
@@ -37,6 +45,15 @@ export class UITextInput {
         } else {
             this.element.classList.add(CSS.HIDDEN);
         }
+    }
+
+    setActive(isActive) {
+        this.isActive = isActive;
+        this.setImage(isActive ? this.enableImage : this.disableImage);
+    }
+
+    setOnChangedEvent(func) {
+        this.onChangedFunc = func;
     }
 }
 

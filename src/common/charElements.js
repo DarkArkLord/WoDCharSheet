@@ -9,6 +9,30 @@ const CSS = Object.freeze({
     LEFT_PADDING_5: 'left-padding-5px',
 });
 
+class DarkEvent {
+    constructor() {
+        this.handlers = [];
+    }
+
+    addHandler(handler) {
+        this.handlers.push(handler);
+    }
+
+    removeHandler(handler) {
+        let index = this.handlers.findIndex(h => h == handler);
+        while (index >= 0) {
+            this.handlers.splice(index, 1);
+            index = this.handlers.findIndex(h => h == handler);
+        }
+    }
+
+    invoke() {
+        for (const handler of this.handlers) {
+            handler();
+        }
+    }
+}
+
 class CharValueWrapper {
     constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
         this.data = data;

@@ -37,7 +37,7 @@ export class UITextInput {
     }
 
     setReadOnly(isReadOnly) {
-        this.element.readOnly = isReadOnly;
+        this.input.readOnly = isReadOnly;
     }
 
     setVisible(isVisible) {

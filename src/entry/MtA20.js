@@ -12,7 +12,7 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElements.js'
-import { CharValueElement } from '../common/charElements.js'
+import { DarkEvent, CharValueElement } from '../common/charElements.js'
 
 import { CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
 
@@ -100,10 +100,51 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
 const character = {};
 const charValue = CHAR_VALUES_TRANSLATIONS.attributes.sections[0];
 
-const e1 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes', CHAR_VALIDATIONS, CHAR_EDIT_STATES.BASE);
-const e2 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes', CHAR_VALIDATIONS, CHAR_EDIT_STATES.POINTS);
-const e3 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes', CHAR_VALIDATIONS, CHAR_EDIT_STATES.EXP);
-const e4 = new CharValueElement(character, charValue, CHAR_VALIDATIONS_TOTAL, 'attributes');
+const event = new DarkEvent();
+
+const e1 = new CharValueElement({
+    keeper: character,
+    valueInfo: charValue,
+    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    validationsField: 'attributes',
+    editValudations: CHAR_VALIDATIONS,
+    editState: CHAR_EDIT_STATES.BASE,
+    updateEvent: event,
+});
+event.addHandler(e1.update, e1);
+
+const e2 = new CharValueElement({
+    keeper: character,
+    valueInfo: charValue,
+    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    validationsField: 'attributes',
+    editValudations: CHAR_VALIDATIONS,
+    editState: CHAR_EDIT_STATES.POINTS,
+    updateEvent: event,
+});
+event.addHandler(e2.update, e2);
+
+const e3 = new CharValueElement({
+    keeper: character,
+    valueInfo: charValue,
+    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    validationsField: 'attributes',
+    editValudations: CHAR_VALIDATIONS,
+    editState: CHAR_EDIT_STATES.EXP,
+    updateEvent: event,
+});
+event.addHandler(e3.update, e3);
+
+const e4 = new CharValueElement({
+    keeper: character,
+    valueInfo: charValue,
+    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    validationsField: 'attributes',
+    editValudations: undefined,
+    editState: undefined,
+    updateEvent: event,
+});
+event.addHandler(e4.update, e4);
 
 tabs.unshift({
     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),

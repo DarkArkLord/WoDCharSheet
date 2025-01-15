@@ -9,12 +9,16 @@ const CSS = Object.freeze({
     LEFT_PADDING_5: 'left-padding-5px',
 });
 
-class DarkEvent {
+export class DarkEvent {
     constructor() {
         this.handlers = [];
     }
 
-    addHandler(handler) {
+    addHandler(handler, context) {
+        if (context) {
+            handler = handler.bind(context);
+        }
+
         this.handlers.push(handler);
     }
 
@@ -89,18 +93,35 @@ class CharValueWrapper {
 const DEFAULT_POINTS_COUNT = 5;
 
 export class CharValueElement {
-    constructor(keeper, valueInfo, validations, validationsField, editValudations, editState) {
-        // this.input = { keeper, valueInfo, validations, validationsField, editValudations, editState, };
+    constructor(input) {
+        const {
+            keeper,
+            valueInfo,
+            totalValidations,
+            validationsField,
+            editValudations,
+            editState,
+            updateEvent,
+        } = input;
+
         const instance = this;
+
+        this.updateEvent = updateEvent;
 
         this.info = valueInfo;
 
         this.validations = editValudations?.[editState];
         this.valueValidations = this.validations?.[validationsField];
-        this.totalValidations = validations?.[validationsField];
+        this.totalValidations = totalValidations?.[validationsField];
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
-        this.wrapper = new CharValueWrapper(this.data, editState, this.valueValidations?.min, this.validations?.prev, this.validations?.next);
+        this.wrapper = new CharValueWrapper(
+            this.data,
+            editState,
+            this.valueValidations?.min,
+            this.validations?.prev,
+            this.validations?.next,
+        );
 
         const pointsCount = this.totalValidations?.totalMax ?? DEFAULT_POINTS_COUNT;
         const isPointsEditable = !!this.valueValidations;
@@ -116,27 +137,24 @@ export class CharValueElement {
             const specialty = instance.specialty.getValue();
             instance.wrapper.setSpecialty(specialty);
 
-            instance.update();
+            instance.updateEvent.invoke();
             // validate
-            // global update
         });
 
         this.points.subButton.setOnClickEvent(() => {
             const value = instance.wrapper.getValue();
             instance.wrapper.setValue(value - 1);
 
-            instance.update();
+            instance.updateEvent.invoke();
             // validate
-            // global update
         });
 
         this.points.addButton.setOnClickEvent(() => {
             const value = instance.wrapper.getValue();
             instance.wrapper.setValue(value + 1);
 
-            instance.update();
+            instance.updateEvent.invoke();
             // validate
-            // global update
         });
 
         this.element = render(

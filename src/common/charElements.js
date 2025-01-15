@@ -14,11 +14,7 @@ export class DarkEvent {
         this.handlers = [];
     }
 
-    addHandler(handler, context) {
-        if (context) {
-            handler = handler.bind(context);
-        }
-
+    addHandler(handler) {
         this.handlers.push(handler);
     }
 

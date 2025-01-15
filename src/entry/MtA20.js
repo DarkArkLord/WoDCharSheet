@@ -111,7 +111,7 @@ const e1 = new CharValueElement({
     editState: CHAR_EDIT_STATES.BASE,
     updateEvent: event,
 });
-event.addHandler(e1.update, e1);
+event.addHandler(() => e1.update());
 
 const e2 = new CharValueElement({
     keeper: character,
@@ -122,7 +122,7 @@ const e2 = new CharValueElement({
     editState: CHAR_EDIT_STATES.POINTS,
     updateEvent: event,
 });
-event.addHandler(e2.update, e2);
+event.addHandler(() => e2.update());
 
 const e3 = new CharValueElement({
     keeper: character,
@@ -133,7 +133,7 @@ const e3 = new CharValueElement({
     editState: CHAR_EDIT_STATES.EXP,
     updateEvent: event,
 });
-event.addHandler(e3.update, e3);
+event.addHandler(() => e3.update());
 
 const e4 = new CharValueElement({
     keeper: character,
@@ -144,7 +144,7 @@ const e4 = new CharValueElement({
     editState: undefined,
     updateEvent: event,
 });
-event.addHandler(e4.update, e4);
+event.addHandler(() => e4.update());
 
 tabs.unshift({
     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),

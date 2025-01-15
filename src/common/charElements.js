@@ -32,7 +32,7 @@ class CharValueWrapper {
         this.prevFileds = prevFileds;
         this.nextFileds = nextFileds;
 
-        if (field !== undefined && defaultValue !== undefined && this.getValue() === undefined) {
+        if (field !== undefined && defaultValue !== undefined && this.data[this.field] === undefined) {
             this.setValue(defaultValue);
         }
     }
@@ -89,6 +89,7 @@ class CharValueWrapper {
 }
 
 const DEFAULT_POINTS_COUNT = 5;
+const EMPTY_STRING = '';
 
 export class CharValueElement {
     constructor(input) {
@@ -123,10 +124,10 @@ export class CharValueElement {
         const firstColumnAttrs = { class: CSS.TABLE_DATA };
         const otherColumnAttrs = { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` };
 
-        this.text = new UIText('', firstColumnAttrs);
+        this.text = new UIText(EMPTY_STRING, firstColumnAttrs);
         this.specialty = new UITextInput(otherColumnAttrs);
         this.points = new UIPointsLine(pointsCount, this.isEditable, otherColumnAttrs);
-        this.pointsText = new UIText('', otherColumnAttrs);
+        this.pointsText = new UIText(EMPTY_STRING, otherColumnAttrs);
 
         this.pointsText.setVisible(this.isEditable);
 
@@ -181,10 +182,16 @@ export class CharValueElement {
         const specialtyEditableFrom = this.valueValidations?.specialty;
         if (specialtyEditableFrom) {
             this.specialty.setVisible(true);
-            this.specialty.setValue(this.wrapper.getSpecialty());
 
-            const isSpecialtyEditable = totalValue >= specialtyEditableFrom;
-            this.specialty.setReadOnly(!isSpecialtyEditable || hasNextValue);
+            const isSpecialtyEditable = totalValue >= specialtyEditableFrom
+            this.specialty.setReadOnly(!isSpecialtyEditable);
+
+            if (isSpecialtyEditable) {
+                this.specialty.setValue(this.wrapper.getSpecialty());
+            } else {
+                this.wrapper.setSpecialty(EMPTY_STRING);
+                this.specialty.setValue(EMPTY_STRING);
+            }
 
             this.text.setText(this.info.translation);
         } else {
@@ -199,11 +206,13 @@ export class CharValueElement {
 
         if (this.isEditable) {
             this.points.setValue(prevValue, value);
+
+            const enableSubButton = this.valueValidations?.min === undefined ? true : value > this.valueValidations?.min;
+            this.points.subButton.setActive(enableSubButton && !hasNextValue);
+            const enableAddButton = this.valueValidations?.max === undefined ? true : value < this.valueValidations?.max;
+            this.points.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
             this.points.setValue(0, totalValue);
         }
-
-        this.points.subButton.setActive(!hasNextValue);
-        this.points.addButton.setActive(!hasNextValue);
     }
 }

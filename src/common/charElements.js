@@ -32,7 +32,7 @@ class CharValueWrapper {
         this.prevFileds = prevFileds;
         this.nextFileds = nextFileds;
 
-        if (this.getValue() === undefined) {
+        if (field !== undefined && defaultValue !== undefined && this.getValue() === undefined) {
             this.setValue(defaultValue);
         }
     }
@@ -75,6 +75,16 @@ class CharValueWrapper {
 
     getTotalValue() {
         return this.getPrevValue() + this.getValue() + this.getNextValue();
+    }
+
+    hasNextValue() {
+        for (const field of this.nextFileds) {
+            if (this.data[field]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
@@ -164,7 +174,7 @@ export class CharValueElement {
     update() {
         const prevValue = this.wrapper.getPrevValue()
         const value = this.wrapper.getValue()
-        const hasNextValue = !!this.wrapper.getNextValue();
+        const hasNextValue = this.wrapper.hasNextValue();
 
         this.pointsText.setText(`(${value})`);
 

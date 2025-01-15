@@ -98,7 +98,7 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
 // });
 
 const character = {};
-const charValue = CHAR_VALUES_TRANSLATIONS.attributes.sections[0];
+const charValue = CHAR_VALUES_TRANSLATIONS.attributes.sections[0].values[0];
 
 const event = new DarkEvent();
 

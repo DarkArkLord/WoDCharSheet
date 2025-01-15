@@ -18,14 +18,6 @@ export class DarkEvent {
         this.handlers.push(handler);
     }
 
-    removeHandler(handler) {
-        let index = this.handlers.findIndex(h => h == handler);
-        while (index >= 0) {
-            this.handlers.splice(index, 1);
-            index = this.handlers.findIndex(h => h == handler);
-        }
-    }
-
     invoke() {
         for (const handler of this.handlers) {
             handler();

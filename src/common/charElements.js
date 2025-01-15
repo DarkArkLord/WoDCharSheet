@@ -95,11 +95,10 @@ export class CharValueElement {
         const {
             keeper,
             valueInfo,
-            totalValidations,
+            valudations,
             validationsField,
-            editValudations,
-            editState,
             updateEvent,
+            pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
 
         const instance = this;
@@ -108,28 +107,28 @@ export class CharValueElement {
 
         this.info = valueInfo;
 
-        this.validations = editValudations?.[editState];
+        this.validations = valudations;
         this.valueValidations = this.validations?.[validationsField];
-        this.totalValidations = totalValidations?.[validationsField];
+        this.isEditable = valudations?.editable;
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
         this.wrapper = new CharValueWrapper(
             this.data,
-            editState,
+            this.validations?.valueField,
             this.valueValidations?.min,
             this.validations?.prev,
             this.validations?.next,
         );
 
-        const pointsCount = this.totalValidations?.totalMax ?? DEFAULT_POINTS_COUNT;
-        const isPointsEditable = !!this.valueValidations;
+        const firstColumnAttrs = { class: CSS.TABLE_DATA };
+        const otherColumnAttrs = { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` };
 
-        this.text = new UIText('', { class: CSS.TABLE_DATA });
-        this.specialty = new UITextInput({ class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
-        this.points = new UIPointsLine(pointsCount, isPointsEditable, { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
-        this.pointsText = new UIText('', { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` });
+        this.text = new UIText('', firstColumnAttrs);
+        this.specialty = new UITextInput(otherColumnAttrs);
+        this.points = new UIPointsLine(pointsCount, this.isEditable, otherColumnAttrs);
+        this.pointsText = new UIText('', otherColumnAttrs);
 
-        this.pointsText.setVisible(isPointsEditable);
+        this.pointsText.setVisible(this.isEditable);
 
         this.specialty.setOnChangedEvent(() => {
             const specialty = instance.specialty.getValue();
@@ -175,6 +174,7 @@ export class CharValueElement {
         const prevValue = this.wrapper.getPrevValue()
         const value = this.wrapper.getValue()
         const hasNextValue = this.wrapper.hasNextValue();
+        const totalValue = this.wrapper.getTotalValue();
 
         this.pointsText.setText(`(${value})`);
 
@@ -183,7 +183,7 @@ export class CharValueElement {
             this.specialty.setVisible(true);
             this.specialty.setValue(this.wrapper.getSpecialty());
 
-            const isSpecialtyEditable = this.wrapper.getTotalValue() >= specialtyEditableFrom;
+            const isSpecialtyEditable = totalValue >= specialtyEditableFrom;
             this.specialty.setReadOnly(!isSpecialtyEditable || hasNextValue);
 
             this.text.setText(this.info.translation);
@@ -197,7 +197,11 @@ export class CharValueElement {
             this.text.setText(text);
         }
 
-        this.points.setValue(prevValue, value);
+        if (this.isEditable) {
+            this.points.setValue(prevValue, value);
+        } else {
+            this.points.setValue(0, totalValue);
+        }
 
         this.points.subButton.setActive(!hasNextValue);
         this.points.addButton.setActive(!hasNextValue);

@@ -162,12 +162,14 @@ export const CHAR_EDIT_STATES = Object.freeze({
     BASE: 'base',
     POINTS: 'points',
     EXP: 'exp',
+    TOTAL: 'total'
 });
 
 export const CHAR_EDIT_STATES_TRANSLATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: 'Основа',
     [CHAR_EDIT_STATES.POINTS]: 'Свободные точки',
     [CHAR_EDIT_STATES.EXP]: 'Опыт',
+    [CHAR_EDIT_STATES.TOTAL]: 'Итог',
 });
 
 export const CHAR_RESULT_TRANSLATIONS = 'Итог';
@@ -175,6 +177,9 @@ export const CHAR_SETTINGS_TRANSLATIONS = 'Настройки';
 
 export const CHAR_VALIDATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: {
+        editable: true,
+        valueField: CHAR_EDIT_STATES.BASE,
+        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.BASE],
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         attributes: {
@@ -208,6 +213,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
     },
     [CHAR_EDIT_STATES.POINTS]: {
+        editable: true,
+        valueField: CHAR_EDIT_STATES.POINTS,
+        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.POINTS],
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
@@ -242,6 +250,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
     },
     [CHAR_EDIT_STATES.EXP]: {
+        editable: true,
+        valueField: CHAR_EDIT_STATES.EXP,
+        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.EXP],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         attributes: {
@@ -273,37 +284,37 @@ export const CHAR_VALIDATIONS = Object.freeze({
             }
         },
     },
-});
-
-
-export const CHAR_VALIDATIONS_TOTAL = Object.freeze({
-    editable: false,
-    prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
-    next: [],
-    attributes: {
-        totalMin: 1,
-        totalMax: 5,
-    },
-    abilities: {
-        totalMin: 0,
-        totalMax: 5,
-    },
-    spheres: {
-        totalMin: 0,
-        totalMax: 5,
-    },
-    footer: {
-        backgrounds: {
+    [CHAR_EDIT_STATES.TOTAL]: {
+        editable: false,
+        valueField: undefined,
+        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.TOTAL],
+        prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
+        next: [],
+        attributes: {
+            totalMin: 1,
+            totalMax: 5,
+        },
+        abilities: {
             totalMin: 0,
             totalMax: 5,
         },
-        arete: {
-            totalMin: 1,
-            totalMax: 10,
-        },
-        willpower: {
+        spheres: {
             totalMin: 0,
-            totalMax: 10,
-        }
+            totalMax: 5,
+        },
+        footer: {
+            backgrounds: {
+                totalMin: 0,
+                totalMax: 5,
+            },
+            arete: {
+                totalMin: 1,
+                totalMax: 10,
+            },
+            willpower: {
+                totalMin: 0,
+                totalMax: 10,
+            }
+        },
     },
 });

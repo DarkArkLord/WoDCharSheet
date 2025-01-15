@@ -105,10 +105,8 @@ const event = new DarkEvent();
 const e1 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
-    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.BASE],
     validationsField: 'attributes',
-    editValudations: CHAR_VALIDATIONS,
-    editState: CHAR_EDIT_STATES.BASE,
     updateEvent: event,
 });
 event.addHandler(() => e1.update());
@@ -116,10 +114,8 @@ event.addHandler(() => e1.update());
 const e2 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
-    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.POINTS],
     validationsField: 'attributes',
-    editValudations: CHAR_VALIDATIONS,
-    editState: CHAR_EDIT_STATES.POINTS,
     updateEvent: event,
 });
 event.addHandler(() => e2.update());
@@ -127,10 +123,8 @@ event.addHandler(() => e2.update());
 const e3 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
-    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.EXP],
     validationsField: 'attributes',
-    editValudations: CHAR_VALIDATIONS,
-    editState: CHAR_EDIT_STATES.EXP,
     updateEvent: event,
 });
 event.addHandler(() => e3.update());
@@ -138,11 +132,10 @@ event.addHandler(() => e3.update());
 const e4 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
-    totalValidations: CHAR_VALIDATIONS_TOTAL,
+    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.TOTAL],
     validationsField: 'attributes',
-    editValudations: undefined,
-    editState: undefined,
     updateEvent: event,
+    pointsCount: 10,
 });
 event.addHandler(() => e4.update());
 

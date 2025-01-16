@@ -91,7 +91,7 @@ class CharValueWrapper {
 const DEFAULT_POINTS_COUNT = 5;
 const EMPTY_STRING = '';
 
-export class CharValueElement {
+export class CharLineValueElement {
     constructor(input) {
         const {
             keeper,

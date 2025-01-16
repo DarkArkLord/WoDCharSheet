@@ -12,7 +12,7 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElements.js'
-import { DarkEvent, CharValueElement } from '../common/charElements.js'
+import { DarkEvent, CharLineValueElement } from '../common/charElements.js'
 
 import { CHAR_SECTIONS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
 
@@ -103,7 +103,7 @@ const charValue = CHAR_VALUES_TRANSLATIONS[section].sections[0].values[0];
 
 const event = new DarkEvent();
 
-const e1 = new CharValueElement({
+const e1 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.BASE],
@@ -112,7 +112,7 @@ const e1 = new CharValueElement({
 });
 event.addHandler(() => e1.update());
 
-const e2 = new CharValueElement({
+const e2 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.POINTS],
@@ -121,7 +121,7 @@ const e2 = new CharValueElement({
 });
 event.addHandler(() => e2.update());
 
-const e3 = new CharValueElement({
+const e3 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.EXP],
@@ -130,7 +130,7 @@ const e3 = new CharValueElement({
 });
 event.addHandler(() => e3.update());
 
-const e4 = new CharValueElement({
+const e4 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.TOTAL],

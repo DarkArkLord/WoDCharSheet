@@ -98,44 +98,50 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
 // });
 
 const character = {};
-const section = CHAR_SECTIONS.ABILITIES;
-const charValue = CHAR_VALUES_TRANSLATIONS[section].sections[0].values[0];
+const sectionField = CHAR_SECTIONS.ABILITIES;
+const charValue = CHAR_VALUES_TRANSLATIONS[sectionField].sections[0].values[0];
+
+const sectionSummaryData = {};
 
 const event = new DarkEvent();
 
 const e1 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
-    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.BASE],
-    validationsField: section,
+    validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.BASE],
+    validationsField: sectionField,
     updateEvent: event,
+    sectionSummaryData,
 });
 event.addHandler(() => e1.update());
 
 const e2 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
-    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.POINTS],
-    validationsField: section,
+    validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.POINTS],
+    validationsField: sectionField,
     updateEvent: event,
+    sectionSummaryData,
 });
 event.addHandler(() => e2.update());
 
 const e3 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
-    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.EXP],
-    validationsField: section,
+    validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.EXP],
+    validationsField: sectionField,
     updateEvent: event,
+    sectionSummaryData,
 });
 event.addHandler(() => e3.update());
 
 const e4 = new CharLineValueElement({
     keeper: character,
     valueInfo: charValue,
-    valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.TOTAL],
-    validationsField: section,
+    validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.TOTAL],
+    validationsField: sectionField,
     updateEvent: event,
+    sectionSummaryData,
     pointsCount: 10,
 });
 event.addHandler(() => e4.update());
@@ -152,6 +158,9 @@ tabs.unshift({
     ),
 });
 
+const bottomContainer = render(HTMLTags.Div, {},);
+event.addHandler(() => bottomContainer.innerHTML = JSON.stringify(sectionSummaryData));
+
 document.body.append(
     render(
         HTMLTags.Div,
@@ -163,6 +172,7 @@ document.body.append(
         {},
         tabs.map(x => x.content),
     ),
+    bottomContainer,
 );
 
 configureTabsAndButtons({

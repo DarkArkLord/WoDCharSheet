@@ -96,21 +96,26 @@ export class CharLineValueElement {
         const {
             keeper,
             valueInfo,
-            valudations,
+            validations,
             validationsField,
             updateEvent,
+            sectionSummaryData,
             pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
 
         const instance = this;
 
         this.updateEvent = updateEvent;
+        if (validations?.valueField) {
+            this.sectionSummaryData = sectionSummaryData[validations?.valueField] = sectionSummaryData[validations?.valueField] ?? {};
+        }
 
         this.info = valueInfo;
 
-        this.validations = valudations;
+        this.validations = validations;
+        this.validationsField = validationsField;
         this.valueValidations = this.validations?.[validationsField];
-        this.isEditable = valudations?.editable;
+        this.isEditable = validations?.editable;
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
         this.wrapper = new CharValueWrapper(
@@ -141,6 +146,12 @@ export class CharLineValueElement {
             });
 
             this.points.subButton.setOnClickEvent(() => {
+                const totalValue = this.wrapper.getTotalValue();
+                const prevValue = instance.wrapper.getPrevValue();
+
+                const price = instance.valueValidations?.price(totalValue - 1, prevValue) ?? 0;
+                instance.sectionSummaryData.price = (instance.sectionSummaryData.price ?? 0) - price;
+
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value - 1);
 
@@ -149,6 +160,12 @@ export class CharLineValueElement {
             });
 
             this.points.addButton.setOnClickEvent(() => {
+                const totalValue = this.wrapper.getTotalValue();
+                const prevValue = instance.wrapper.getPrevValue();
+
+                const price = instance.valueValidations?.price(totalValue, prevValue) ?? 0;
+                instance.sectionSummaryData.price = (instance.sectionSummaryData.price ?? 0) + price;
+
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value + 1);
 
@@ -219,6 +236,24 @@ export class CharLineValueElement {
     }
 
     validate() {
-        //
+        const errors = [];
+
+        const totalValue = this.wrapper.getTotalValue();
+        if (totalValue < this.valueValidations?.totalMin) {
+            errors.push({
+                level: this.validations?.valueTranslation,
+                value: this.info.translation,
+                text: `Не может быть меньше ${this.valueValidations?.totalMin}`,
+            });
+        }
+        if (totalValue > this.valueValidations?.totalMax) {
+            errors.push({
+                level: this.validations?.valueTranslation,
+                value: this.info.translation,
+                text: `Не может быть больше ${this.valueValidations?.totalMax}`,
+            });
+        }
+
+        return errors;
     }
 }

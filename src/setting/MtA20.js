@@ -1,3 +1,16 @@
+export const CHAR_SECTIONS = Object.freeze({
+    ATTRIBUTES: 'attributes',
+    ABILITIES: 'abilities',
+    SPHERES: 'spheres',
+    BACKGROUNDS: 'backgrounds',
+    ARETE: 'arete',
+    WILLPOWER: 'willpower',
+    QUINTESSENCE: 'quintessence',
+    PARADOX: 'paradox',
+    HEALTH: 'health',
+    EXPERIENCE: 'experience',
+});
+
 export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
     header: [
         [
@@ -16,7 +29,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             { id: 'Concept', translation: 'Концепция', },
         ],
     ],
-    attributes: {
+    [CHAR_SECTIONS.ATTRIBUTES]: {
         id: 'Attributes',
         translation: 'Атрибуты',
         sections: [
@@ -49,7 +62,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             },
         ],
     },
-    abilities: {
+    [CHAR_SECTIONS.ABILITIES]: {
         id: 'Abilities',
         translation: 'Способности',
         sections: [
@@ -106,7 +119,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             },
         ],
     },
-    spheres: {
+    [CHAR_SECTIONS.SPHERES]: {
         id: 'Spheres',
         translation: 'Сферы',
         columns: [
@@ -127,33 +140,31 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             ],
         ],
     },
-    footer: {
-        backgrounds: {
-            id: 'Backgrounds',
-            translation: 'Факты биографии',
-            variants: [
-                { id: 'Avatar', translation: 'Аватар', },
-            ]
-        },
-        arete: { id: 'Arete', translation: 'Арете', },
-        willpower: { id: 'Willpower', translation: 'Сила воли', },
-        quintessence: { id: 'Quintessence', translation: 'Квинтэссенция', },
-        paradox: { id: 'Paradox', translation: 'Парадокс', },
-        health: {
-            id: 'Health',
-            translation: 'Здоровье',
-            levels: [
-                { id: 'Bruised', translation: 'Задет', penalty: '-0', },
-                { id: 'Hurt', translation: 'Поврежден', penalty: '-1', },
-                { id: 'Injured', translation: 'Ранен', penalty: '-1', },
-                { id: 'Wounded', translation: 'Тяжело ранен', penalty: '-2', },
-                { id: 'Mauled', translation: 'Травмирован', penalty: '-2', },
-                { id: 'Crippled', translation: 'Искалечен', penalty: '-5', },
-                { id: 'Incapacitated', translation: 'Недееспособен', penalty: '  ', },
-            ]
-        },
-        experience: { id: 'Experience', translation: 'Опыт', },
+    [CHAR_SECTIONS.BACKGROUNDS]: {
+        id: 'Backgrounds',
+        translation: 'Факты биографии',
+        variants: [
+            { id: 'Avatar', translation: 'Аватар', },
+        ]
     },
+    [CHAR_SECTIONS.ARETE]: { id: 'Arete', translation: 'Арете', },
+    [CHAR_SECTIONS.WILLPOWER]: { id: 'Willpower', translation: 'Сила воли', },
+    [CHAR_SECTIONS.QUINTESSENCE]: { id: 'Quintessence', translation: 'Квинтэссенция', },
+    [CHAR_SECTIONS.PARADOX]: { id: 'Paradox', translation: 'Парадокс', },
+    [CHAR_SECTIONS.HEALTH]: {
+        id: 'Health',
+        translation: 'Здоровье',
+        levels: [
+            { id: 'Bruised', translation: 'Задет', penalty: '-0', },
+            { id: 'Hurt', translation: 'Поврежден', penalty: '-1', },
+            { id: 'Injured', translation: 'Ранен', penalty: '-1', },
+            { id: 'Wounded', translation: 'Тяжело ранен', penalty: '-2', },
+            { id: 'Mauled', translation: 'Травмирован', penalty: '-2', },
+            { id: 'Crippled', translation: 'Искалечен', penalty: '-5', },
+            { id: 'Incapacitated', translation: 'Недееспособен', penalty: '  ', },
+        ]
+    },
+    [CHAR_SECTIONS.EXPERIENCE]: { id: 'Experience', translation: 'Опыт', },
     // Add second page and other
     aaaaaaaaa: { id: 'Aaaaaaa', translation: 'Aaaaaaaaa', },
 });
@@ -182,32 +193,32 @@ export const CHAR_VALIDATIONS = Object.freeze({
         valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.BASE],
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
-        attributes: {
+        [CHAR_SECTIONS.ATTRIBUTES]: {
             sectionPoints: [7, 5, 3],
             specialty: 4,
             min: 1,
             max: 5,
             price: (total, prevTotal) => 1,
         },
-        abilities: {
+        [CHAR_SECTIONS.ABILITIES]: {
             sectionPoints: [13, 9, 5],
             min: 0,
             max: 3,
             price: (total, prevTotal) => 1,
         },
-        spheres: {
+        [CHAR_SECTIONS.SPHERES]: {
             freePoints: 6,
             price: (total, prevTotal) => 1,
         },
         footer: {
-            backgrounds: {
+            [CHAR_SECTIONS.BACKGROUNDS]: {
                 freePoints: 7,
                 price: (total, prevTotal) => 1,
             },
-            arete: {
+            [CHAR_SECTIONS.ARETE]: {
                 min: 1,
             },
-            willpower: {
+            [CHAR_SECTIONS.WILLPOWER]: {
                 min: 5,
             }
         },
@@ -219,34 +230,32 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
-        attributes: {
+        [CHAR_SECTIONS.ATTRIBUTES]: {
             specialty: 4,
             min: 0,
             price: (total, prevTotal) => 5,
         },
-        abilities: {
+        [CHAR_SECTIONS.ABILITIES]: {
             specialty: 4,
             min: 0,
             price: (total, prevTotal) => 2,
         },
-        spheres: {
+        [CHAR_SECTIONS.SPHERES]: {
             min: 0,
             price: (total, prevTotal) => 7,
         },
-        footer: {
-            backgrounds: {
-                min: 1,
-                price: (total, prevTotal) => 1,
-            },
-            arete: {
-                min: 0,
-                totalMax: 3,
-                price: (total, prevTotal) => 4,
-            },
-            willpower: {
-                min: 0,
-                price: (total, prevTotal) => 1,
-            }
+        [CHAR_SECTIONS.BACKGROUNDS]: {
+            min: 1,
+            price: (total, prevTotal) => 1,
+        },
+        [CHAR_SECTIONS.ARETE]: {
+            min: 0,
+            totalMax: 3,
+            price: (total, prevTotal) => 4,
+        },
+        [CHAR_SECTIONS.WILLPOWER]: {
+            min: 0,
+            price: (total, prevTotal) => 1,
         },
     },
     [CHAR_EDIT_STATES.EXP]: {
@@ -255,33 +264,31 @@ export const CHAR_VALIDATIONS = Object.freeze({
         valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.EXP],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
-        attributes: {
+        [CHAR_SECTIONS.ATTRIBUTES]: {
             specialty: 4,
             min: 0,
             price: (total, prevTotal) => total * 4,
         },
-        abilities: {
+        [CHAR_SECTIONS.ABILITIES]: {
             specialty: 4,
             min: 0,
             price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 3 : total * 2,
         },
-        spheres: {
+        [CHAR_SECTIONS.SPHERES]: {
             min: 0,
             price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
         },
-        footer: {
-            backgrounds: {
-                min: 1,
-                price: (total, prevTotal) => total * 3,
-            },
-            arete: {
-                min: 0,
-                price: (total, prevTotal) => total * 8,
-            },
-            willpower: {
-                min: 0,
-                price: (total, prevTotal) => total,
-            }
+        [CHAR_SECTIONS.BACKGROUNDS]: {
+            min: 1,
+            price: (total, prevTotal) => total * 3,
+        },
+        [CHAR_SECTIONS.ARETE]: {
+            min: 0,
+            price: (total, prevTotal) => total * 8,
+        },
+        [CHAR_SECTIONS.WILLPOWER]: {
+            min: 0,
+            price: (total, prevTotal) => total,
         },
     },
     [CHAR_EDIT_STATES.TOTAL]: {
@@ -290,31 +297,29 @@ export const CHAR_VALIDATIONS = Object.freeze({
         valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.TOTAL],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         next: [],
-        attributes: {
+        [CHAR_SECTIONS.ATTRIBUTES]: {
             totalMin: 1,
             totalMax: 5,
         },
-        abilities: {
+        [CHAR_SECTIONS.ABILITIES]: {
             totalMin: 0,
             totalMax: 5,
         },
-        spheres: {
+        [CHAR_SECTIONS.SPHERES]: {
             totalMin: 0,
             totalMax: 5,
         },
-        footer: {
-            backgrounds: {
-                totalMin: 0,
-                totalMax: 5,
-            },
-            arete: {
-                totalMin: 1,
-                totalMax: 10,
-            },
-            willpower: {
-                totalMin: 0,
-                totalMax: 10,
-            }
+        [CHAR_SECTIONS.BACKGROUNDS]: {
+            totalMin: 0,
+            totalMax: 5,
+        },
+        [CHAR_SECTIONS.ARETE]: {
+            totalMin: 1,
+            totalMax: 10,
+        },
+        [CHAR_SECTIONS.WILLPOWER]: {
+            totalMin: 0,
+            totalMax: 10,
         },
     },
 });

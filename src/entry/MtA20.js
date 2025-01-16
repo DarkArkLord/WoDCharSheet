@@ -14,7 +14,7 @@ import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElements.js'
 import { DarkEvent, CharValueElement } from '../common/charElements.js'
 
-import { CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
+import { CHAR_SECTIONS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
 
 const testContentForTabs = {
     [1]: {
@@ -98,7 +98,8 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
 // });
 
 const character = {};
-const charValue = CHAR_VALUES_TRANSLATIONS.attributes.sections[0].values[0];
+const section = CHAR_SECTIONS.ABILITIES;
+const charValue = CHAR_VALUES_TRANSLATIONS[section].sections[0].values[0];
 
 const event = new DarkEvent();
 
@@ -106,7 +107,7 @@ const e1 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.BASE],
-    validationsField: 'attributes',
+    validationsField: section,
     updateEvent: event,
 });
 event.addHandler(() => e1.update());
@@ -115,7 +116,7 @@ const e2 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.POINTS],
-    validationsField: 'attributes',
+    validationsField: section,
     updateEvent: event,
 });
 event.addHandler(() => e2.update());
@@ -124,7 +125,7 @@ const e3 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.EXP],
-    validationsField: 'attributes',
+    validationsField: section,
     updateEvent: event,
 });
 event.addHandler(() => e3.update());
@@ -133,7 +134,7 @@ const e4 = new CharValueElement({
     keeper: character,
     valueInfo: charValue,
     valudations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.TOTAL],
-    validationsField: 'attributes',
+    validationsField: section,
     updateEvent: event,
     pointsCount: 10,
 });

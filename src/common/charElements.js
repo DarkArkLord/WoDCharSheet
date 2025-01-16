@@ -131,29 +131,31 @@ export class CharLineValueElement {
 
         this.pointsText.setVisible(this.isEditable);
 
-        this.specialty.setOnChangedEvent(() => {
-            const specialty = instance.specialty.getValue();
-            instance.wrapper.setSpecialty(specialty);
+        if (this.isEditable) {
+            this.specialty.setOnChangedEvent(() => {
+                const specialty = instance.specialty.getValue();
+                instance.wrapper.setSpecialty(specialty);
 
-            instance.updateEvent.invoke();
-            // validate
-        });
+                instance.updateEvent.invoke();
+                // validate
+            });
 
-        this.points.subButton.setOnClickEvent(() => {
-            const value = instance.wrapper.getValue();
-            instance.wrapper.setValue(value - 1);
+            this.points.subButton.setOnClickEvent(() => {
+                const value = instance.wrapper.getValue();
+                instance.wrapper.setValue(value - 1);
 
-            instance.updateEvent.invoke();
-            // validate
-        });
+                instance.updateEvent.invoke();
+                // validate
+            });
 
-        this.points.addButton.setOnClickEvent(() => {
-            const value = instance.wrapper.getValue();
-            instance.wrapper.setValue(value + 1);
+            this.points.addButton.setOnClickEvent(() => {
+                const value = instance.wrapper.getValue();
+                instance.wrapper.setValue(value + 1);
 
-            instance.updateEvent.invoke();
-            // validate
-        });
+                instance.updateEvent.invoke();
+                // validate
+            });
+        }
 
         this.element = render(
             HTMLTags.Div,
@@ -214,5 +216,9 @@ export class CharLineValueElement {
         } else {
             this.points.setValue(0, totalValue);
         }
+    }
+
+    validate() {
+        //
     }
 }

@@ -198,22 +198,22 @@ export const CHAR_VALIDATIONS = Object.freeze({
             specialty: 4,
             min: 1,
             max: 5,
-            price: (total, prevTotal) => 1,
+            price: (total) => 1,
         },
         [CHAR_SECTIONS.ABILITIES]: {
             sectionPoints: [13, 9, 5],
             min: 0,
             max: 3,
-            price: (total, prevTotal) => 1,
+            price: (total) => 1,
         },
         [CHAR_SECTIONS.SPHERES]: {
             freePoints: 6,
-            price: (total, prevTotal) => 1,
+            price: (total) => 1,
         },
         footer: {
             [CHAR_SECTIONS.BACKGROUNDS]: {
                 freePoints: 7,
-                price: (total, prevTotal) => 1,
+                price: (total) => 1,
             },
             [CHAR_SECTIONS.ARETE]: {
                 min: 1,
@@ -233,29 +233,29 @@ export const CHAR_VALIDATIONS = Object.freeze({
         [CHAR_SECTIONS.ATTRIBUTES]: {
             specialty: 4,
             min: 0,
-            price: (total, prevTotal) => 5,
+            price: (total) => 5,
         },
         [CHAR_SECTIONS.ABILITIES]: {
             specialty: 4,
             min: 0,
-            price: (total, prevTotal) => 2,
+            price: (total) => 2,
         },
         [CHAR_SECTIONS.SPHERES]: {
             min: 0,
-            price: (total, prevTotal) => 7,
+            price: (total) => 7,
         },
         [CHAR_SECTIONS.BACKGROUNDS]: {
             min: 1,
-            price: (total, prevTotal) => 1,
+            price: (total) => 1,
         },
         [CHAR_SECTIONS.ARETE]: {
             min: 0,
             totalMax: 3,
-            price: (total, prevTotal) => 4,
+            price: (total) => 4,
         },
         [CHAR_SECTIONS.WILLPOWER]: {
             min: 0,
-            price: (total, prevTotal) => 1,
+            price: (total) => 1,
         },
     },
     [CHAR_EDIT_STATES.EXP]: {
@@ -267,28 +267,28 @@ export const CHAR_VALIDATIONS = Object.freeze({
         [CHAR_SECTIONS.ATTRIBUTES]: {
             specialty: 4,
             min: 0,
-            price: (total, prevTotal) => total * 4,
+            price: (total) => total * 4,
         },
         [CHAR_SECTIONS.ABILITIES]: {
             specialty: 4,
             min: 0,
-            price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 3 : total * 2,
+            price: (total) => total == 0 ? 3 : total * 2,
         },
         [CHAR_SECTIONS.SPHERES]: {
             min: 0,
-            price: (total, prevTotal) => total == 0 && prevTotal == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
+            price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
         },
         [CHAR_SECTIONS.BACKGROUNDS]: {
             min: 1,
-            price: (total, prevTotal) => total * 3,
+            price: (total) => total * 3,
         },
         [CHAR_SECTIONS.ARETE]: {
             min: 0,
-            price: (total, prevTotal) => total * 8,
+            price: (total) => total * 8,
         },
         [CHAR_SECTIONS.WILLPOWER]: {
             min: 0,
-            price: (total, prevTotal) => total,
+            price: (total) => total,
         },
     },
     [CHAR_EDIT_STATES.TOTAL]: {

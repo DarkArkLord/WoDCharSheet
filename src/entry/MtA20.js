@@ -101,8 +101,6 @@ const character = {};
 const sectionField = CHAR_SECTIONS.ABILITIES;
 const charValue = CHAR_VALUES_TRANSLATIONS[sectionField].sections[0].values[0];
 
-const sectionSummaryData = {};
-
 const event = new DarkEvent();
 
 const e1 = new CharLineValueElement({
@@ -111,7 +109,6 @@ const e1 = new CharLineValueElement({
     validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.BASE],
     validationsField: sectionField,
     updateEvent: event,
-    sectionSummaryData,
 });
 event.addHandler(() => e1.update());
 
@@ -121,7 +118,6 @@ const e2 = new CharLineValueElement({
     validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.POINTS],
     validationsField: sectionField,
     updateEvent: event,
-    sectionSummaryData,
 });
 event.addHandler(() => e2.update());
 
@@ -131,7 +127,6 @@ const e3 = new CharLineValueElement({
     validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.EXP],
     validationsField: sectionField,
     updateEvent: event,
-    sectionSummaryData,
 });
 event.addHandler(() => e3.update());
 
@@ -141,7 +136,6 @@ const e4 = new CharLineValueElement({
     validations: CHAR_VALIDATIONS[CHAR_EDIT_STATES.TOTAL],
     validationsField: sectionField,
     updateEvent: event,
-    sectionSummaryData,
     pointsCount: 10,
 });
 event.addHandler(() => e4.update());
@@ -159,7 +153,15 @@ tabs.unshift({
 });
 
 const bottomContainer = render(HTMLTags.Div, {},);
-event.addHandler(() => bottomContainer.innerHTML = JSON.stringify(sectionSummaryData));
+event.addHandler(() => {
+    const summary = {};
+
+    for (const e of [e1, e2, e3, e4]) {
+        summary[e.validations.valueTranslation] = e.priceWrapper.getPrice();
+    }
+
+    bottomContainer.innerHTML = JSON.stringify(summary);
+});
 
 document.body.append(
     render(

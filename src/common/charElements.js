@@ -88,6 +88,32 @@ class CharValueWrapper {
     }
 }
 
+class CharValuePriceWrapper {
+    constructor(valueWrapper, priceFunc) {
+        this.valueWrapper = valueWrapper;
+        this.priceFunc = priceFunc;
+        this.price = 0;
+    }
+
+    calculate() {
+        this.price = 0;
+
+        if (this.priceFunc) {
+            const prev = this.valueWrapper.getPrevValue();
+            const value = this.valueWrapper.getValue();
+            for (let cur = 0; cur < value; cur++) {
+                this.price += this.priceFunc(prev + cur);
+            }
+        }
+
+        return this.price;
+    }
+
+    getPrice() {
+        return this.price;
+    }
+}
+
 const DEFAULT_POINTS_COUNT = 5;
 const EMPTY_STRING = '';
 
@@ -99,16 +125,12 @@ export class CharLineValueElement {
             validations,
             validationsField,
             updateEvent,
-            sectionSummaryData,
             pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
 
         const instance = this;
 
         this.updateEvent = updateEvent;
-        if (validations?.valueField) {
-            this.sectionSummaryData = sectionSummaryData[validations?.valueField] = sectionSummaryData[validations?.valueField] ?? {};
-        }
 
         this.info = valueInfo;
 
@@ -125,6 +147,7 @@ export class CharLineValueElement {
             this.validations?.prev,
             this.validations?.next,
         );
+        this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.valueValidations?.price);
 
         const firstColumnAttrs = { class: CSS.TABLE_DATA };
         const otherColumnAttrs = { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` };
@@ -141,34 +164,25 @@ export class CharLineValueElement {
                 const specialty = instance.specialty.getValue();
                 instance.wrapper.setSpecialty(specialty);
 
+                instance.update();
                 instance.updateEvent.invoke();
                 // validate
             });
 
             this.points.subButton.setOnClickEvent(() => {
-                const totalValue = this.wrapper.getTotalValue();
-                const prevValue = instance.wrapper.getPrevValue();
-
-                const price = instance.valueValidations?.price(totalValue - 1, prevValue) ?? 0;
-                instance.sectionSummaryData.price = (instance.sectionSummaryData.price ?? 0) - price;
-
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value - 1);
 
+                instance.update();
                 instance.updateEvent.invoke();
                 // validate
             });
 
             this.points.addButton.setOnClickEvent(() => {
-                const totalValue = this.wrapper.getTotalValue();
-                const prevValue = instance.wrapper.getPrevValue();
-
-                const price = instance.valueValidations?.price(totalValue, prevValue) ?? 0;
-                instance.sectionSummaryData.price = (instance.sectionSummaryData.price ?? 0) + price;
-
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value + 1);
 
+                instance.update();
                 instance.updateEvent.invoke();
                 // validate
             });
@@ -233,6 +247,8 @@ export class CharLineValueElement {
         } else {
             this.points.setValue(0, totalValue);
         }
+
+        this.priceWrapper.calculate();
     }
 
     validate() {

@@ -46,16 +46,10 @@ const tabs = editStatesFrotTabsOrder.map(editState => {
     };
 });
 
-// const bottomContainer = render(HTMLTags.Div, {},);
-// event.addHandler(() => {
-//     const summary = {};
-
-//     for (const e of [e1, e2, e3, e4]) {
-//         summary[e.validations.valueTranslation] = e.priceWrapper.getPrice();
-//     }
-
-//     bottomContainer.innerHTML = JSON.stringify(summary);
-// });
+const bottomContainer = render(HTMLTags.Div, {},);
+event.addHandler(() => {
+    bottomContainer.innerHTML = JSON.stringify(character, null, 2);
+});
 
 document.body.append(
     render(
@@ -68,7 +62,7 @@ document.body.append(
         {},
         tabs.map(x => x.content),
     ),
-    // bottomContainer,
+    bottomContainer,
 );
 
 configureTabsAndButtons({

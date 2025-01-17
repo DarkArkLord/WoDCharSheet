@@ -9,9 +9,3 @@
 .text-align-center {
     text-align: center;
 }
-
-input:read-only {
-    border: 0;
-    box-shadow: none;
-    background-color: #ddd;
-}

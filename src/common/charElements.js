@@ -323,4 +323,14 @@ export class CharLineValuesSectionElement {
             item.update();
         }
     }
+
+    validate() {
+        const errors = this.items.flatMap(item => item.validate() ?? []);
+
+        for (const error of errors) {
+            error.section = this.info.translation;
+        }
+
+        return errors;
+    }
 }

@@ -274,6 +274,10 @@ export class CharLineValueElement {
 
         return errors;
     }
+
+    getPrice() {
+        return this.priceWrapper.getPrice();
+    }
 }
 
 export class CharLineValuesSectionElement {
@@ -332,5 +336,9 @@ export class CharLineValuesSectionElement {
         }
 
         return errors;
+    }
+
+    getPrice() {
+        return this.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }

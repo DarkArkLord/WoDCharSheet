@@ -12,24 +12,21 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElements.js'
-import { DarkEvent, CharLineValueElement, CharLineValuesSectionElement } from '../common/charElements.js'
+import { DarkEvent, CharLineValueElement, CharLineValuesSectionElement, CharLineValuesSectionsPartElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
 
 const editStatesFrotTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
 
 const character = {};
-const sectionField = CHAR_PARTS.ABILITIES;
-const sectionInfo = CHAR_VALUES_TRANSLATIONS[sectionField].sections[0];
 
 const event = new DarkEvent();
 
 const tabs = editStatesFrotTabsOrder.map(editState => {
-    const data = new CharLineValuesSectionElement({
+    const data = new CharLineValuesSectionsPartElement({
         keeper: character,
-        sectionInfo,
+        partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
         validations: CHAR_VALIDATIONS[editState],
-        validationsField: sectionField,
         updateEvent: event,
     });
 

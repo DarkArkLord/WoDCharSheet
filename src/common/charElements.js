@@ -342,3 +342,48 @@ export class CharLineValuesSectionElement {
         return this.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
+
+export class CharLineValuesSectionsPartElement {
+    constructor(input) {
+        const {
+            keeper,
+            partInfo,
+            validations,
+            updateEvent,
+        } = input;
+
+        this.updateEvent = updateEvent;
+
+        this.info = partInfo;
+
+        this.sections = partInfo.sections?.map(section => new CharLineValuesSectionElement({
+            keeper,
+            sectionInfo: section,
+            validations,
+            validationsField: partInfo.id,
+            updateEvent,
+        })) ?? [];
+
+        this.element = render(
+            HTMLTags.Table, {},
+            render(
+                HTMLTags.TableRow, {},
+                render(
+                    HTMLTags.TableData,
+                    { class: CSS.TEXT_ALIGN_CENTER, colspan: partInfo.sections.length, },
+                    sectionInfo.translation,
+                ),
+            ),
+            render(
+                HTMLTags.TableRow, {},
+                this.sections.map(section => render(HTMLTags.TableData, {}, section.element)),
+            ),
+        );
+    }
+
+    update() {
+        for (const section of this.sections) {
+            section.update();
+        }
+    }
+}

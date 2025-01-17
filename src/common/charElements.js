@@ -376,7 +376,7 @@ export class CharLineValuesSectionsPartElement {
                 render(
                     HTMLTags.TableData,
                     { class: CSS.TEXT_ALIGN_CENTER, colspan: partInfo.sections.length, },
-                    sectionInfo.translation,
+                    partInfo.translation,
                 ),
             ),
             render(

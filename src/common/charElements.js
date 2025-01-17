@@ -302,16 +302,21 @@ export class CharLineValuesSectionElement {
             updateEvent,
         })) ?? [];
 
-        this.element = render(
-            HTMLTags.Table, {},
-            render(
+        const sectionHeader = [];
+        if (sectionInfo.translation) {
+            sectionHeader.push(render(
                 HTMLTags.TableRow, {},
                 render(
                     HTMLTags.TableData,
                     { class: CSS.TEXT_ALIGN_CENTER, colspan: 4, },
                     sectionInfo.translation,
                 ),
-            ),
+            ));
+        }
+
+        this.element = render(
+            HTMLTags.Table, {},
+            sectionHeader,
             this.items.map(item => render(
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, {}, item.text.element),

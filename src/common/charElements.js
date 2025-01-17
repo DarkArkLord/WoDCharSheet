@@ -217,11 +217,9 @@ export class CharLineValueElement {
         const specialtyEditableFrom = this.valueValidations?.specialty;
         if (specialtyEditableFrom) {
             this.specialty.setVisible(true);
+            this.specialty.setReadOnly(prevValue + value < specialtyEditableFrom);
 
-            const isSpecialtyEditable = totalValue >= specialtyEditableFrom
-            this.specialty.setReadOnly(!isSpecialtyEditable);
-
-            if (isSpecialtyEditable) {
+            if (totalValue >= specialtyEditableFrom) {
                 this.specialty.setValue(this.wrapper.getSpecialty());
             } else {
                 this.wrapper.setSpecialty(EMPTY_STRING);

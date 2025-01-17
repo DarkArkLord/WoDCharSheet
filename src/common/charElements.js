@@ -7,6 +7,7 @@ const CSS = Object.freeze({
     TABLE_ROW: 'tr',
     TABLE_DATA: 'td',
     LEFT_PADDING_5: 'left-padding-5px',
+    TEXT_ALIGN_CENTER: 'text-align-center',
 });
 
 export class DarkEvent {
@@ -310,15 +311,25 @@ export class CharLineValuesSectionElement {
                 { class: CSS.TABLE_ROW },
                 render(
                     HTMLTags.Div,
-                    { class: CSS.TABLE_DATA },
+                    { class: `${CSS.TABLE_DATA} ${CSS.TEXT_ALIGN_CENTER}` },
                     sectionInfo.translation,
                 ),
             ),
             this.items.map(item => render(
                 HTMLTags.Div,
                 { class: CSS.TABLE_ROW },
-                item.element,
+                // item.element,
+                item.text.element,
+                item.specialty.element,
+                item.points.element,
+                item.pointsText.element,
             )),
         );
+    }
+
+    update() {
+        for (const item of this.items) {
+            item.update();
+        }
     }
 }

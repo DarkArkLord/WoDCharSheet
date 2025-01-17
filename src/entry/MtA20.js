@@ -14,7 +14,7 @@ import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElements.js'
 import { DarkEvent, CharLineValueElement } from '../common/charElements.js'
 
-import { CHAR_SECTIONS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
+import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS, CHAR_VALIDATIONS_TOTAL } from '../setting/MtA20.js'
 
 const testContentForTabs = {
     [1]: {
@@ -60,45 +60,8 @@ const tabs = Object.keys(testContentForTabs).map(key => ({
     ),
 }));
 
-// const pointsLine = new UIPointsLine(5, true, { class: 'td left-padding-5px' });
-// pointsLine.addButton.setOnClickEvent(() => {
-//     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
-// });
-// pointsLine.subButton.setOnClickEvent(() => {
-//     pointsLine.addButton.setVisible(!pointsLine.addButton.isVisible);
-// });
-// pointsLine.setValue(2, 2);
-
-// tabs.unshift({
-//     button: render(HTMLTags.Div, { class: 'tab-button' }, 'Test',),
-//     content: render(
-//         HTMLTags.Div,
-//         { class: 'tab-content' },
-//         render(
-//             HTMLTags.Div,
-//             { class: 'table' },
-//             render(
-//                 HTMLTags.Div,
-//                 { class: 'tr' },
-//                 (new UIText('Тут лежат картинки абобусы', { class: 'td' })).element,
-//                 (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Number, 0, 6)).element,
-//                 (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
-//                 pointsLine.element,
-//             ),
-//             render(
-//                 HTMLTags.Div,
-//                 { class: 'tr' },
-//                 (new UIText('Тут лежат картинки', { class: 'td' })).element,
-//                 (new UIText('арзубузс', { class: 'td left-padding-5px' })).element,
-//                 (new UITextInput({ class: 'td left-padding-5px' }, UITextInputType.Text)).element,
-//                 (new UIPointsLine(7, false, { class: 'td left-padding-5px' })).element,
-//             ),
-//         ),
-//     ),
-// });
-
 const character = {};
-const sectionField = CHAR_SECTIONS.ABILITIES;
+const sectionField = CHAR_PARTS.ABILITIES;
 const charValue = CHAR_VALUES_TRANSLATIONS[sectionField].sections[0].values[0];
 
 const event = new DarkEvent();

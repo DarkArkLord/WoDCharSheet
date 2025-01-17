@@ -1,4 +1,4 @@
-export const CHAR_SECTIONS = Object.freeze({
+export const CHAR_PARTS = Object.freeze({
     ATTRIBUTES: 'attributes',
     ABILITIES: 'abilities',
     SPHERES: 'spheres',
@@ -29,7 +29,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             { id: 'Concept', translation: 'Концепция', },
         ],
     ],
-    [CHAR_SECTIONS.ATTRIBUTES]: {
+    [CHAR_PARTS.ATTRIBUTES]: {
         id: 'Attributes',
         translation: 'Атрибуты',
         sections: [
@@ -62,7 +62,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             },
         ],
     },
-    [CHAR_SECTIONS.ABILITIES]: {
+    [CHAR_PARTS.ABILITIES]: {
         id: 'Abilities',
         translation: 'Способности',
         sections: [
@@ -119,7 +119,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             },
         ],
     },
-    [CHAR_SECTIONS.SPHERES]: {
+    [CHAR_PARTS.SPHERES]: {
         id: 'Spheres',
         translation: 'Сферы',
         columns: [
@@ -140,18 +140,18 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             ],
         ],
     },
-    [CHAR_SECTIONS.BACKGROUNDS]: {
+    [CHAR_PARTS.BACKGROUNDS]: {
         id: 'Backgrounds',
         translation: 'Факты биографии',
         variants: [
             { id: 'Avatar', translation: 'Аватар', },
         ]
     },
-    [CHAR_SECTIONS.ARETE]: { id: 'Arete', translation: 'Арете', },
-    [CHAR_SECTIONS.WILLPOWER]: { id: 'Willpower', translation: 'Сила воли', },
-    [CHAR_SECTIONS.QUINTESSENCE]: { id: 'Quintessence', translation: 'Квинтэссенция', },
-    [CHAR_SECTIONS.PARADOX]: { id: 'Paradox', translation: 'Парадокс', },
-    [CHAR_SECTIONS.HEALTH]: {
+    [CHAR_PARTS.ARETE]: { id: 'Arete', translation: 'Арете', },
+    [CHAR_PARTS.WILLPOWER]: { id: 'Willpower', translation: 'Сила воли', },
+    [CHAR_PARTS.QUINTESSENCE]: { id: 'Quintessence', translation: 'Квинтэссенция', },
+    [CHAR_PARTS.PARADOX]: { id: 'Paradox', translation: 'Парадокс', },
+    [CHAR_PARTS.HEALTH]: {
         id: 'Health',
         translation: 'Здоровье',
         levels: [
@@ -164,7 +164,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             { id: 'Incapacitated', translation: 'Недееспособен', penalty: '  ', },
         ]
     },
-    [CHAR_SECTIONS.EXPERIENCE]: { id: 'Experience', translation: 'Опыт', },
+    [CHAR_PARTS.EXPERIENCE]: { id: 'Experience', translation: 'Опыт', },
     // Add second page and other
     aaaaaaaaa: { id: 'Aaaaaaa', translation: 'Aaaaaaaaa', },
 });
@@ -193,32 +193,32 @@ export const CHAR_VALIDATIONS = Object.freeze({
         valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.BASE],
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
-        [CHAR_SECTIONS.ATTRIBUTES]: {
+        [CHAR_PARTS.ATTRIBUTES]: {
             sectionPoints: [7, 5, 3],
             specialty: 4,
             min: 1,
             max: 5,
             price: (total) => 1,
         },
-        [CHAR_SECTIONS.ABILITIES]: {
+        [CHAR_PARTS.ABILITIES]: {
             sectionPoints: [13, 9, 5],
             min: 0,
             max: 3,
             price: (total) => 1,
         },
-        [CHAR_SECTIONS.SPHERES]: {
+        [CHAR_PARTS.SPHERES]: {
             freePoints: 6,
             price: (total) => 1,
         },
         footer: {
-            [CHAR_SECTIONS.BACKGROUNDS]: {
+            [CHAR_PARTS.BACKGROUNDS]: {
                 freePoints: 7,
                 price: (total) => 1,
             },
-            [CHAR_SECTIONS.ARETE]: {
+            [CHAR_PARTS.ARETE]: {
                 min: 1,
             },
-            [CHAR_SECTIONS.WILLPOWER]: {
+            [CHAR_PARTS.WILLPOWER]: {
                 min: 5,
             }
         },
@@ -230,30 +230,30 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
-        [CHAR_SECTIONS.ATTRIBUTES]: {
+        [CHAR_PARTS.ATTRIBUTES]: {
             specialty: 4,
             min: 0,
             price: (total) => 5,
         },
-        [CHAR_SECTIONS.ABILITIES]: {
+        [CHAR_PARTS.ABILITIES]: {
             specialty: 4,
             min: 0,
             price: (total) => 2,
         },
-        [CHAR_SECTIONS.SPHERES]: {
+        [CHAR_PARTS.SPHERES]: {
             min: 0,
             price: (total) => 7,
         },
-        [CHAR_SECTIONS.BACKGROUNDS]: {
+        [CHAR_PARTS.BACKGROUNDS]: {
             min: 1,
             price: (total) => 1,
         },
-        [CHAR_SECTIONS.ARETE]: {
+        [CHAR_PARTS.ARETE]: {
             min: 0,
             totalMax: 3,
             price: (total) => 4,
         },
-        [CHAR_SECTIONS.WILLPOWER]: {
+        [CHAR_PARTS.WILLPOWER]: {
             min: 0,
             price: (total) => 1,
         },
@@ -264,29 +264,29 @@ export const CHAR_VALIDATIONS = Object.freeze({
         valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.EXP],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
-        [CHAR_SECTIONS.ATTRIBUTES]: {
+        [CHAR_PARTS.ATTRIBUTES]: {
             specialty: 4,
             min: 0,
             price: (total) => total * 4,
         },
-        [CHAR_SECTIONS.ABILITIES]: {
+        [CHAR_PARTS.ABILITIES]: {
             specialty: 4,
             min: 0,
             price: (total) => total == 0 ? 3 : total * 2,
         },
-        [CHAR_SECTIONS.SPHERES]: {
+        [CHAR_PARTS.SPHERES]: {
             min: 0,
             price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
         },
-        [CHAR_SECTIONS.BACKGROUNDS]: {
+        [CHAR_PARTS.BACKGROUNDS]: {
             min: 1,
             price: (total) => total * 3,
         },
-        [CHAR_SECTIONS.ARETE]: {
+        [CHAR_PARTS.ARETE]: {
             min: 0,
             price: (total) => total * 8,
         },
-        [CHAR_SECTIONS.WILLPOWER]: {
+        [CHAR_PARTS.WILLPOWER]: {
             min: 0,
             price: (total) => total,
         },
@@ -297,27 +297,27 @@ export const CHAR_VALIDATIONS = Object.freeze({
         valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.TOTAL],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         next: [],
-        [CHAR_SECTIONS.ATTRIBUTES]: {
+        [CHAR_PARTS.ATTRIBUTES]: {
             totalMin: 1,
             totalMax: 5,
         },
-        [CHAR_SECTIONS.ABILITIES]: {
+        [CHAR_PARTS.ABILITIES]: {
             totalMin: 0,
             totalMax: 5,
         },
-        [CHAR_SECTIONS.SPHERES]: {
+        [CHAR_PARTS.SPHERES]: {
             totalMin: 0,
             totalMax: 5,
         },
-        [CHAR_SECTIONS.BACKGROUNDS]: {
+        [CHAR_PARTS.BACKGROUNDS]: {
             totalMin: 0,
             totalMax: 5,
         },
-        [CHAR_SECTIONS.ARETE]: {
+        [CHAR_PARTS.ARETE]: {
             totalMin: 1,
             totalMax: 10,
         },
-        [CHAR_SECTIONS.WILLPOWER]: {
+        [CHAR_PARTS.WILLPOWER]: {
             totalMin: 0,
             totalMax: 10,
         },

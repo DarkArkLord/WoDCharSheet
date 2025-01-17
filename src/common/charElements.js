@@ -92,6 +92,7 @@ class CharValuePriceWrapper {
     constructor(valueWrapper, priceFunc) {
         this.valueWrapper = valueWrapper;
         this.priceFunc = priceFunc;
+        this.isDirty = true;
         this.price = 0;
     }
 
@@ -109,7 +110,15 @@ class CharValuePriceWrapper {
         return this.price;
     }
 
+    setDirty() {
+        this.isDirty = true;
+    }
+
     getPrice() {
+        if (this.isDirty) {
+            this.calculate();
+        }
+
         return this.price;
     }
 }
@@ -245,7 +254,7 @@ export class CharLineValueElement {
             this.points.setValue(0, totalValue);
         }
 
-        this.priceWrapper.calculate();
+        this.priceWrapper.setDirty();
     }
 
     validate() {

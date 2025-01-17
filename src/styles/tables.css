@@ -10,3 +10,10 @@
 .td {
     display: table-cell
 }
+
+table,
+tr,
+td {
+    border: 0;
+    padding: 2px 5px;
+}

@@ -1,4 +1,7 @@
 export const HTMLTags = {
+    Table: 'table',
+    TableRow: 'tr',
+    TableData: 'td',
     Div: 'div',
     Img: 'img',
     Input: 'input',

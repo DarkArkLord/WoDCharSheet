@@ -159,13 +159,10 @@ export class CharLineValueElement {
         );
         this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.valueValidations?.price);
 
-        const firstColumnAttrs = { class: CSS.TABLE_DATA };
-        const otherColumnAttrs = { class: `${CSS.TABLE_DATA} ${CSS.LEFT_PADDING_5}` };
-
-        this.text = new UIText(EMPTY_STRING, firstColumnAttrs);
-        this.specialty = new UITextInput(otherColumnAttrs);
-        this.points = new UIPointsLine(pointsCount, this.isEditable, otherColumnAttrs);
-        this.pointsText = new UIText(EMPTY_STRING, otherColumnAttrs);
+        this.text = new UIText(EMPTY_STRING, {});
+        this.specialty = new UITextInput({}, UITextInputType.Text);
+        this.points = new UIPointsLine(pointsCount, this.isEditable, {});
+        this.pointsText = new UIText(EMPTY_STRING, {});
 
         this.pointsText.setVisible(this.isEditable);
 
@@ -196,15 +193,13 @@ export class CharLineValueElement {
         }
 
         this.element = render(
-            HTMLTags.Div,
-            { class: CSS.TABLE },
+            HTMLTags.Table, {},
             render(
-                HTMLTags.Div,
-                { class: CSS.TABLE_ROW },
-                this.text.element,
-                this.specialty.element,
-                this.points.element,
-                this.pointsText.element,
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, this.text.element),
+                render(HTMLTags.TableData, {}, this.specialty.element),
+                render(HTMLTags.TableData, {}, this.points.element),
+                render(HTMLTags.TableData, {}, this.pointsText.element),
             ),
         );
 
@@ -304,25 +299,21 @@ export class CharLineValuesSectionElement {
         })) ?? [];
 
         this.element = render(
-            HTMLTags.Div,
-            { class: CSS.TABLE },
+            HTMLTags.Table, {},
             render(
-                HTMLTags.Div,
-                { class: CSS.TABLE_ROW },
+                HTMLTags.TableRow, {},
                 render(
-                    HTMLTags.Div,
-                    { class: `${CSS.TABLE_DATA} ${CSS.TEXT_ALIGN_CENTER}` },
+                    HTMLTags.TableData,
+                    { class: CSS.TEXT_ALIGN_CENTER, colspan: 4, },
                     sectionInfo.translation,
                 ),
             ),
             this.items.map(item => render(
-                HTMLTags.Div,
-                { class: CSS.TABLE_ROW },
-                // item.element,
-                item.text.element,
-                item.specialty.element,
-                item.points.element,
-                item.pointsText.element,
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, item.text.element),
+                render(HTMLTags.TableData, {}, item.specialty.element),
+                render(HTMLTags.TableData, {}, item.points.element),
+                render(HTMLTags.TableData, {}, item.pointsText.element),
             )),
         );
     }

@@ -166,7 +166,6 @@ export class CharLineValueElement {
 
                 instance.update();
                 instance.updateEvent.invoke();
-                // validate
             });
 
             this.points.subButton.setOnClickEvent(() => {
@@ -175,7 +174,6 @@ export class CharLineValueElement {
 
                 instance.update();
                 instance.updateEvent.invoke();
-                // validate
             });
 
             this.points.addButton.setOnClickEvent(() => {
@@ -184,7 +182,6 @@ export class CharLineValueElement {
 
                 instance.update();
                 instance.updateEvent.invoke();
-                // validate
             });
         }
 

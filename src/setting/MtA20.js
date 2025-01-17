@@ -30,7 +30,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ],
     ],
     [CHAR_PARTS.ATTRIBUTES]: {
-        id: 'Attributes',
+        id: CHAR_PARTS.ATTRIBUTES,
         translation: 'Атрибуты',
         sections: [
             {
@@ -63,7 +63,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ],
     },
     [CHAR_PARTS.ABILITIES]: {
-        id: 'Abilities',
+        id: CHAR_PARTS.ABILITIES,
         translation: 'Способности',
         sections: [
             {
@@ -120,7 +120,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ],
     },
     [CHAR_PARTS.SPHERES]: {
-        id: 'Spheres',
+        id: CHAR_PARTS.SPHERES,
         translation: 'Сферы',
         columns: [
             [
@@ -141,18 +141,18 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ],
     },
     [CHAR_PARTS.BACKGROUNDS]: {
-        id: 'Backgrounds',
+        id: CHAR_PARTS.BACKGROUNDS,
         translation: 'Факты биографии',
         variants: [
             { id: 'Avatar', translation: 'Аватар', },
         ]
     },
-    [CHAR_PARTS.ARETE]: { id: 'Arete', translation: 'Арете', },
-    [CHAR_PARTS.WILLPOWER]: { id: 'Willpower', translation: 'Сила воли', },
-    [CHAR_PARTS.QUINTESSENCE]: { id: 'Quintessence', translation: 'Квинтэссенция', },
-    [CHAR_PARTS.PARADOX]: { id: 'Paradox', translation: 'Парадокс', },
+    [CHAR_PARTS.ARETE]: { id: CHAR_PARTS.ARETE, translation: 'Арете', },
+    [CHAR_PARTS.WILLPOWER]: { id: CHAR_PARTS.WILLPOWER, translation: 'Сила воли', },
+    [CHAR_PARTS.QUINTESSENCE]: { id: CHAR_PARTS.QUINTESSENCE, translation: 'Квинтэссенция', },
+    [CHAR_PARTS.PARADOX]: { id: CHAR_PARTS.PARADOX, translation: 'Парадокс', },
     [CHAR_PARTS.HEALTH]: {
-        id: 'Health',
+        id: CHAR_PARTS.HEALTH,
         translation: 'Здоровье',
         levels: [
             { id: 'Bruised', translation: 'Задет', penalty: '-0', },
@@ -164,7 +164,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             { id: 'Incapacitated', translation: 'Недееспособен', penalty: '  ', },
         ]
     },
-    [CHAR_PARTS.EXPERIENCE]: { id: 'Experience', translation: 'Опыт', },
+    [CHAR_PARTS.EXPERIENCE]: { id: CHAR_PARTS.EXPERIENCE, translation: 'Опыт', },
     // Add second page and other
     aaaaaaaaa: { id: 'Aaaaaaa', translation: 'Aaaaaaaaa', },
 });

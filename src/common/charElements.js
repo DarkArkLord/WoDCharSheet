@@ -281,5 +281,44 @@ export class CharLineValueElement {
 }
 
 export class CharLineValuesSectionElement {
-    //
+    constructor(input) {
+        const {
+            keeper,
+            sectionInfo,
+            validations,
+            validationsField,
+            updateEvent,
+        } = input;
+
+        this.updateEvent = updateEvent;
+
+        this.info = sectionInfo;
+
+        this.items = sectionInfo?.values?.map(valueInfo => new CharLineValueElement({
+            keeper,
+            valueInfo,
+            validations,
+            validationsField,
+            updateEvent,
+        })) ?? [];
+
+        this.element = render(
+            HTMLTags.Div,
+            { class: CSS.TABLE },
+            render(
+                HTMLTags.Div,
+                { class: CSS.TABLE_ROW },
+                render(
+                    HTMLTags.Div,
+                    { class: CSS.TABLE_DATA },
+                    sectionInfo.translation,
+                ),
+            ),
+            this.items.map(item => render(
+                HTMLTags.Div,
+                { class: CSS.TABLE_ROW },
+                item.element,
+            )),
+        );
+    }
 }

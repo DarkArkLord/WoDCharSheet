@@ -270,3 +270,7 @@ export class CharLineValueElement {
         return errors;
     }
 }
+
+export class CharLineValuesSectionElement {
+    //
+}

@@ -179,7 +179,7 @@ class CharacterMtA {
             });
         }
 
-        updateEvent.invoke();
+        this.update();
     }
 
     update() {

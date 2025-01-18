@@ -280,8 +280,6 @@ export class CharUiLineValueElement extends CharUiTextWithPointsElement {
                 instance.updateEvent.invoke();
             });
         }
-
-        this.update();
     }
 
     update() {
@@ -379,8 +377,6 @@ export class CharUiLineValuesSectionElement {
                 render(HTMLTags.TableData, {}, item.priceText.element),
             )),
         );
-
-        this.update();
     }
 
     update() {
@@ -467,8 +463,6 @@ export class CharUiLineValuesSectionsPartElement {
                 this.sections.map(section => render(HTMLTags.TableData, {}, section.element)),
             ),
         );
-
-        this.update();
     }
 
     update() {

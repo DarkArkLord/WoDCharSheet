@@ -131,6 +131,120 @@ const EMPTY_STRING = '';
 
 const DEFAULT_COMPARATOR = (a, b) => b - a;
 
+class CkarUiTextWithPointsElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+            pointsCount = DEFAULT_POINTS_COUNT,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
+        this.wrapper = new CharValueWrapper(
+            this.data,
+            this.validations?.state,
+            this.partValidations?.min,
+            this.validations?.prev,
+            this.validations?.next,
+        );
+        this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.partValidations?.price);
+
+        this.text = new UIText(valueInfo.translation, {});
+        this.points = new UIPointsLine(pointsCount, this.isEditable, { class: CSS.NOWRAP });
+
+        if (this.isEditable) {
+            this.points.subButton.setOnClickEvent(() => {
+                const value = instance.wrapper.getValue();
+                instance.wrapper.setValue(value - 1);
+
+                instance.priceWrapper.setDirty();
+
+                instance.update();
+                instance.updateEvent.invoke();
+            });
+
+            this.points.addButton.setOnClickEvent(() => {
+                const value = instance.wrapper.getValue();
+                instance.wrapper.setValue(value + 1);
+
+                instance.priceWrapper.setDirty();
+
+                instance.update();
+                instance.updateEvent.invoke();
+            });
+        }
+
+        this.update();
+    }
+
+    update() {
+        if (this.isEditable) {
+            const prevValue = this.wrapper.getPrevValue()
+            const value = this.wrapper.getValue()
+            const hasNextValue = this.wrapper.hasNextValue();
+
+            this.points.setValue(prevValue, value);
+
+            const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
+            this.points.subButton.setActive(enableSubButton && !hasNextValue);
+            const enableAddButton = this.partValidations?.max === undefined ? true : value < this.partValidations?.max;
+            this.points.addButton.setActive(enableAddButton && !hasNextValue);
+        } else {
+            const totalValue = this.wrapper.getTotalValue();
+            this.points.setValue(0, totalValue);
+        }
+    }
+
+    validate() {
+        const errors = [];
+
+        const totalValue = this.wrapper.getTotalValue();
+        if (totalValue < this.partValidations?.totalMin) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Не может быть меньше ${this.partValidations?.totalMin} (сейчас ${totalValue})`,
+            });
+        }
+        if (totalValue > this.partValidations?.totalMax) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Не может быть больше ${this.partValidations?.totalMax} (сейчас ${totalValue})`,
+            });
+        }
+
+        // Highlight Border
+        if (errors.length > 0) {
+            this.text.element.classList.add(CSS.BORDER_RED_1);
+            this.points.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.text.element.classList.remove(CSS.BORDER_RED_1);
+            this.points.element.classList.remove(CSS.BORDER_RED_1);
+        }
+
+        return errors;
+    }
+}
+
 export class CharUiLineValueElement {
     constructor(input) {
         const {
@@ -498,5 +612,11 @@ export class CharUiLineValuesSectionsPartElement {
 
     getPrice() {
         return this.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
+}
+
+export class CharUiBlockValueElement {
+    constructor() {
+        //
     }
 }

@@ -90,7 +90,7 @@ class PointsValueWrapper extends ValueWrapper {
     }
 }
 
-class ValuePriceWrapper {
+class PointsValuePriceWrapper {
     constructor(pointsValueWrapper, priceFunc) {
         this.pointsValueWrapper = pointsValueWrapper;
         this.priceFunc = priceFunc;
@@ -168,7 +168,7 @@ class CharUiTextWithPointsElement {
             this.validations?.prev,
             this.validations?.next,
         );
-        this.priceWrapper = new ValuePriceWrapper(this.wrapper, this.partValidations?.price);
+        this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(valueInfo.translation, {});
         this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });

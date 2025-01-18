@@ -207,25 +207,31 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
         [CHAR_PARTS.ABILITIES]: {
             sectionPoints: [13, 9, 5],
+            specialty: 4,
             min: 0,
             max: 3,
             price: (total) => 1,
         },
         [CHAR_PARTS.SPHERES]: {
             freePoints: 6,
+            specialty: 4,
             min: 0,
+            max: 5,
             price: (total) => 1,
         },
         [CHAR_PARTS.BACKGROUNDS]: {
             freePoints: 7,
             min: 1,
+            max: 5,
             price: (total) => 1,
         },
         [CHAR_PARTS.ARETE]: {
             min: 1,
+            max: 1,
         },
         [CHAR_PARTS.WILLPOWER]: {
             min: 5,
+            max: 5,
         },
     },
     [CHAR_EDIT_STATES.POINTS]: {
@@ -246,11 +252,13 @@ export const CHAR_VALIDATIONS = Object.freeze({
             price: (total) => 2,
         },
         [CHAR_PARTS.SPHERES]: {
+            specialty: 4,
             min: 0,
             price: (total) => 7,
         },
         [CHAR_PARTS.BACKGROUNDS]: {
             min: 1,
+            max: 5,
             price: (total) => 1,
         },
         [CHAR_PARTS.ARETE]: {
@@ -280,6 +288,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             price: (total) => total == 0 ? 3 : total * 2,
         },
         [CHAR_PARTS.SPHERES]: {
+            specialty: 4,
             min: 0,
             price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
         },

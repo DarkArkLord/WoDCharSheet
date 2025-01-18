@@ -17,3 +17,7 @@
 .border-red-1 {
     border: 1px solid red;
 }
+
+.nowrap {
+    white-space: nowrap;
+}

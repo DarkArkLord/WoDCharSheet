@@ -8,6 +8,7 @@ const CSS = Object.freeze({
     TABLE_DATA: 'td',
     LEFT_PADDING_5: 'left-padding-5px',
     TEXT_ALIGN_CENTER: 'text-align-center',
+    NOWRAP: 'nowrap',
 });
 
 export class DarkEvent {
@@ -167,7 +168,7 @@ export class CharLineValueElement {
 
         this.text = new UIText(EMPTY_STRING, {});
         this.specialty = new UITextInput({}, UITextInputType.Text);
-        this.points = new UIPointsLine(pointsCount, this.isEditable, {});
+        this.points = new UIPointsLine(pointsCount, this.isEditable, { class: CSS.NOWRAP });
         this.priceText = new UIText(EMPTY_STRING, {});
 
         this.priceText.setVisible(this.isEditable);

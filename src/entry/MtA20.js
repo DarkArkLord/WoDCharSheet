@@ -18,6 +18,8 @@ import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATE
 
 const CSS = Object.freeze({
     TEXT_ALIGN_CENTER: 'text-align-center',
+    BORDER_BLACK_1: 'border-black-1',
+    BORDER_RED_1: 'border-red-1',
 });
 
 const editStatesForTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
@@ -70,7 +72,7 @@ class CharacterMtAState {
 
         this.errorsList = new UITextList();
         const errorsElement = render(
-            HTMLTags.Table, {},
+            HTMLTags.Table, { class: CSS.BORDER_BLACK_1 },
             render(
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, { class: CSS.TEXT_ALIGN_CENTER }, 'Ошибки'),
@@ -149,7 +151,7 @@ class CharacterMtA {
             state.errorsList.clear();
 
             for (const error of errors) {
-                state.errorsList.addItem(error);
+                state.errorsList.addItem(error, { class: CSS.BORDER_RED_1 });
             }
         }
     }

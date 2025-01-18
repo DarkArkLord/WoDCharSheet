@@ -29,11 +29,9 @@ export class DarkEvent {
 }
 
 class CharValueWrapper {
-    constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
+    constructor(data, field, defaultValue) {
         this.data = data;
         this.field = field;
-        this.prevFileds = prevFileds;
-        this.nextFileds = nextFileds;
 
         if (field !== undefined && defaultValue !== undefined && this.data[this.field] === undefined) {
             this.setValue(defaultValue);
@@ -41,19 +39,20 @@ class CharValueWrapper {
     }
 
     getValue() {
-        return this.data[this.field] ?? 0;
+        return this.data[this.field];
     }
 
     setValue(value) {
         this.data[this.field] = value;
     }
+}
 
-    getSpecialty() {
-        return this.data.specialty ?? '';
-    }
+class CharPointsValueWrapper extends CharValueWrapper {
+    constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
+        super(data, field, defaultValue);
 
-    setSpecialty(value) {
-        this.data.specialty = value;
+        this.prevFileds = prevFileds;
+        this.nextFileds = nextFileds;
     }
 
     getPrevValue() {
@@ -92,8 +91,8 @@ class CharValueWrapper {
 }
 
 class CharValuePriceWrapper {
-    constructor(valueWrapper, priceFunc) {
-        this.valueWrapper = valueWrapper;
+    constructor(pointsValueWrapper, priceFunc) {
+        this.pointsValueWrapper = pointsValueWrapper;
         this.priceFunc = priceFunc;
         this.isDirty = true;
         this.price = 0;
@@ -103,8 +102,8 @@ class CharValuePriceWrapper {
         this.price = 0;
 
         if (this.priceFunc) {
-            const prev = this.valueWrapper.getPrevValue();
-            const value = this.valueWrapper.getValue();
+            const prev = this.pointsValueWrapper.getPrevValue();
+            const value = this.pointsValueWrapper.getValue();
             for (let cur = 0; cur < value; cur++) {
                 this.price += this.priceFunc(prev + cur);
             }
@@ -130,6 +129,8 @@ const DEFAULT_POINTS_COUNT = 5;
 const EMPTY_STRING = '';
 
 const DEFAULT_COMPARATOR = (a, b) => b - a;
+
+const SPECIALTY_FIELD = 'specialty'
 
 class CharUiTextWithPointsElement {
     constructor(input) {
@@ -160,7 +161,7 @@ class CharUiTextWithPointsElement {
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
-        this.wrapper = new CharValueWrapper(
+        this.wrapper = new CharPointsValueWrapper(
             this.data,
             this.validations?.state,
             this.partValidations?.min,
@@ -270,6 +271,8 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         const instance = this;
 
+        this.specialtyWrapper = new CharValueWrapper(this.data, SPECIALTY_FIELD, EMPTY_STRING);
+
         this.specialty = new UITextInput({}, UITextInputType.Text, null, null, 10);
         this.priceText = new UIText(EMPTY_STRING, {});
 
@@ -278,7 +281,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
         if (this.isEditable) {
             this.specialty.setOnChangedEvent(() => {
                 const specialty = instance.specialty.getValue();
-                instance.wrapper.setSpecialty(specialty);
+                instance.specialtyWrapper.setValue(specialty);
 
                 instance.update();
                 instance.updateEvent.invoke();
@@ -299,9 +302,9 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
             this.specialty.setReadOnly(prevValue + value < specialtyEditableFrom);
 
             if (totalValue >= specialtyEditableFrom) {
-                this.specialty.setValue(this.wrapper.getSpecialty());
+                this.specialty.setValue(this.specialtyWrapper.getValue());
             } else {
-                this.wrapper.setSpecialty(EMPTY_STRING);
+                this.specialtyWrapper.setValue(EMPTY_STRING);
                 this.specialty.setValue(EMPTY_STRING);
             }
 
@@ -309,7 +312,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
         } else {
             this.specialty.setVisible(false);
 
-            const crudeText = this.wrapper.getSpecialty().trim();
+            const crudeText = this.specialtyWrapper.getValue().trim();
             const text = crudeText.length > 0
                 ? `${this.info.translation} (${crudeText})`
                 : this.info.translation

@@ -11,15 +11,12 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
-import { UIText, UIPointsLine, UITextInputType, UITextInput } from '../common/uiElements.js'
+import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
 import { DarkEvent, CharLineValueElement, CharLineValuesSectionElement, CharLineValuesSectionsPartElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
-const editStatesFrotTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
-
-const character = {};
-const charUpdateEvent = new DarkEvent();
+const editStatesForTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
 
 class CharacterMtAState {
     constructor(input) {
@@ -85,15 +82,45 @@ class CharacterMtAState {
 }
 
 class CharacterMtA {
-    constructor() {
-        //
+    constructor(input) {
+        const {
+            keeper,
+            validations,
+        } = input;
+
+        const updateEvent = new DarkEvent();
+
+        this.errorsList = new UITextList();
+
+        this.states = {};
+        for (const state of editStatesForTabsOrder) {
+            this.states[state] = new CharacterMtAState({
+                keeper,
+                validations: validations[state],
+                updateEvent,
+                errorsList: this.errorsList,
+            });
+        }
+    }
+
+    update() {
+        for (const state of Object.values(this.states)) {
+            state.update();
+        }
+    }
+
+    validate() {
+        return Object.values(this.states).flatMap(state => state.validate() ?? []) ?? [];
     }
 }
 
-const tabs = editStatesFrotTabsOrder.map(editState => {
+const characterData = {};
+const charUpdateEvent = new DarkEvent();
+
+const tabs = editStatesForTabsOrder.map(editState => {
     const data = new CharLineValuesSectionsPartElement({
         data: {
-            keeper: character,
+            keeper: characterData,
             partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
         },
         validations: {
@@ -121,7 +148,7 @@ const tabs = editStatesFrotTabsOrder.map(editState => {
 
 const bottomContainer = render(HTMLTags.Div, {},);
 charUpdateEvent.addHandler(() => {
-    bottomContainer.innerHTML = JSON.stringify(character, null, 2);
+    bottomContainer.innerHTML = JSON.stringify(characterData, null, 2);
 });
 
 document.body.append(

@@ -28,7 +28,6 @@ class CharacterMtAState {
             keeper,
             validations,
             updateEvent,
-            errorsList,
         } = input;
 
         this.updateEvent = updateEvent;
@@ -69,6 +68,7 @@ class CharacterMtAState {
             )),
         );
 
+        this.errorsList = new UITextList();
         const errorsElement = render(
             HTMLTags.Table, {},
             render(
@@ -77,7 +77,7 @@ class CharacterMtAState {
             ),
             render(
                 HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, errorsList.element),
+                render(HTMLTags.TableData, {}, this.errorsList.element),
             ),
         );
 
@@ -123,20 +123,8 @@ class CharacterMtA {
     constructor(keeper) {
         const instalce = this;
 
-        this.errorsList = new UITextList();
-
         const updateEvent = this.updateEvent = new DarkEvent();
         updateEvent.addHandler(() => instalce.update());
-        updateEvent.addHandler(() => {
-            const errors = instalce.validate() ?? [];
-
-            instalce.errorsList.clear();
-
-            for (const error of errors) {
-                const text = [error.state, error.part, error.section, error.value, error.text].filter(x => x).join(': ');
-                instalce.errorsList.addItem(text);
-            };
-        });
 
         this.states = {};
         for (const state of editStatesForTabsOrder) {
@@ -144,14 +132,25 @@ class CharacterMtA {
                 keeper,
                 validations: CHAR_VALIDATIONS[state],
                 updateEvent,
-                errorsList: this.errorsList,
             });
         }
+
+        updateEvent.invoke();
     }
 
     update() {
+        const errors = this.validate()?.map(error => [
+            error.state, error.part, error.section, error.value, error.text
+        ].filter(x => x).join(': ')) ?? [];
+
         for (const state of Object.values(this.states)) {
             state.update();
+
+            state.errorsList.clear();
+
+            for (const error of errors) {
+                state.errorsList.addItem(error);
+            }
         }
     }
 

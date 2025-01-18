@@ -123,10 +123,10 @@ class CharacterMtAState {
 
 class CharacterMtA {
     constructor(keeper) {
-        const instalce = this;
+        const instance = this;
 
         const updateEvent = this.updateEvent = new DarkEvent();
-        updateEvent.addHandler(() => instalce.update());
+        updateEvent.addHandler(() => instance.update());
 
         this.states = {};
         for (const state of editStatesForTabsOrder) {

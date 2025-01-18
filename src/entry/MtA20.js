@@ -20,6 +20,7 @@ const CSS = Object.freeze({
     TAB_BUTTON: 'tab-button',
     TAB_CONTENT: 'tab-content',
     TEXT_ALIGN_CENTER: 'text-align-center',
+    VERTICAL_ALIGN_TOP: 'vertical-align-top',
     BORDER_BLACK_1: 'border-black-1',
     BORDER_RED_1: 'border-red-1',
 });
@@ -147,7 +148,7 @@ class CharacterMtAState {
             render(
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, {}, charElement),
-                render(HTMLTags.TableData, {}, errorsElement),
+                render(HTMLTags.TableData, { class: CSS.VERTICAL_ALIGN_TOP }, errorsElement),
             ),
         );
 

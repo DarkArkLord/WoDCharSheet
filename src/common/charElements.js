@@ -28,7 +28,7 @@ export class DarkEvent {
     }
 }
 
-class CharValueWrapper {
+class ValueWrapper {
     constructor(data, field, defaultValue) {
         this.data = data;
         this.field = field;
@@ -47,7 +47,7 @@ class CharValueWrapper {
     }
 }
 
-class CharPointsValueWrapper extends CharValueWrapper {
+class PointsValueWrapper extends ValueWrapper {
     constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
         super(data, field, defaultValue);
 
@@ -90,7 +90,7 @@ class CharPointsValueWrapper extends CharValueWrapper {
     }
 }
 
-class CharValuePriceWrapper {
+class ValuePriceWrapper {
     constructor(pointsValueWrapper, priceFunc) {
         this.pointsValueWrapper = pointsValueWrapper;
         this.priceFunc = priceFunc;
@@ -161,14 +161,14 @@ class CharUiTextWithPointsElement {
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
-        this.wrapper = new CharPointsValueWrapper(
+        this.wrapper = new PointsValueWrapper(
             this.data,
             this.validations?.state,
             this.partValidations?.min,
             this.validations?.prev,
             this.validations?.next,
         );
-        this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.partValidations?.price);
+        this.priceWrapper = new ValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(valueInfo.translation, {});
         this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
@@ -271,7 +271,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         const instance = this;
 
-        this.specialtyWrapper = new CharValueWrapper(this.data, SPECIALTY_FIELD, EMPTY_STRING);
+        this.specialtyWrapper = new ValueWrapper(this.data, SPECIALTY_FIELD, EMPTY_STRING);
 
         this.specialty = new UITextInput({}, UITextInputType.Text, null, null, 10);
         this.priceText = new UIText(EMPTY_STRING, {});

@@ -358,9 +358,10 @@ export class CharLineValuesSectionsPartElement {
         this.updateEvent = updateEvent;
 
         this.info = partInfo;
+        this.data = keeper[partInfo.id] = keeper[partInfo.id] ?? {};
 
         this.sections = partInfo.sections?.map(section => new CharLineValuesSectionElement({
-            keeper,
+            keeper: this.data,
             sectionInfo: section,
             validations,
             validationsField: partInfo.id,

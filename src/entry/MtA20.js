@@ -14,7 +14,7 @@ import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
 import { DarkEvent, CharLineValueElement, CharLineValuesSectionElement, CharLineValuesSectionsPartElement } from '../common/charElements.js'
 
-import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS } from '../setting/MtA20.js'
+import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
 const CSS = Object.freeze({
     TAB_BUTTON: 'tab-button',
@@ -184,6 +184,35 @@ class CharacterMtA {
     }
 }
 
+class ConfigTab {
+    constructor(data) {
+        this.data = data;
+
+        this.charTextElement = render(
+            HTMLTags.TextArea,
+            { cols: 45, rows: 45, readonly: true, disabled: true, },
+        );
+
+        this.tabButton = render(
+            HTMLTags.Div,
+            { class: CSS.TAB_BUTTON },
+            CHAR_SETTINGS_TRANSLATION,
+        );
+
+        this.tabContent = render(
+            HTMLTags.Div,
+            { class: CSS.TAB_CONTENT },
+            this.charTextElement,
+        );
+
+        this.update();
+    }
+
+    update() {
+        this.charTextElement.value = JSON.stringify(this.data, null, 2);
+    }
+}
+
 const characterData = {};
 const characterUi = new CharacterMtA(characterData);
 
@@ -191,6 +220,13 @@ const tabs = editStatesForTabsOrder.map(editState => ({
     button: characterUi.states[editState].tabButton,
     content: characterUi.states[editState].tabContent,
 }));
+
+const config = new ConfigTab(characterData);
+characterUi.updateEvent.addHandler(() => config.update());
+tabs.push({
+    button: config.tabButton,
+    content: config.tabContent,
+});
 
 document.body.append(
     render(

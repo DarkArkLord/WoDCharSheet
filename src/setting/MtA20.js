@@ -183,7 +183,7 @@ export const CHAR_EDIT_STATES_TRANSLATIONS = Object.freeze({
     [CHAR_EDIT_STATES.TOTAL]: 'Итог',
 });
 
-export const CHAR_SETTINGS_TRANSLATIONS = 'Настройки';
+export const CHAR_SETTINGS_TRANSLATION = 'Настройки';
 
 export const CHAR_VALIDATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: {

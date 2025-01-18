@@ -365,7 +365,6 @@ export class CharLineValuesSectionsPartElement {
 
         this.updateEvent = updateEvent;
 
-
         this.validations = validations;
         this.valueValidations = validations?.[partInfo.id];
         this.isEditable = validations?.editable;

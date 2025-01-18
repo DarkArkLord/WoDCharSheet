@@ -71,7 +71,16 @@ class CharacterMtAState {
     validate() {
         const errors = Object.values(this.parts).flatMap(part => part.validate() ?? []);
 
-        //
+        if (this.validations?.freePoints) {
+            const price = this.getPrice();
+
+            if (price !== this.validations.freePoints) {
+                errors.push({
+                    ...this.validationsInfo,
+                    text: `Должно быть распределено ${this.validations.freePoints} точек (сейчас ${price})`,
+                });
+            }
+        }
 
         return errors;
     }

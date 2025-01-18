@@ -323,6 +323,7 @@ export class CharUiLinePointsSectionElement {
             data: {
                 keeper,
                 sectionInfo,
+                pointsCount,
             },
             validations: {
                 validations,
@@ -410,6 +411,7 @@ export class CharUiLinePointsSectionsPartElement {
             data: {
                 keeper,
                 partInfo,
+                pointsCount,
             },
             validations: {
                 validations,

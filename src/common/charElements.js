@@ -548,7 +548,7 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
             HTMLTags.Table, {},
             render(
                 HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.text.element),
+                render(HTMLTags.TableData, { class: CSS.TEXT_ALIGN_CENTER }, this.text.element),
             ),
             render(
                 HTMLTags.TableRow, { class: CSS.TEXT_ALIGN_CENTER },

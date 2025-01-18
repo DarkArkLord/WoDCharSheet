@@ -230,16 +230,19 @@ class CharUiTextWithPointsElement {
             });
         }
 
-        // Highlight Border
-        if (errors.length > 0) {
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        if (isVisible) {
             this.text.element.classList.add(CSS.BORDER_RED_1);
             this.points.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.text.element.classList.remove(CSS.BORDER_RED_1);
             this.points.element.classList.remove(CSS.BORDER_RED_1);
         }
-
-        return errors;
     }
 
     getPrice() {
@@ -390,14 +393,17 @@ export class CharUiLinePointsSectionElement {
     validate() {
         const errors = this.items?.flatMap(item => item.validate() ?? []) ?? [];
 
-        // Highlight Border
-        if (errors.length > 0) {
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        if (isVisible) {
             this.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.element.classList.remove(CSS.BORDER_RED_1);
         }
-
-        return errors;
     }
 
     getPrice() {
@@ -502,14 +508,17 @@ export class CharUiLinePointsSectionsPartElement {
             }
         }
 
-        // Highlight Border
-        if (errors.length > 0) {
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        if (isVisible) {
             this.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.element.classList.remove(CSS.BORDER_RED_1);
         }
-
-        return errors;
     }
 
     getPrice() {
@@ -554,5 +563,13 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
         }
 
         super.update();
+    }
+
+    setHighlight(isVisible) {
+        if (isVisible) {
+            this.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.element.classList.remove(CSS.BORDER_RED_1);
+        }
     }
 }

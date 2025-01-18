@@ -292,7 +292,12 @@ export class CharLineValuesSectionElement {
 
         this.updateEvent = updateEvent;
 
+        this.isEditable = validations?.editable;
+
         this.info = sectionInfo;
+
+        this.sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
+        this.header = new UIText(this.sectionTitle, {});
 
         this.items = sectionInfo?.values?.map(valueInfo => new CharLineValueElement({
             keeper,
@@ -302,21 +307,16 @@ export class CharLineValuesSectionElement {
             updateEvent,
         })) ?? [];
 
-        const sectionHeader = [];
-        if (sectionInfo.translation) {
-            sectionHeader.push(render(
+        this.element = render(
+            HTMLTags.Table, {},
+            render(
                 HTMLTags.TableRow, {},
                 render(
                     HTMLTags.TableData,
                     { class: CSS.TEXT_ALIGN_CENTER, colspan: 4, },
-                    sectionInfo.translation,
+                    this.header.element,
                 ),
-            ));
-        }
-
-        this.element = render(
-            HTMLTags.Table, {},
-            sectionHeader,
+            ),
             this.items.map(item => render(
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, {}, item.text.element),
@@ -325,11 +325,17 @@ export class CharLineValuesSectionElement {
                 render(HTMLTags.TableData, {}, item.priceText.element),
             )),
         );
+
+        this.update();
     }
 
     update() {
         for (const item of this.items) {
             item.update();
+        }
+
+        if (this.isEditable) {
+            this.header.setText(`${this.sectionTitle} (${this.getPrice()})`);
         }
     }
 
@@ -359,8 +365,13 @@ export class CharLineValuesSectionsPartElement {
 
         this.updateEvent = updateEvent;
 
+        this.isEditable = validations?.editable;
+
         this.info = partInfo;
         this.data = keeper[partInfo.id] = keeper[partInfo.id] ?? {};
+
+        this.partTitle = partInfo.translation ?? EMPTY_STRING;
+        this.header = new UIText(this.partTitle, {});
 
         this.sections = partInfo.sections?.map(section => new CharLineValuesSectionElement({
             keeper: this.data,
@@ -377,7 +388,7 @@ export class CharLineValuesSectionsPartElement {
                 render(
                     HTMLTags.TableData,
                     { class: CSS.TEXT_ALIGN_CENTER, colspan: partInfo.sections.length, },
-                    partInfo.translation,
+                    this.header.element,
                 ),
             ),
             render(
@@ -385,11 +396,31 @@ export class CharLineValuesSectionsPartElement {
                 this.sections.map(section => render(HTMLTags.TableData, {}, section.element)),
             ),
         );
+
+        this.update();
     }
 
     update() {
         for (const section of this.sections) {
             section.update();
         }
+
+        if (this.isEditable) {
+            this.header.setText(`${this.partTitle} (${this.getPrice()})`);
+        }
+    }
+
+    validate() {
+        const errors = this.items.flatMap(item => item.validate() ?? []);
+
+        for (const error of errors) {
+            error.part = this.info.translation;
+        }
+
+        return errors;
+    }
+
+    getPrice() {
+        return this.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }

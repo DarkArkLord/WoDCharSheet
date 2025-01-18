@@ -137,6 +137,7 @@ class CharUiTextWithPointsElement {
             data: {
                 keeper,
                 valueInfo,
+                pointsCount = DEFAULT_POINTS_COUNT,
             },
             validations: {
                 validations,
@@ -144,7 +145,6 @@ class CharUiTextWithPointsElement {
                 dataForValidations,
             },
             updateEvent,
-            pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
 
         const instance = this;
@@ -255,6 +255,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
             data: {
                 keeper,
                 valueInfo,
+                pointsCount,
             },
             validations: {
                 validations,
@@ -262,7 +263,6 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
                 dataForValidations,
             },
             updateEvent,
-            pointsCount,
         } = input;
 
         const instance = this;
@@ -523,6 +523,7 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
             data: {
                 keeper,
                 valueInfo,
+                pointsCount,
             },
             validations: {
                 validations,
@@ -530,18 +531,17 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
                 dataForValidations,
             },
             updateEvent,
-            pointsCount,
         } = input;
 
         this.element = render(
             HTMLTags.Table, {},
             render(
                 HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.text),
+                render(HTMLTags.TableData, {}, this.text.element),
             ),
             render(
                 HTMLTags.TableRow, { class: CSS.TEXT_ALIGN_CENTER },
-                render(HTMLTags.TableData, {}, this.points),
+                render(HTMLTags.TableData, {}, this.points.element),
             ),
         );
     }

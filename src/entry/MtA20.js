@@ -19,18 +19,17 @@ import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATE
 const editStatesFrotTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
 
 const character = {};
-
-const event = new DarkEvent();
+const charUpdateEvent = new DarkEvent();
 
 const tabs = editStatesFrotTabsOrder.map(editState => {
     const data = new CharLineValuesSectionsPartElement({
         keeper: character,
         partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
         validations: CHAR_VALIDATIONS[editState],
-        updateEvent: event,
+        updateEvent: charUpdateEvent,
     });
 
-    event.addHandler(() => data.update());
+    charUpdateEvent.addHandler(() => data.update());
 
     return {
         button: render(
@@ -47,7 +46,7 @@ const tabs = editStatesFrotTabsOrder.map(editState => {
 });
 
 const bottomContainer = render(HTMLTags.Div, {},);
-event.addHandler(() => {
+charUpdateEvent.addHandler(() => {
     bottomContainer.innerHTML = JSON.stringify(character, null, 2);
 });
 

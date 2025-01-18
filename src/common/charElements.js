@@ -150,7 +150,7 @@ export class CharLineValueElement {
         this.info = valueInfo;
 
         this.validations = validations;
-        this.valueValidations = partValidations;
+        this.partValidations = partValidations;
         this.isEditable = validations?.editable;
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
@@ -158,12 +158,12 @@ export class CharLineValueElement {
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
         this.wrapper = new CharValueWrapper(
             this.data,
-            this.validations?.valueField,
-            this.valueValidations?.min,
+            this.validations?.state,
+            this.partValidations?.min,
             this.validations?.prev,
             this.validations?.next,
         );
-        this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.valueValidations?.price);
+        this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(EMPTY_STRING, {});
         this.specialty = new UITextInput({}, UITextInputType.Text);
@@ -224,7 +224,7 @@ export class CharLineValueElement {
 
         this.priceText.setText(`(${this.priceWrapper.getPrice()})`);
 
-        const specialtyEditableFrom = this.valueValidations?.specialty;
+        const specialtyEditableFrom = this.partValidations?.specialty;
         if (specialtyEditableFrom) {
             this.specialty.setVisible(true);
             this.specialty.setReadOnly(prevValue + value < specialtyEditableFrom);
@@ -250,9 +250,9 @@ export class CharLineValueElement {
         if (this.isEditable) {
             this.points.setValue(prevValue, value);
 
-            const enableSubButton = this.valueValidations?.min === undefined ? true : value > this.valueValidations?.min;
+            const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
             this.points.subButton.setActive(enableSubButton && !hasNextValue);
-            const enableAddButton = this.valueValidations?.max === undefined ? true : value < this.valueValidations?.max;
+            const enableAddButton = this.partValidations?.max === undefined ? true : value < this.partValidations?.max;
             this.points.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
             this.points.setValue(0, totalValue);
@@ -263,16 +263,16 @@ export class CharLineValueElement {
         const errors = [];
 
         const totalValue = this.wrapper.getTotalValue();
-        if (totalValue < this.valueValidations?.totalMin) {
+        if (totalValue < this.partValidations?.totalMin) {
             errors.push({
                 ...this.validationsInfo,
-                text: `Не может быть меньше ${this.valueValidations?.totalMin}`,
+                text: `Не может быть меньше ${this.partValidations?.totalMin}`,
             });
         }
-        if (totalValue > this.valueValidations?.totalMax) {
+        if (totalValue > this.partValidations?.totalMax) {
             errors.push({
                 ...this.validationsInfo,
-                text: `Не может быть больше ${this.valueValidations?.totalMax}`,
+                text: `Не может быть больше ${this.partValidations?.totalMax}`,
             });
         }
 
@@ -385,7 +385,7 @@ export class CharLineValuesSectionsPartElement {
         this.updateEvent = updateEvent;
 
         this.validations = validations;
-        this.valueValidations = validations?.[partInfo.id];
+        this.partValidations = validations?.[partInfo.id];
         this.isEditable = validations?.editable;
 
         this.validationsInfo = { ...dataForValidations, part: partInfo.translation, };
@@ -403,7 +403,7 @@ export class CharLineValuesSectionsPartElement {
             },
             validations: {
                 validations,
-                partValidations: this.valueValidations,
+                partValidations: this.partValidations,
                 dataForValidations: this.validationsInfo,
             },
             updateEvent,
@@ -441,8 +441,8 @@ export class CharLineValuesSectionsPartElement {
     validate() {
         const errors = this.items.flatMap(item => item.validate() ?? []);
 
-        if (this.valueValidations?.sectionPoints) {
-            const validPoints = this.valueValidations.sectionPoints.slice().sort();
+        if (this.partValidations?.sectionPoints) {
+            const validPoints = this.partValidations.sectionPoints.slice().sort();
             const currentPoints = this.sections.map(section => section.getPrice()).sort();
 
             if (JSON.stringify(validPoints) !== JSON.stringify(currentPoints)) {
@@ -455,13 +455,13 @@ export class CharLineValuesSectionsPartElement {
             }
         }
 
-        if (this.valueValidations?.freePoints !== undefined) {
+        if (this.partValidations?.freePoints !== undefined) {
             const price = this.getPrice();
 
-            if (price !== this.valueValidations.freePoints) {
+            if (price !== this.partValidations.freePoints) {
                 errors.push({
                     ...this.validationsInfo,
-                    text: `Должно быть распределено ${this.valueValidations.freePoints} точек (сейчас ${price})`,
+                    text: `Должно быть распределено ${this.partValidations.freePoints} точек (сейчас ${price})`,
                 });
             }
         }

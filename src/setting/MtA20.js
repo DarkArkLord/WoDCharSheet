@@ -188,8 +188,8 @@ export const CHAR_SETTINGS_TRANSLATIONS = 'Настройки';
 export const CHAR_VALIDATIONS = Object.freeze({
     [CHAR_EDIT_STATES.BASE]: {
         editable: true,
-        valueField: CHAR_EDIT_STATES.BASE,
-        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.BASE],
+        state: CHAR_EDIT_STATES.BASE,
+        stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.BASE],
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         [CHAR_PARTS.ATTRIBUTES]: {
@@ -224,8 +224,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
     },
     [CHAR_EDIT_STATES.POINTS]: {
         editable: true,
-        valueField: CHAR_EDIT_STATES.POINTS,
-        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.POINTS],
+        state: CHAR_EDIT_STATES.POINTS,
+        stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.POINTS],
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
@@ -259,8 +259,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
     },
     [CHAR_EDIT_STATES.EXP]: {
         editable: true,
-        valueField: CHAR_EDIT_STATES.EXP,
-        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.EXP],
+        state: CHAR_EDIT_STATES.EXP,
+        stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.EXP],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {
@@ -292,8 +292,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
     },
     [CHAR_EDIT_STATES.TOTAL]: {
         editable: false,
-        valueField: undefined,
-        valueTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.TOTAL],
+        state: undefined,
+        stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.TOTAL],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {

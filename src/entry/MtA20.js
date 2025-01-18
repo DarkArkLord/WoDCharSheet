@@ -25,16 +25,14 @@ class CharacterMtAState {
     constructor(input) {
         const {
             keeper,
-            state,
             validations,
             updateEvent,
         } = input;
 
         this.updateEvent = updateEvent;
 
-        this.state = state;
-        this.validations = validations[state];
-        this.validationsInfo = { state };
+        this.validations = validations;
+        this.validationsInfo = { state: validations.stateTranslation };
 
         this.parts = {
             [CHAR_PARTS.ATTRIBUTES]: new CharLineValuesSectionsPartElement({

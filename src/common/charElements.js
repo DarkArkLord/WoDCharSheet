@@ -129,6 +129,8 @@ class CharValuePriceWrapper {
 const DEFAULT_POINTS_COUNT = 5;
 const EMPTY_STRING = '';
 
+const DEFAULT_COMPARATOR = (a, b) => b - a;
+
 export class CharUiLineValueElement {
     constructor(input) {
         const {
@@ -460,8 +462,8 @@ export class CharUiLineValuesSectionsPartElement {
         const errors = this.sections?.flatMap(item => item.validate() ?? []) ?? [];
 
         if (this.partValidations?.sectionPoints) {
-            const validPoints = this.partValidations.sectionPoints.slice().sort();
-            const currentPoints = this.sections.map(section => section.getPrice()).sort();
+            const validPoints = this.partValidations.sectionPoints.slice().sort(DEFAULT_COMPARATOR);
+            const currentPoints = this.sections.map(section => section.getPrice()).sort(DEFAULT_COMPARATOR);
 
             if (JSON.stringify(validPoints) !== JSON.stringify(currentPoints)) {
                 const validPointsStr = validPoints.join('/');

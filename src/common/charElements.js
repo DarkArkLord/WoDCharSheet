@@ -262,6 +262,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
                 dataForValidations,
             },
             updateEvent,
+            pointsCount,
         } = input;
 
         const instance = this;
@@ -287,7 +288,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
         const value = this.wrapper.getValue()
         const totalValue = this.wrapper.getTotalValue();
 
-        this.priceText.setText(`(${this.priceWrapper.getPrice()})`);
+        this.priceText.setText(`(${this.getPrice()})`);
 
         const specialtyEditableFrom = this.partValidations?.specialty;
         if (specialtyEditableFrom) {
@@ -313,10 +314,6 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
         }
 
         super.update();
-    }
-
-    validate() {
-        return super.validate() ?? [];
     }
 }
 
@@ -518,8 +515,42 @@ export class CharUiLinePointsSectionsPartElement {
     }
 }
 
-export class CharUiBlockPointsElement {
-    constructor() {
-        //
+export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
+    constructor(input) {
+        super(input);
+
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+            pointsCount,
+        } = input;
+
+        this.element = render(
+            HTMLTags.Table, {},
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, this.text),
+            ),
+            render(
+                HTMLTags.TableRow, { class: CSS.TEXT_ALIGN_CENTER },
+                render(HTMLTags.TableData, {}, this.points),
+            ),
+        );
+    }
+
+    update() {
+        if (this.isEditable) {
+            this.text.setText(`${this.info.translation} (${this.getPrice()})`)
+        }
+
+        super.update();
     }
 }

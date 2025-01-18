@@ -12,7 +12,7 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
-import { DarkEvent, CharUiLineValueElement, CharUiLineValuesSectionElement, CharUiLineValuesSectionsPartElement } from '../common/charElements.js'
+import { DarkEvent, CharUiLinePointsElement, CharUiLinePointsSectionElement, CharUiLinePointsSectionsPartElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
@@ -40,7 +40,7 @@ class CharacterMtAState {
         this.validationsInfo = { state: validations.stateTranslation };
 
         this.parts = {
-            [CHAR_PARTS.ATTRIBUTES]: new CharUiLineValuesSectionsPartElement({
+            [CHAR_PARTS.ATTRIBUTES]: new CharUiLinePointsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
@@ -51,7 +51,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.ABILITIES]: new CharUiLineValuesSectionsPartElement({
+            [CHAR_PARTS.ABILITIES]: new CharUiLinePointsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
@@ -62,7 +62,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.SPHERES]: new CharUiLineValuesSectionsPartElement({
+            [CHAR_PARTS.SPHERES]: new CharUiLinePointsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.SPHERES],

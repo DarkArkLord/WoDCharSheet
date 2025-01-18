@@ -247,7 +247,7 @@ class CharUiTextWithPointsElement {
     }
 }
 
-export class CharUiLineValueElement extends CharUiTextWithPointsElement {
+export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
     constructor(input) {
         super(input);
 
@@ -320,7 +320,7 @@ export class CharUiLineValueElement extends CharUiTextWithPointsElement {
     }
 }
 
-export class CharUiLineValuesSectionElement {
+export class CharUiLinePointsSectionElement {
     constructor(input) {
         const {
             data: {
@@ -346,7 +346,7 @@ export class CharUiLineValuesSectionElement {
         this.sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
         this.header = new UIText(this.sectionTitle, {});
 
-        this.items = sectionInfo?.values?.map(valueInfo => new CharUiLineValueElement({
+        this.items = sectionInfo?.values?.map(valueInfo => new CharUiLinePointsElement({
             data: {
                 keeper,
                 valueInfo,
@@ -407,7 +407,7 @@ export class CharUiLineValuesSectionElement {
     }
 }
 
-export class CharUiLineValuesSectionsPartElement {
+export class CharUiLinePointsSectionsPartElement {
     constructor(input) {
         const {
             data: {
@@ -435,7 +435,7 @@ export class CharUiLineValuesSectionsPartElement {
         this.partTitle = partInfo.translation ?? EMPTY_STRING;
         this.header = new UIText(this.partTitle, {});
 
-        this.sections = partInfo.sections?.map(section => new CharUiLineValuesSectionElement({
+        this.sections = partInfo.sections?.map(section => new CharUiLinePointsSectionElement({
             data: {
                 keeper: this.data,
                 sectionInfo: section,
@@ -518,7 +518,7 @@ export class CharUiLineValuesSectionsPartElement {
     }
 }
 
-export class CharUiBlockValueElement {
+export class CharUiBlockPointsElement {
     constructor() {
         //
     }

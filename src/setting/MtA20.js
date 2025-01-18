@@ -1,4 +1,11 @@
+const CHAR_MERIT_FLAW_TYPE = Object.freeze({
+    PHYSICAL: 'Физ',
+    MENTAL: 'Мен',
+    SOCIAL: 'Соц',
+});
+
 export const CHAR_PARTS = Object.freeze({
+    HEADER: 'header',
     ATTRIBUTES: 'attributes',
     ABILITIES: 'abilities',
     SPHERES: 'spheres',
@@ -9,33 +16,43 @@ export const CHAR_PARTS = Object.freeze({
     PARADOX: 'paradox',
     HEALTH: 'health',
     EXPERIENCE: 'experience',
+    OTHER_TRAITS: 'otherTraits',
+    MERITS: 'merits',
+    FLAWS: 'flaws',
 });
 
 export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
-    header: [
-        [
-            { id: 'Name', translation: 'Имя', },
-            { id: 'Player', translation: 'Игрок', },
-            { id: 'Chronicle', translation: 'Хроника', },
-        ],
-        [
-            { id: 'Nature', translation: 'Натура', },
-            { id: 'Demeanor', translation: 'Маска', },
-            { id: 'Essence', translation: 'Аватар', },
-        ],
-        [
-            { id: 'Affiliation', translation: 'Фракция', },
-            { id: 'Sect', translation: 'Секта', },
-            { id: 'Concept', translation: 'Концепция', },
-        ],
-    ],
-    [CHAR_PARTS.ATTRIBUTES]: {
-        id: CHAR_PARTS.ATTRIBUTES,
-        translation: 'Атрибуты',
+    [CHAR_PARTS.HEADER]: {
+        id: CHAR_PARTS.HEADER, translation: 'Заголовок',
         sections: [
             {
-                id: 'Physical',
-                translation: 'Физические',
+                values: [
+                    { id: 'Name', translation: 'Имя', },
+                    { id: 'Player', translation: 'Игрок', },
+                    { id: 'Chronicle', translation: 'Хроника', },
+                ],
+            },
+            {
+                values: [
+                    { id: 'Nature', translation: 'Натура', },
+                    { id: 'Demeanor', translation: 'Маска', },
+                    { id: 'Essence', translation: 'Аватар', },
+                ],
+            },
+            {
+                values: [
+                    { id: 'Affiliation', translation: 'Фракция', },
+                    { id: 'Sect', translation: 'Секта', },
+                    { id: 'Concept', translation: 'Концепция', },
+                ],
+            },
+        ]
+    },
+    [CHAR_PARTS.ATTRIBUTES]: {
+        id: CHAR_PARTS.ATTRIBUTES, translation: 'Атрибуты',
+        sections: [
+            {
+                id: 'Physical', translation: 'Физические',
                 values: [
                     { id: 'Strength', translation: 'Сила', },
                     { id: 'Dexterity', translation: 'Ловкость', },
@@ -43,8 +60,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                 ]
             },
             {
-                id: 'Social',
-                translation: 'Социальные',
+                id: 'Social', translation: 'Социальные',
                 values: [
                     { id: 'Charisma', translation: 'Харизма', },
                     { id: 'Manipulation', translation: 'Манипуляция', },
@@ -52,8 +68,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                 ]
             },
             {
-                id: 'Mental',
-                translation: 'Ментальные',
+                id: 'Mental', translation: 'Ментальные',
                 values: [
                     { id: 'Perception', translation: 'Восприятие', },
                     { id: 'Intelligence', translation: 'Интеллект', },
@@ -63,12 +78,10 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ],
     },
     [CHAR_PARTS.ABILITIES]: {
-        id: CHAR_PARTS.ABILITIES,
-        translation: 'Способности',
+        id: CHAR_PARTS.ABILITIES, translation: 'Способности',
         sections: [
             {
-                id: 'Talents',
-                translation: 'Таланты',
+                id: 'Talents', translation: 'Таланты',
                 values: [
                     { id: 'Alertness', translation: 'Внимательность', },
                     { id: 'Art', translation: 'Искусство', },
@@ -84,8 +97,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                 ]
             },
             {
-                id: 'Skills',
-                translation: 'Навыки',
+                id: 'Skills', translation: 'Навыки',
                 values: [
                     { id: 'Crafts', translation: 'Ремесло', },
                     { id: 'Drive', translation: 'Вождение', },
@@ -101,8 +113,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                 ]
             },
             {
-                id: 'Knowledges',
-                translation: 'Знания',
+                id: 'Knowledges', translation: 'Знания',
                 values: [
                     { id: 'Academics', translation: 'Академизм', },
                     { id: 'Computer', translation: 'Информатика', },
@@ -120,8 +131,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ],
     },
     [CHAR_PARTS.SPHERES]: {
-        id: CHAR_PARTS.SPHERES,
-        translation: 'Сферы',
+        id: CHAR_PARTS.SPHERES, translation: 'Сферы',
         sections: [
             {
                 values: [
@@ -147,19 +157,17 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ]
     },
     [CHAR_PARTS.BACKGROUNDS]: {
-        id: CHAR_PARTS.BACKGROUNDS,
-        translation: 'Факты биографии',
+        id: CHAR_PARTS.BACKGROUNDS, translation: 'Факты биографии',
         variants: [
             { id: 'Avatar', translation: 'Аватар', },
-        ]
+        ],
     },
     [CHAR_PARTS.ARETE]: { id: CHAR_PARTS.ARETE, translation: 'Арете', },
     [CHAR_PARTS.WILLPOWER]: { id: CHAR_PARTS.WILLPOWER, translation: 'Сила воли', },
     [CHAR_PARTS.QUINTESSENCE]: { id: CHAR_PARTS.QUINTESSENCE, translation: 'Квинтэссенция', },
     [CHAR_PARTS.PARADOX]: { id: CHAR_PARTS.PARADOX, translation: 'Парадокс', },
     [CHAR_PARTS.HEALTH]: {
-        id: CHAR_PARTS.HEALTH,
-        translation: 'Здоровье',
+        id: CHAR_PARTS.HEALTH, translation: 'Здоровье',
         levels: [
             { id: 'Bruised', translation: 'Задет', penalty: '-0', },
             { id: 'Hurt', translation: 'Поврежден', penalty: '-1', },
@@ -171,6 +179,24 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         ]
     },
     [CHAR_PARTS.EXPERIENCE]: { id: CHAR_PARTS.EXPERIENCE, translation: 'Опыт', },
+    [CHAR_PARTS.OTHER_TRAITS]: {
+        id: CHAR_PARTS.OTHER_TRAITS, translation: 'Другие параметры',
+        variants: [
+            { id: 'TestOtherTrait', translation: 'Тестовый другой параметр', },
+        ],
+    },
+    [CHAR_PARTS.MERITS]: {
+        id: CHAR_PARTS.MERITS, translation: 'Достоинства',
+        variants: [
+            { id: 'TestMerit', translation: 'Тестовое достоинство', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
+        ],
+    },
+    [CHAR_PARTS.FLAWS]: {
+        id: CHAR_PARTS.FLAWS, translation: 'Недостатки',
+        variants: [
+            { id: 'TestFlaw', translation: 'Тестовый недостаток', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
+        ],
+    },
     // Add second page and other
     aaaaaaaaa: { id: 'Aaaaaaa', translation: 'Aaaaaaaaa', },
 });

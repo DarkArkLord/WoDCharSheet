@@ -38,8 +38,8 @@ class ValueWrapper {
         }
     }
 
-    getValue() {
-        return this.data[this.field];
+    getValue(defaultValue) {
+        return this.data[this.field] ?? defaultValue;
     }
 
     setValue(value) {
@@ -75,8 +75,8 @@ class PointsValueWrapper extends ValueWrapper {
         return result;
     }
 
-    getTotalValue() {
-        return this.getPrevValue() + this.getValue() + this.getNextValue();
+    getTotalValue(defaultValue) {
+        return this.getPrevValue() + this.getValue(defaultValue) + this.getNextValue();
     }
 
     hasNextValue() {
@@ -179,7 +179,6 @@ class CharUiPointsElement {
 
                 instance.priceWrapper.setDirty();
 
-                // instance.update();
                 instance.updateEvent.invoke();
             });
 
@@ -189,7 +188,6 @@ class CharUiPointsElement {
 
                 instance.priceWrapper.setDirty();
 
-                // instance.update();
                 instance.updateEvent.invoke();
             });
         }
@@ -199,8 +197,8 @@ class CharUiPointsElement {
 
     update() {
         if (this.isEditable) {
-            const prevValue = this.wrapper.getPrevValue()
-            const value = this.wrapper.getValue()
+            const prevValue = this.wrapper.getPrevValue(0);
+            const value = this.wrapper.getValue(0);
             const hasNextValue = this.wrapper.hasNextValue();
 
             this.points.setValue(prevValue, value);
@@ -211,7 +209,7 @@ class CharUiPointsElement {
                 && prevValue + value < this.pointsCount;
             this.points.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
-            const totalValue = this.wrapper.getTotalValue();
+            const totalValue = this.wrapper.getTotalValue(0);
             this.points.setValue(0, totalValue);
         }
     }
@@ -219,7 +217,7 @@ class CharUiPointsElement {
     validate() {
         const errors = [];
 
-        const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue();
+        const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue(0);
         if (totalValue < this.partValidations?.totalMin) {
             errors.push({
                 ...this.validationsInfo,
@@ -345,8 +343,8 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
     update() {
         const prevValue = this.wrapper.getPrevValue()
-        const value = this.wrapper.getValue()
-        const totalValue = this.wrapper.getTotalValue();
+        const value = this.wrapper.getValue(0)
+        const totalValue = this.wrapper.getTotalValue(0);
 
         this.priceText.setText(`(${this.getPrice()})`);
 

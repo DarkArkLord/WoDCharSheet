@@ -77,10 +77,18 @@ class CharacterMtAState {
 
         const charElement = render(
             HTMLTags.Table, {},
-            Object.values(this.parts).map(part => render(
+            render(
                 HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, part.element),
-            )),
+                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ATTRIBUTES].element),
+            ),
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ABILITIES].element),
+            ),
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.SPHERES].element),
+            ),
         );
 
         this.errorsList = new UITextList();

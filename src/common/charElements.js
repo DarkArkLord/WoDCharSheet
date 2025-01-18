@@ -216,7 +216,7 @@ class CharUiTextWithPointsElement {
     validate() {
         const errors = [];
 
-        const totalValue = this.wrapper.getTotalValue();
+        const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue();
         if (totalValue < this.partValidations?.totalMin) {
             errors.push({
                 ...this.validationsInfo,

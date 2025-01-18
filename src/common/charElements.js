@@ -365,6 +365,9 @@ export class CharLineValuesSectionsPartElement {
 
         this.updateEvent = updateEvent;
 
+
+        this.validations = validations;
+        this.valueValidations = validations?.[partInfo.id];
         this.isEditable = validations?.editable;
 
         this.info = partInfo;
@@ -415,6 +418,33 @@ export class CharLineValuesSectionsPartElement {
 
         for (const error of errors) {
             error.part = this.info.translation;
+        }
+
+        if (this.valueValidations?.sectionPoints) {
+            const validPoints = this.valueValidations.sectionPoints.slice().sort();
+            const currentPoints = this.sections.map(section => section.getPrice()).sort();
+
+            if (JSON.stringify(validPoints) !== JSON.stringify(currentPoints)) {
+                const validPointsStr = validPoints.join('/');
+                const currentPointsStr = currentPoints.join('/');
+                errors.push({
+                    level: this.validations?.valueTranslation,
+                    part: this.info.translation,
+                    text: `Между секциями должно быть распределено ${validPointsStr} точек (сейчас ${currentPointsStr})`,
+                });
+            }
+        }
+
+        if (this.valueValidations?.freePoints !== undefined) {
+            const price = this.getPrice();
+
+            if (price !== this.valueValidations.freePoints) {
+                errors.push({
+                    level: this.validations?.valueTranslation,
+                    part: this.info.translation,
+                    text: `Должно быть распределено ${this.valueValidations.freePoints} точек (сейчас ${price})`,
+                });
+            }
         }
 
         return errors;

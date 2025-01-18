@@ -199,7 +199,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         [CHAR_PARTS.ATTRIBUTES]: {
-            sectionPoints: [7, 5, 3],
+            sectionPoints: [7 + 3, 5 + 3, 3 + 3],
             specialty: 4,
             min: 1,
             max: 5,

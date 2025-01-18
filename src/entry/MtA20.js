@@ -34,18 +34,21 @@ class CharacterMtAState {
 
         this.state = state;
         this.validations = validations[state];
+        this.validationsInfo = { state };
 
         this.parts = {
             [CHAR_PARTS.ATTRIBUTES]: new CharLineValuesSectionsPartElement({
                 keeper: character,
                 partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
                 validations: this.validations,
+                dataForValidations: this.validationsInfo,
                 updateEvent: updateEvent,
             }),
             [CHAR_PARTS.ABILITIES]: new CharLineValuesSectionsPartElement({
                 keeper: character,
                 partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
                 validations: this.validations,
+                dataForValidations: this.validationsInfo,
                 updateEvent: updateEvent,
             }),
         };
@@ -60,9 +63,7 @@ class CharacterMtAState {
     validate() {
         const errors = Object.values(this.parts).flatMap(part => part.validate() ?? []);
 
-        for (const error of errors) {
-            error.part = this.validations.valueTranslation;
-        }
+        //
 
         return errors;
     }

@@ -134,6 +134,7 @@ export class CharLineValueElement {
             valueInfo,
             validations,
             validationsField,
+            dataForValidations,
             updateEvent,
             pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
@@ -148,6 +149,8 @@ export class CharLineValueElement {
         this.validationsField = validationsField;
         this.valueValidations = this.validations?.[validationsField];
         this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
         this.wrapper = new CharValueWrapper(
@@ -259,15 +262,13 @@ export class CharLineValueElement {
         const totalValue = this.wrapper.getTotalValue();
         if (totalValue < this.valueValidations?.totalMin) {
             errors.push({
-                level: this.validations?.valueTranslation,
-                value: this.info.translation,
+                ...this.validationsInfo,
                 text: `Не может быть меньше ${this.valueValidations?.totalMin}`,
             });
         }
         if (totalValue > this.valueValidations?.totalMax) {
             errors.push({
-                level: this.validations?.valueTranslation,
-                value: this.info.translation,
+                ...this.validationsInfo,
                 text: `Не может быть больше ${this.valueValidations?.totalMax}`,
             });
         }
@@ -287,12 +288,15 @@ export class CharLineValuesSectionElement {
             sectionInfo,
             validations,
             validationsField,
+            dataForValidations,
             updateEvent,
         } = input;
 
         this.updateEvent = updateEvent;
 
         this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, section: sectionInfo.translation, };
 
         this.info = sectionInfo;
 
@@ -304,6 +308,7 @@ export class CharLineValuesSectionElement {
             valueInfo,
             validations,
             validationsField,
+            dataForValidations: validationsInfo,
             updateEvent,
         })) ?? [];
 
@@ -342,9 +347,7 @@ export class CharLineValuesSectionElement {
     validate() {
         const errors = this.items.flatMap(item => item.validate() ?? []);
 
-        for (const error of errors) {
-            error.section = this.info.translation;
-        }
+        //
 
         return errors;
     }
@@ -360,6 +363,7 @@ export class CharLineValuesSectionsPartElement {
             keeper,
             partInfo,
             validations,
+            dataForValidations,
             updateEvent,
         } = input;
 
@@ -368,6 +372,8 @@ export class CharLineValuesSectionsPartElement {
         this.validations = validations;
         this.valueValidations = validations?.[partInfo.id];
         this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, part: partInfo.translation, };
 
         this.info = partInfo;
         this.data = keeper[partInfo.id] = keeper[partInfo.id] ?? {};
@@ -380,6 +386,7 @@ export class CharLineValuesSectionsPartElement {
             sectionInfo: section,
             validations,
             validationsField: partInfo.id,
+            dataForValidations: validationsInfo,
             updateEvent,
         })) ?? [];
 
@@ -415,10 +422,6 @@ export class CharLineValuesSectionsPartElement {
     validate() {
         const errors = this.items.flatMap(item => item.validate() ?? []);
 
-        for (const error of errors) {
-            error.part = this.info.translation;
-        }
-
         if (this.valueValidations?.sectionPoints) {
             const validPoints = this.valueValidations.sectionPoints.slice().sort();
             const currentPoints = this.sections.map(section => section.getPrice()).sort();
@@ -427,8 +430,7 @@ export class CharLineValuesSectionsPartElement {
                 const validPointsStr = validPoints.join('/');
                 const currentPointsStr = currentPoints.join('/');
                 errors.push({
-                    level: this.validations?.valueTranslation,
-                    part: this.info.translation,
+                    ...this.validationsInfo,
                     text: `Между секциями должно быть распределено ${validPointsStr} точек (сейчас ${currentPointsStr})`,
                 });
             }
@@ -439,8 +441,7 @@ export class CharLineValuesSectionsPartElement {
 
             if (price !== this.valueValidations.freePoints) {
                 errors.push({
-                    level: this.validations?.valueTranslation,
-                    part: this.info.translation,
+                    ...this.validationsInfo,
                     text: `Должно быть распределено ${this.valueValidations.freePoints} точек (сейчас ${price})`,
                 });
             }

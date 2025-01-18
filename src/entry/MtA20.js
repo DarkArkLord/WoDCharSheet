@@ -22,8 +22,49 @@ const character = {};
 const charUpdateEvent = new DarkEvent();
 
 class CharacterMtAState {
-    constructor() {
-        //
+    constructor(input) {
+        const {
+            keeper,
+            state,
+            validations,
+            updateEvent,
+        } = input;
+
+        this.updateEvent = updateEvent;
+
+        this.state = state;
+        this.validations = validations[state];
+
+        this.parts = {
+            [CHAR_PARTS.ATTRIBUTES]: new CharLineValuesSectionsPartElement({
+                keeper: character,
+                partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
+                validations: this.validations,
+                updateEvent: updateEvent,
+            }),
+            [CHAR_PARTS.ABILITIES]: new CharLineValuesSectionsPartElement({
+                keeper: character,
+                partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
+                validations: this.validations,
+                updateEvent: updateEvent,
+            }),
+        };
+    }
+
+    update() {
+        for (const part of this.parts) {
+            part.update();
+        }
+    }
+
+    validate() {
+        const errors = Object.values(this.parts).flatMap(part => part.validate() ?? []);
+
+        for (const error of errors) {
+            error.part = this.validations.valueTranslation;
+        }
+
+        return errors;
     }
 }
 

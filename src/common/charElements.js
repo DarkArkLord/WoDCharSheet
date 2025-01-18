@@ -131,7 +131,7 @@ const EMPTY_STRING = '';
 
 const DEFAULT_COMPARATOR = (a, b) => b - a;
 
-class CkarUiTextWithPointsElement {
+class CharUiTextWithPointsElement {
     constructor(input) {
         const {
             data: {
@@ -193,8 +193,6 @@ class CkarUiTextWithPointsElement {
                 instance.updateEvent.invoke();
             });
         }
-
-        this.update();
     }
 
     update() {
@@ -243,10 +241,16 @@ class CkarUiTextWithPointsElement {
 
         return errors;
     }
+
+    getPrice() {
+        return this.priceWrapper.getPrice();
+    }
 }
 
-export class CharUiLineValueElement {
+export class CharUiLineValueElement extends CharUiTextWithPointsElement {
     constructor(input) {
+        super(input);
+
         const {
             data: {
                 keeper,
@@ -258,34 +262,11 @@ export class CharUiLineValueElement {
                 dataForValidations,
             },
             updateEvent,
-            pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
 
         const instance = this;
 
-        this.updateEvent = updateEvent;
-
-        this.info = valueInfo;
-
-        this.validations = validations;
-        this.partValidations = partValidations;
-        this.isEditable = validations?.editable;
-
-        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
-
-        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
-        this.wrapper = new CharValueWrapper(
-            this.data,
-            this.validations?.state,
-            this.partValidations?.min,
-            this.validations?.prev,
-            this.validations?.next,
-        );
-        this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.partValidations?.price);
-
-        this.text = new UIText(EMPTY_STRING, {});
         this.specialty = new UITextInput({}, UITextInputType.Text, null, null, 10);
-        this.points = new UIPointsLine(pointsCount, this.isEditable, { class: CSS.NOWRAP });
         this.priceText = new UIText(EMPTY_STRING, {});
 
         this.priceText.setVisible(this.isEditable);
@@ -298,38 +279,7 @@ export class CharUiLineValueElement {
                 instance.update();
                 instance.updateEvent.invoke();
             });
-
-            this.points.subButton.setOnClickEvent(() => {
-                const value = instance.wrapper.getValue();
-                instance.wrapper.setValue(value - 1);
-
-                instance.priceWrapper.setDirty();
-
-                instance.update();
-                instance.updateEvent.invoke();
-            });
-
-            this.points.addButton.setOnClickEvent(() => {
-                const value = instance.wrapper.getValue();
-                instance.wrapper.setValue(value + 1);
-
-                instance.priceWrapper.setDirty();
-
-                instance.update();
-                instance.updateEvent.invoke();
-            });
         }
-
-        this.element = render(
-            HTMLTags.Table, {},
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.text.element),
-                render(HTMLTags.TableData, {}, this.specialty.element),
-                render(HTMLTags.TableData, {}, this.points.element),
-                render(HTMLTags.TableData, {}, this.priceText.element),
-            ),
-        );
 
         this.update();
     }
@@ -337,7 +287,6 @@ export class CharUiLineValueElement {
     update() {
         const prevValue = this.wrapper.getPrevValue()
         const value = this.wrapper.getValue()
-        const hasNextValue = this.wrapper.hasNextValue();
         const totalValue = this.wrapper.getTotalValue();
 
         this.priceText.setText(`(${this.priceWrapper.getPrice()})`);
@@ -365,51 +314,11 @@ export class CharUiLineValueElement {
             this.text.setText(text);
         }
 
-        if (this.isEditable) {
-            this.points.setValue(prevValue, value);
-
-            const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
-            this.points.subButton.setActive(enableSubButton && !hasNextValue);
-            const enableAddButton = this.partValidations?.max === undefined ? true : value < this.partValidations?.max;
-            this.points.addButton.setActive(enableAddButton && !hasNextValue);
-        } else {
-            this.points.setValue(0, totalValue);
-        }
+        super.update();
     }
 
     validate() {
-        const errors = [];
-
-        const totalValue = this.wrapper.getTotalValue();
-        if (totalValue < this.partValidations?.totalMin) {
-            errors.push({
-                ...this.validationsInfo,
-                text: `Не может быть меньше ${this.partValidations?.totalMin} (сейчас ${totalValue})`,
-            });
-        }
-        if (totalValue > this.partValidations?.totalMax) {
-            errors.push({
-                ...this.validationsInfo,
-                text: `Не может быть больше ${this.partValidations?.totalMax} (сейчас ${totalValue})`,
-            });
-        }
-
-        // Highlight Border
-        if (errors.length > 0) {
-            this.element.classList.add(CSS.BORDER_RED_1);
-            this.text.element.classList.add(CSS.BORDER_RED_1);
-            this.points.element.classList.add(CSS.BORDER_RED_1);
-        } else {
-            this.element.classList.remove(CSS.BORDER_RED_1);
-            this.text.element.classList.remove(CSS.BORDER_RED_1);
-            this.points.element.classList.remove(CSS.BORDER_RED_1);
-        }
-
-        return errors;
-    }
-
-    getPrice() {
-        return this.priceWrapper.getPrice();
+        return super.validate() ?? [];
     }
 }
 

@@ -85,6 +85,18 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
+            [CHAR_PARTS.WILLPOWER]: new CharUiBlockPointsElement({
+                data: {
+                    keeper,
+                    valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.WILLPOWER],
+                },
+                validations: {
+                    validations: this.validations,
+                    partValidations: this.validations[CHAR_PARTS.WILLPOWER],
+                    dataForValidations: this.validationsInfo,
+                },
+                updateEvent: updateEvent,
+            }),
         };
 
         const charElement = render(
@@ -103,7 +115,17 @@ class CharacterMtAState {
             ),
             render(
                 HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ARETE].element),
+                render(
+                    HTMLTags.TableData, {},
+                    render(
+                        HTMLTags.Table, {},
+                        render(
+                            HTMLTags.TableRow, {},
+                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ARETE].element),
+                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.WILLPOWER].element),
+                        ),
+                    ),
+                ),
             ),
         );
 

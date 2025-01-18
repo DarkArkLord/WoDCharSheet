@@ -178,8 +178,6 @@ class CharacterMtA {
                 updateEvent,
             });
         }
-
-        this.update();
     }
 
     update() {
@@ -246,6 +244,8 @@ tabs.push({
     button: config.tabButton,
     content: config.tabContent,
 });
+
+characterUi.updateEvent.invoke();
 
 document.body.append(
     render(

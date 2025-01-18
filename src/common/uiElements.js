@@ -11,10 +11,10 @@ export const UITextInputType = Object.freeze({
 });
 
 export class UITextInput {
-    constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined) {
+    constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined, size = undefined) {
         const instance = this;
 
-        this.input = render(HTMLTags.Input, { type, min, max });
+        this.input = render(HTMLTags.Input, { type, min, max, size });
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
 
         this.isVisible = true;

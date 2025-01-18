@@ -168,7 +168,7 @@ export class CharLineValueElement {
         this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(EMPTY_STRING, {});
-        this.specialty = new UITextInput({}, UITextInputType.Text);
+        this.specialty = new UITextInput({}, UITextInputType.Text, null, null, 10);
         this.points = new UIPointsLine(pointsCount, this.isEditable, { class: CSS.NOWRAP });
         this.priceText = new UIText(EMPTY_STRING, {});
 

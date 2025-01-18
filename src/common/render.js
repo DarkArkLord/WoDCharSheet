@@ -8,6 +8,8 @@ export const HTMLTags = {
     TextArea: 'textarea',
     UnorderedList: 'ul',
     ListItem: 'li',
+    Select: 'select',
+    Option: 'option',
 };
 
 export function render(tag, attributes, ...childs) {

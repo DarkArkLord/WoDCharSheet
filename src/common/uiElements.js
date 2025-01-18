@@ -197,3 +197,36 @@ export class UITextList {
         this.listElement.innerHTML = '';
     }
 }
+
+export class UIDropdown {
+    constructor(selectAttrubutes = {}) {
+        const instance = this;
+
+        this.element = render(HTMLTags.Select, selectAttrubutes);
+
+        this.isActive = true;
+        this.onChangeEvent = undefined;
+        this.element.onchange = function (input) {
+            if (instance.isActive && instance.onChangeEvent) {
+                instance.onChangeEvent(input);
+            }
+        }
+    }
+
+    clear() {
+        this.selectElement.innerHTML = '';
+    }
+
+    addOption(text, optionAttrubutes = {}) {
+        const optionElement = render(HTMLTags.Option, optionAttrubutes, text);
+        this.element.append(optionElement);
+    }
+
+    setOnChangeEvent(func) {
+        this.onChangeEvent = func;
+    }
+
+    setActive(isActive) {
+        this.isActive = isActive;
+    }
+}

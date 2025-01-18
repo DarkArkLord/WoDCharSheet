@@ -64,7 +64,7 @@ class CharacterMtAState {
     }
 
     validate() {
-        const errors = Object.values(this.parts).flatMap(part => part.validate() ?? []);
+        const errors = Object.values(this.parts).flatMap(part => part.validate() ?? []) ?? [];
 
         if (this.validations?.freePoints) {
             const price = this.getPrice();

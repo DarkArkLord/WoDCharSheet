@@ -356,7 +356,7 @@ export class CharLineValuesSectionElement {
     }
 
     validate() {
-        const errors = this.items.flatMap(item => item.validate() ?? []);
+        const errors = this.items?.flatMap(item => item.validate() ?? []) ?? [];
 
         //
 
@@ -439,7 +439,7 @@ export class CharLineValuesSectionsPartElement {
     }
 
     validate() {
-        const errors = this.items.flatMap(item => item.validate() ?? []);
+        const errors = this.items?.flatMap(item => item.validate() ?? []) ?? [];
 
         if (this.partValidations?.sectionPoints) {
             const validPoints = this.partValidations.sectionPoints.slice().sort();

@@ -5,6 +5,8 @@ export const HTMLTags = {
     Div: 'div',
     Img: 'img',
     Input: 'input',
+    UnorderedList: 'li',
+    ListItem: 'li',
 };
 
 export function render(tag, attributes, ...childs) {

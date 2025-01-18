@@ -5,7 +5,7 @@ export const HTMLTags = {
     Div: 'div',
     Img: 'img',
     Input: 'input',
-    UnorderedList: 'li',
+    UnorderedList: 'ul',
     ListItem: 'li',
 };
 

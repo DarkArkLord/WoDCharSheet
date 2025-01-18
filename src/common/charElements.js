@@ -132,6 +132,111 @@ const DEFAULT_COMPARATOR = (a, b) => b - a;
 
 const SPECIALTY_FIELD = 'specialty'
 
+class CharUiPointsElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.pointsCount = partValidations.pointsCount ?? DEFAULT_POINTS_COUNT;
+        this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
+        this.wrapper = new PointsValueWrapper(
+            this.data,
+            this.validations?.state,
+            this.partValidations?.min,
+            this.validations?.prev,
+            this.validations?.next,
+        );
+        this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.partValidations?.price);
+
+        this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
+
+        if (this.isEditable) {
+            this.points.subButton.setOnClickEvent(() => {
+                const value = instance.wrapper.getValue();
+                instance.wrapper.setValue(value - 1);
+
+                instance.priceWrapper.setDirty();
+
+                // instance.update();
+                instance.updateEvent.invoke();
+            });
+
+            this.points.addButton.setOnClickEvent(() => {
+                const value = instance.wrapper.getValue();
+                instance.wrapper.setValue(value + 1);
+
+                instance.priceWrapper.setDirty();
+
+                // instance.update();
+                instance.updateEvent.invoke();
+            });
+        }
+
+        this.element = this.points.element;
+    }
+
+    update() {
+        if (this.isEditable) {
+            const prevValue = this.wrapper.getPrevValue()
+            const value = this.wrapper.getValue()
+            const hasNextValue = this.wrapper.hasNextValue();
+
+            this.points.setValue(prevValue, value);
+
+            const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
+            this.points.subButton.setActive(enableSubButton && !hasNextValue);
+            const enableAddButton = (this.partValidations?.max === undefined ? true : value < this.partValidations?.max)
+                && prevValue + value < this.pointsCount;
+            this.points.addButton.setActive(enableAddButton && !hasNextValue);
+        } else {
+            const totalValue = this.wrapper.getTotalValue();
+            this.points.setValue(0, totalValue);
+        }
+    }
+
+    validate() {
+        const errors = [];
+
+        const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue();
+        if (totalValue < this.partValidations?.totalMin) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Не может быть меньше ${this.partValidations?.totalMin} (сейчас ${totalValue})`,
+            });
+        }
+        if (totalValue > this.partValidations?.totalMax) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Не может быть больше ${this.partValidations?.totalMax} (сейчас ${totalValue})`,
+            });
+        }
+
+        return errors;
+    }
+}
+
 class CharUiTextWithPointsElement {
     constructor(input) {
         const {
@@ -171,66 +276,15 @@ class CharUiTextWithPointsElement {
         this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(valueInfo.translation, {});
-        this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
-
-        if (this.isEditable) {
-            this.points.subButton.setOnClickEvent(() => {
-                const value = instance.wrapper.getValue();
-                instance.wrapper.setValue(value - 1);
-
-                instance.priceWrapper.setDirty();
-
-                instance.update();
-                instance.updateEvent.invoke();
-            });
-
-            this.points.addButton.setOnClickEvent(() => {
-                const value = instance.wrapper.getValue();
-                instance.wrapper.setValue(value + 1);
-
-                instance.priceWrapper.setDirty();
-
-                instance.update();
-                instance.updateEvent.invoke();
-            });
-        }
+        this.points = new CharUiPointsElement(input);
     }
 
     update() {
-        if (this.isEditable) {
-            const prevValue = this.wrapper.getPrevValue()
-            const value = this.wrapper.getValue()
-            const hasNextValue = this.wrapper.hasNextValue();
-
-            this.points.setValue(prevValue, value);
-
-            const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
-            this.points.subButton.setActive(enableSubButton && !hasNextValue);
-            const enableAddButton = (this.partValidations?.max === undefined ? true : value < this.partValidations?.max)
-                && prevValue + value < this.pointsCount;
-            this.points.addButton.setActive(enableAddButton && !hasNextValue);
-        } else {
-            const totalValue = this.wrapper.getTotalValue();
-            this.points.setValue(0, totalValue);
-        }
+        this.points.update();
     }
 
     validate() {
-        const errors = [];
-
-        const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue();
-        if (totalValue < this.partValidations?.totalMin) {
-            errors.push({
-                ...this.validationsInfo,
-                text: `Не может быть меньше ${this.partValidations?.totalMin} (сейчас ${totalValue})`,
-            });
-        }
-        if (totalValue > this.partValidations?.totalMax) {
-            errors.push({
-                ...this.validationsInfo,
-                text: `Не может быть больше ${this.partValidations?.totalMax} (сейчас ${totalValue})`,
-            });
-        }
+        const errors = this.points.validate() ?? [];
 
         this.setHighlight(errors.length > 0);
 

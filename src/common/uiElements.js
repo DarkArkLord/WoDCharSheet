@@ -185,7 +185,7 @@ export class UIPointsLine {
 export class UITextList {
     constructor(wrapAttrubutes = {}) {
         this.listElement = render(HTMLTags.UnorderedList, {});
-        this.element = render(HTMLTags.Div, wrapAttrubutes, this.listElement,);
+        this.element = render(HTMLTags.Div, wrapAttrubutes, this.listElement);
     }
 
     addItem(text, itemAttrubutes = {}) {
@@ -193,14 +193,7 @@ export class UITextList {
         this.listElement.append(item);
     }
 
-    addItemsRange(texts, itemAttrubutes = {}) {
-        for (const text of texts) {
-            const item = render(HTMLTags.ListItem, itemAttrubutes, text);
-            this.listElement.append(item);
-        }
-    }
-
     clear() {
-        this.listElement.innerHTML = undefined;
+        this.listElement.innerHTML = '';
     }
 }

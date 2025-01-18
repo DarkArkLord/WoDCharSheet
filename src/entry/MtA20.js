@@ -16,6 +16,10 @@ import { DarkEvent, CharLineValueElement, CharLineValuesSectionElement, CharLine
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
+const CSS = Object.freeze({
+    TEXT_ALIGN_CENTER: 'text-align-center',
+});
+
 const editStatesForTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
 
 class CharacterMtAState {
@@ -24,6 +28,7 @@ class CharacterMtAState {
             keeper,
             validations,
             updateEvent,
+            errorsList,
         } = input;
 
         this.updateEvent = updateEvent;
@@ -55,10 +60,39 @@ class CharacterMtAState {
                 updateEvent: updateEvent,
             }),
         };
+
+        const charElement = render(
+            HTMLTags.Table, {},
+            Object.values(this.parts).map(part => render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, part.element),
+            )),
+        );
+
+        const errorsElement = render(
+            HTMLTags.Table, {},
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, { class: CSS.TEXT_ALIGN_CENTER }, 'Ошибки'),
+            ),
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, errorsList.element),
+            ),
+        );
+
+        this.element = render(
+            HTMLTags.Table, {},
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, charElement),
+                render(HTMLTags.TableData, {}, errorsElement),
+            ),
+        );
     }
 
     update() {
-        for (const part of this.parts) {
+        for (const part of Object.values(this.parts)) {
             part.update();
         }
     }
@@ -79,24 +113,36 @@ class CharacterMtAState {
 
         return errors;
     }
+
+    getPrice() {
+        return Object.values(this.parts).reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
 }
 
 class CharacterMtA {
-    constructor(input) {
-        const {
-            keeper,
-            validations,
-        } = input;
-
-        const updateEvent = new DarkEvent();
+    constructor(keeper) {
+        const instalce = this;
 
         this.errorsList = new UITextList();
+
+        const updateEvent = this.updateEvent = new DarkEvent();
+        updateEvent.addHandler(() => instalce.update());
+        updateEvent.addHandler(() => {
+            const errors = instalce.validate() ?? [];
+
+            instalce.errorsList.clear();
+
+            for (const error of errors) {
+                const text = [error.state, error.part, error.section, error.value, error.text].filter(x => x).join(': ');
+                instalce.errorsList.addItem(text);
+            };
+        });
 
         this.states = {};
         for (const state of editStatesForTabsOrder) {
             this.states[state] = new CharacterMtAState({
                 keeper,
-                validations: validations[state],
+                validations: CHAR_VALIDATIONS[state],
                 updateEvent,
                 errorsList: this.errorsList,
             });
@@ -115,23 +161,9 @@ class CharacterMtA {
 }
 
 const characterData = {};
-const charUpdateEvent = new DarkEvent();
+const characterUi = new CharacterMtA(characterData);
 
 const tabs = editStatesForTabsOrder.map(editState => {
-    const data = new CharLineValuesSectionsPartElement({
-        data: {
-            keeper: characterData,
-            partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
-        },
-        validations: {
-            validations: CHAR_VALIDATIONS[editState],
-            dataForValidations: { state: editState, },
-        },
-        updateEvent: charUpdateEvent,
-    });
-
-    charUpdateEvent.addHandler(() => data.update());
-
     return {
         button: render(
             HTMLTags.Div,
@@ -141,13 +173,13 @@ const tabs = editStatesForTabsOrder.map(editState => {
         content: render(
             HTMLTags.Div,
             { class: 'tab-content' },
-            data.element,
+            characterUi.states[editState].element,
         ),
     };
 });
 
 const bottomContainer = render(HTMLTags.Div, {},);
-charUpdateEvent.addHandler(() => {
+characterUi.updateEvent.addHandler(() => {
     bottomContainer.innerHTML = JSON.stringify(characterData, null, 2);
 });
 

@@ -9,6 +9,7 @@ const CSS = Object.freeze({
     LEFT_PADDING_5: 'left-padding-5px',
     TEXT_ALIGN_CENTER: 'text-align-center',
     NOWRAP: 'nowrap',
+    BORDER_RED_1: 'border-red-1',
 });
 
 export class DarkEvent {
@@ -277,6 +278,13 @@ export class CharLineValueElement {
             });
         }
 
+        // Highlight Border
+        if (errors.length > 0) {
+            this.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.element.classList.remove(CSS.BORDER_RED_1);
+        }
+
         return errors;
     }
 
@@ -359,7 +367,12 @@ export class CharLineValuesSectionElement {
     validate() {
         const errors = this.items?.flatMap(item => item.validate() ?? []) ?? [];
 
-        //
+        // Highlight Border
+        if (errors.length > 0) {
+            this.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.element.classList.remove(CSS.BORDER_RED_1);
+        }
 
         return errors;
     }
@@ -465,6 +478,13 @@ export class CharLineValuesSectionsPartElement {
                     text: `Должно быть распределено ${this.partValidations.freePoints} точек (сейчас ${price})`,
                 });
             }
+        }
+
+        // Highlight Border
+        if (errors.length > 0) {
+            this.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.element.classList.remove(CSS.BORDER_RED_1);
         }
 
         return errors;

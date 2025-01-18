@@ -268,13 +268,13 @@ export class CharLineValueElement {
         if (totalValue < this.partValidations?.totalMin) {
             errors.push({
                 ...this.validationsInfo,
-                text: `Не может быть меньше ${this.partValidations?.totalMin}`,
+                text: `Не может быть меньше ${this.partValidations?.totalMin} (сейчас ${totalValue})`,
             });
         }
         if (totalValue > this.partValidations?.totalMax) {
             errors.push({
                 ...this.validationsInfo,
-                text: `Не может быть больше ${this.partValidations?.totalMax}`,
+                text: `Не может быть больше ${this.partValidations?.totalMax} (сейчас ${totalValue})`,
             });
         }
 

@@ -122,23 +122,29 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
     [CHAR_PARTS.SPHERES]: {
         id: CHAR_PARTS.SPHERES,
         translation: 'Сферы',
-        columns: [
-            [
-                { id: 'Correspondence', translation: 'Связи', },
-                { id: 'Entropy', translation: 'Энтропия', },
-                { id: 'Forces', translation: 'Силы', },
-            ],
-            [
-                { id: 'Life', translation: 'Жизнь', },
-                { id: 'Matter', translation: 'Материя', },
-                { id: 'Mind', translation: 'Разум', },
-            ],
-            [
-                { id: 'Prime', translation: 'Основы', },
-                { id: 'Spirit', translation: 'Дух', },
-                { id: 'Time', translation: 'Время', },
-            ],
-        ],
+        sections: [
+            {
+                values: [
+                    { id: 'Correspondence', translation: 'Связи', },
+                    { id: 'Entropy', translation: 'Энтропия', },
+                    { id: 'Forces', translation: 'Силы', },
+                ]
+            },
+            {
+                values: [
+                    { id: 'Life', translation: 'Жизнь', },
+                    { id: 'Matter', translation: 'Материя', },
+                    { id: 'Mind', translation: 'Разум', },
+                ]
+            },
+            {
+                values: [
+                    { id: 'Prime', translation: 'Основы', },
+                    { id: 'Spirit', translation: 'Дух', },
+                    { id: 'Time', translation: 'Время', },
+                ]
+            },
+        ]
     },
     [CHAR_PARTS.BACKGROUNDS]: {
         id: CHAR_PARTS.BACKGROUNDS,
@@ -207,19 +213,19 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
         [CHAR_PARTS.SPHERES]: {
             freePoints: 6,
+            min: 0,
             price: (total) => 1,
         },
-        footer: {
-            [CHAR_PARTS.BACKGROUNDS]: {
-                freePoints: 7,
-                price: (total) => 1,
-            },
-            [CHAR_PARTS.ARETE]: {
-                min: 1,
-            },
-            [CHAR_PARTS.WILLPOWER]: {
-                min: 5,
-            }
+        [CHAR_PARTS.BACKGROUNDS]: {
+            freePoints: 7,
+            min: 1,
+            price: (total) => 1,
+        },
+        [CHAR_PARTS.ARETE]: {
+            min: 1,
+        },
+        [CHAR_PARTS.WILLPOWER]: {
+            min: 5,
         },
     },
     [CHAR_EDIT_STATES.POINTS]: {

@@ -62,6 +62,17 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
+            [CHAR_PARTS.SPHERES]: new CharLineValuesSectionsPartElement({
+                data: {
+                    keeper,
+                    partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.SPHERES],
+                },
+                validations: {
+                    validations: this.validations,
+                    dataForValidations: this.validationsInfo,
+                },
+                updateEvent: updateEvent,
+            }),
         };
 
         const charElement = render(

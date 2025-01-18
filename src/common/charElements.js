@@ -162,9 +162,9 @@ export class CharLineValueElement {
         this.text = new UIText(EMPTY_STRING, {});
         this.specialty = new UITextInput({}, UITextInputType.Text);
         this.points = new UIPointsLine(pointsCount, this.isEditable, {});
-        this.pointsText = new UIText(EMPTY_STRING, {});
+        this.priceText = new UIText(EMPTY_STRING, {});
 
-        this.pointsText.setVisible(this.isEditable);
+        this.priceText.setVisible(this.isEditable);
 
         if (this.isEditable) {
             this.specialty.setOnChangedEvent(() => {
@@ -179,6 +179,8 @@ export class CharLineValueElement {
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value - 1);
 
+                instance.priceWrapper.setDirty();
+
                 instance.update();
                 instance.updateEvent.invoke();
             });
@@ -186,6 +188,8 @@ export class CharLineValueElement {
             this.points.addButton.setOnClickEvent(() => {
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value + 1);
+
+                instance.priceWrapper.setDirty();
 
                 instance.update();
                 instance.updateEvent.invoke();
@@ -199,7 +203,7 @@ export class CharLineValueElement {
                 render(HTMLTags.TableData, {}, this.text.element),
                 render(HTMLTags.TableData, {}, this.specialty.element),
                 render(HTMLTags.TableData, {}, this.points.element),
-                render(HTMLTags.TableData, {}, this.pointsText.element),
+                render(HTMLTags.TableData, {}, this.priceText.element),
             ),
         );
 
@@ -212,7 +216,7 @@ export class CharLineValueElement {
         const hasNextValue = this.wrapper.hasNextValue();
         const totalValue = this.wrapper.getTotalValue();
 
-        this.pointsText.setText(`(${value})`);
+        this.priceText.setText(`(${this.priceWrapper.getPrice()})`);
 
         const specialtyEditableFrom = this.valueValidations?.specialty;
         if (specialtyEditableFrom) {
@@ -247,8 +251,6 @@ export class CharLineValueElement {
         } else {
             this.points.setValue(0, totalValue);
         }
-
-        this.priceWrapper.setDirty();
     }
 
     validate() {
@@ -320,7 +322,7 @@ export class CharLineValuesSectionElement {
                 render(HTMLTags.TableData, {}, item.text.element),
                 render(HTMLTags.TableData, {}, item.specialty.element),
                 render(HTMLTags.TableData, {}, item.points.element),
-                render(HTMLTags.TableData, {}, item.pointsText.element),
+                render(HTMLTags.TableData, {}, item.priceText.element),
             )),
         );
     }

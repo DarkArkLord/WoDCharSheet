@@ -137,7 +137,6 @@ class CharUiTextWithPointsElement {
             data: {
                 keeper,
                 valueInfo,
-                pointsCount = DEFAULT_POINTS_COUNT,
             },
             validations: {
                 validations,
@@ -155,6 +154,7 @@ class CharUiTextWithPointsElement {
 
         this.validations = validations;
         this.partValidations = partValidations;
+        this.pointsCount = partValidations.pointsCount ?? DEFAULT_POINTS_COUNT;
         this.isEditable = validations?.editable;
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
@@ -170,7 +170,7 @@ class CharUiTextWithPointsElement {
         this.priceWrapper = new CharValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(valueInfo.translation, {});
-        this.points = new UIPointsLine(pointsCount, this.isEditable, { class: CSS.NOWRAP });
+        this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
 
         if (this.isEditable) {
             this.points.subButton.setOnClickEvent(() => {
@@ -205,7 +205,8 @@ class CharUiTextWithPointsElement {
 
             const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
             this.points.subButton.setActive(enableSubButton && !hasNextValue);
-            const enableAddButton = this.partValidations?.max === undefined ? true : value < this.partValidations?.max;
+            const enableAddButton = (this.partValidations?.max === undefined ? true : value < this.partValidations?.max)
+                && prevValue + value < this.pointsCount;
             this.points.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
             const totalValue = this.wrapper.getTotalValue();
@@ -258,7 +259,6 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
             data: {
                 keeper,
                 valueInfo,
-                pointsCount,
             },
             validations: {
                 validations,
@@ -326,7 +326,6 @@ export class CharUiLinePointsSectionElement {
             data: {
                 keeper,
                 sectionInfo,
-                pointsCount,
             },
             validations: {
                 validations,
@@ -417,7 +416,6 @@ export class CharUiLinePointsSectionsPartElement {
             data: {
                 keeper,
                 partInfo,
-                pointsCount,
             },
             validations: {
                 validations,
@@ -534,7 +532,6 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
             data: {
                 keeper,
                 valueInfo,
-                pointsCount,
             },
             validations: {
                 validations,

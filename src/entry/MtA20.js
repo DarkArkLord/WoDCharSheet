@@ -77,7 +77,6 @@ class CharacterMtAState {
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ARETE],
-                    pointsCount: 10,
                 },
                 validations: {
                     validations: this.validations,

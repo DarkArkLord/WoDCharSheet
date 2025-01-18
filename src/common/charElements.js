@@ -130,11 +130,15 @@ const EMPTY_STRING = '';
 export class CharLineValueElement {
     constructor(input) {
         const {
-            keeper,
-            valueInfo,
-            validations,
-            partValidations,
-            dataForValidations,
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
             updateEvent,
             pointsCount = DEFAULT_POINTS_COUNT,
         } = input;
@@ -283,11 +287,15 @@ export class CharLineValueElement {
 export class CharLineValuesSectionElement {
     constructor(input) {
         const {
-            keeper,
-            sectionInfo,
-            validations,
-            partValidations,
-            dataForValidations,
+            data: {
+                keeper,
+                sectionInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
             updateEvent,
         } = input;
 
@@ -303,11 +311,15 @@ export class CharLineValuesSectionElement {
         this.header = new UIText(this.sectionTitle, {});
 
         this.items = sectionInfo?.values?.map(valueInfo => new CharLineValueElement({
-            keeper,
-            valueInfo,
-            validations,
-            partValidations,
-            dataForValidations: this.validationsInfo,
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: this.validationsInfo,
+            },
             updateEvent,
         })) ?? [];
 
@@ -359,10 +371,14 @@ export class CharLineValuesSectionElement {
 export class CharLineValuesSectionsPartElement {
     constructor(input) {
         const {
-            keeper,
-            partInfo,
-            validations,
-            dataForValidations,
+            data: {
+                keeper,
+                partInfo,
+            },
+            validations: {
+                validations,
+                dataForValidations,
+            },
             updateEvent,
         } = input;
 
@@ -381,11 +397,15 @@ export class CharLineValuesSectionsPartElement {
         this.header = new UIText(this.partTitle, {});
 
         this.sections = partInfo.sections?.map(section => new CharLineValuesSectionElement({
-            keeper: this.data,
-            sectionInfo: section,
-            validations,
-            partValidations: this.valueValidations,
-            dataForValidations: this.validationsInfo,
+            data: {
+                keeper: this.data,
+                sectionInfo: section,
+            },
+            validations: {
+                validations,
+                partValidations: this.valueValidations,
+                dataForValidations: this.validationsInfo,
+            },
             updateEvent,
         })) ?? [];
 

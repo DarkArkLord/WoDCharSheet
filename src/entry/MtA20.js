@@ -38,17 +38,25 @@ class CharacterMtAState {
 
         this.parts = {
             [CHAR_PARTS.ATTRIBUTES]: new CharLineValuesSectionsPartElement({
-                keeper: character,
-                partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
-                validations: this.validations,
-                dataForValidations: this.validationsInfo,
+                data: {
+                    keeper,
+                    partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
+                },
+                validations: {
+                    validations: this.validations,
+                    dataForValidations: this.validationsInfo,
+                },
                 updateEvent: updateEvent,
             }),
             [CHAR_PARTS.ABILITIES]: new CharLineValuesSectionsPartElement({
-                keeper: character,
-                partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
-                validations: this.validations,
-                dataForValidations: this.validationsInfo,
+                data: {
+                    keeper,
+                    partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
+                },
+                validations: {
+                    validations: this.validations,
+                    dataForValidations: this.validationsInfo,
+                },
                 updateEvent: updateEvent,
             }),
         };
@@ -77,9 +85,14 @@ class CharacterMtA {
 
 const tabs = editStatesFrotTabsOrder.map(editState => {
     const data = new CharLineValuesSectionsPartElement({
-        keeper: character,
-        partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
-        validations: CHAR_VALIDATIONS[editState],
+        data: {
+            keeper: character,
+            partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
+        },
+        validations: {
+            validations: CHAR_VALIDATIONS[editState],
+            dataForValidations: { state: editState, },
+        },
         updateEvent: charUpdateEvent,
     });
 

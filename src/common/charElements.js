@@ -133,7 +133,7 @@ export class CharLineValueElement {
             keeper,
             valueInfo,
             validations,
-            validationsField,
+            partValidations,
             dataForValidations,
             updateEvent,
             pointsCount = DEFAULT_POINTS_COUNT,
@@ -146,8 +146,7 @@ export class CharLineValueElement {
         this.info = valueInfo;
 
         this.validations = validations;
-        this.validationsField = validationsField;
-        this.valueValidations = this.validations?.[validationsField];
+        this.valueValidations = partValidations;
         this.isEditable = validations?.editable;
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
@@ -287,7 +286,7 @@ export class CharLineValuesSectionElement {
             keeper,
             sectionInfo,
             validations,
-            validationsField,
+            partValidations,
             dataForValidations,
             updateEvent,
         } = input;
@@ -307,8 +306,8 @@ export class CharLineValuesSectionElement {
             keeper,
             valueInfo,
             validations,
-            validationsField,
-            dataForValidations: validationsInfo,
+            partValidations,
+            dataForValidations: this.validationsInfo,
             updateEvent,
         })) ?? [];
 
@@ -385,8 +384,8 @@ export class CharLineValuesSectionsPartElement {
             keeper: this.data,
             sectionInfo: section,
             validations,
-            validationsField: partInfo.id,
-            dataForValidations: validationsInfo,
+            partValidations: this.valueValidations,
+            dataForValidations: this.validationsInfo,
             updateEvent,
         })) ?? [];
 

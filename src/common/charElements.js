@@ -281,8 +281,12 @@ export class CharLineValueElement {
         // Highlight Border
         if (errors.length > 0) {
             this.element.classList.add(CSS.BORDER_RED_1);
+            this.text.element.classList.add(CSS.BORDER_RED_1);
+            this.points.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.element.classList.remove(CSS.BORDER_RED_1);
+            this.text.element.classList.remove(CSS.BORDER_RED_1);
+            this.points.element.classList.remove(CSS.BORDER_RED_1);
         }
 
         return errors;

@@ -17,6 +17,8 @@ import { DarkEvent, CharLineValueElement, CharLineValuesSectionElement, CharLine
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_RESULT_TRANSLATIONS, CHAR_SETTINGS_TRANSLATIONS, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
 const CSS = Object.freeze({
+    TAB_BUTTON: 'tab-button',
+    TAB_CONTENT: 'tab-content',
     TEXT_ALIGN_CENTER: 'text-align-center',
     BORDER_BLACK_1: 'border-black-1',
     BORDER_RED_1: 'border-red-1',
@@ -91,6 +93,18 @@ class CharacterMtAState {
                 render(HTMLTags.TableData, {}, errorsElement),
             ),
         );
+
+        this.tabButton = render(
+            HTMLTags.Div,
+            { class: CSS.TAB_BUTTON },
+            validations.stateTranslation,
+        );
+
+        this.tabContent = render(
+            HTMLTags.Div,
+            { class: CSS.TAB_CONTENT },
+            this.element,
+        );
     }
 
     update() {
@@ -111,6 +125,15 @@ class CharacterMtAState {
                     text: `Должно быть распределено ${this.validations.freePoints} точек (сейчас ${price})`,
                 });
             }
+        }
+
+        // Highlight Border
+        if (errors.length > 0) {
+            this.tabButton.classList.add(CSS.BORDER_RED_1);
+            this.tabContent.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.tabButton.classList.remove(CSS.BORDER_RED_1);
+            this.tabContent.classList.remove(CSS.BORDER_RED_1);
         }
 
         return errors;
@@ -164,25 +187,10 @@ class CharacterMtA {
 const characterData = {};
 const characterUi = new CharacterMtA(characterData);
 
-const tabs = editStatesForTabsOrder.map(editState => {
-    return {
-        button: render(
-            HTMLTags.Div,
-            { class: 'tab-button' },
-            CHAR_EDIT_STATES_TRANSLATIONS[editState],
-        ),
-        content: render(
-            HTMLTags.Div,
-            { class: 'tab-content' },
-            characterUi.states[editState].element,
-        ),
-    };
-});
-
-const bottomContainer = render(HTMLTags.Div, {},);
-characterUi.updateEvent.addHandler(() => {
-    bottomContainer.innerHTML = JSON.stringify(characterData, null, 2);
-});
+const tabs = editStatesForTabsOrder.map(editState => ({
+    button: characterUi.states[editState].tabButton,
+    content: characterUi.states[editState].tabContent,
+}));
 
 document.body.append(
     render(
@@ -195,7 +203,6 @@ document.body.append(
         {},
         tabs.map(x => x.content),
     ),
-    bottomContainer,
 );
 
 configureTabsAndButtons({

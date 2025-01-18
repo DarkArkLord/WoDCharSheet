@@ -129,7 +129,7 @@ class CharValuePriceWrapper {
 const DEFAULT_POINTS_COUNT = 5;
 const EMPTY_STRING = '';
 
-export class CharLineValueElement {
+export class CharUiLineValueElement {
     constructor(input) {
         const {
             data: {
@@ -297,7 +297,7 @@ export class CharLineValueElement {
     }
 }
 
-export class CharLineValuesSectionElement {
+export class CharUiLineValuesSectionElement {
     constructor(input) {
         const {
             data: {
@@ -323,7 +323,7 @@ export class CharLineValuesSectionElement {
         this.sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
         this.header = new UIText(this.sectionTitle, {});
 
-        this.items = sectionInfo?.values?.map(valueInfo => new CharLineValueElement({
+        this.items = sectionInfo?.values?.map(valueInfo => new CharUiLineValueElement({
             data: {
                 keeper,
                 valueInfo,
@@ -386,7 +386,7 @@ export class CharLineValuesSectionElement {
     }
 }
 
-export class CharLineValuesSectionsPartElement {
+export class CharUiLineValuesSectionsPartElement {
     constructor(input) {
         const {
             data: {
@@ -414,7 +414,7 @@ export class CharLineValuesSectionsPartElement {
         this.partTitle = partInfo.translation ?? EMPTY_STRING;
         this.header = new UIText(this.partTitle, {});
 
-        this.sections = partInfo.sections?.map(section => new CharLineValuesSectionElement({
+        this.sections = partInfo.sections?.map(section => new CharUiLineValuesSectionElement({
             data: {
                 keeper: this.data,
                 sectionInfo: section,

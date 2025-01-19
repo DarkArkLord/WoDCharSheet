@@ -101,10 +101,7 @@ const SPECIALTY_FIELD = 'specialty'
 class CharUiPointsElement {
     constructor(input) {
         const {
-            data: {
-                keeper,
-                valueInfo,
-            },
+            data,
             validations: {
                 validations,
                 partValidations,
@@ -117,16 +114,14 @@ class CharUiPointsElement {
 
         this.updateEvent = updateEvent;
 
-        this.info = valueInfo;
-
         this.validations = validations;
         this.partValidations = partValidations;
         this.pointsCount = partValidations.pointsCount ?? DEFAULT_POINTS_COUNT;
         this.isEditable = validations?.editable;
 
-        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+        this.validationsInfo = dataForValidations;
 
-        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
+        this.data = data;
         this.wrapper = new PointsValueWrapper(
             this.data,
             this.validations?.state,
@@ -227,7 +222,17 @@ class CharUiTextWithPointsElement {
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
         this.text = new UIText(valueInfo.translation, {});
-        this.points = new CharUiPointsElement(input);
+
+        const data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
+        this.points = new CharUiPointsElement({
+            data,
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: this.validationsInfo,
+            },
+            updateEvent,
+        });
     }
 
     update() {

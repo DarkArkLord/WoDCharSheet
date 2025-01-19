@@ -54,7 +54,6 @@ export class UITextInput {
 
     setActive(isActive) {
         this.isActive = isActive;
-        this.setImage(isActive ? this.enableImage : this.disableImage);
     }
 
     setOnChangedEvent(func) {

@@ -1,6 +1,8 @@
 import { HTMLTags, render } from './render.js'
 import { SVGIcons } from './svg.js'
 
+const EMPTY_STRING = '';
+
 const CSS = Object.freeze({
     HIDDEN: 'hidden',
 });
@@ -199,17 +201,27 @@ export class UITextList {
 }
 
 export class UIDropdown {
-    constructor(selectAttrubutes = {}) {
+    constructor(selectAttrubutes = {}, { addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] }) {
         const instance = this;
 
         this.element = render(HTMLTags.Select, selectAttrubutes);
 
+        this.isVisible = true;
         this.isActive = true;
         this.onChangeEvent = undefined;
+
         this.element.onchange = function (input) {
             if (instance.isActive && instance.onChangeEvent) {
                 instance.onChangeEvent(input);
             }
+        }
+
+        if (addEmptyOption) {
+            this.addOption(EMPTY_STRING, emptyOptionAttrubutes);
+        }
+
+        for (const option of defaultOptions) {
+            this.addOption(option.text, option.attrubutes);
         }
     }
 
@@ -228,5 +240,14 @@ export class UIDropdown {
 
     setActive(isActive) {
         this.isActive = isActive;
+    }
+
+    setVisible(isVisible) {
+        this.isVisible = isVisible;
+        if (isVisible) {
+            this.element.classList.remove(CSS.HIDDEN);
+        } else {
+            this.element.classList.add(CSS.HIDDEN);
+        }
     }
 }

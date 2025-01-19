@@ -200,7 +200,7 @@ export class UITextList {
 }
 
 export class UIDropdown {
-    constructor(selectAttrubutes = {}, { addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] }) {
+    constructor(selectAttrubutes = {}, { addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] } = {}) {
         const instance = this;
 
         this.element = render(HTMLTags.Select, selectAttrubutes);

@@ -196,6 +196,10 @@ class CharUiPointsElement {
 
         return errors;
     }
+
+    getPrice() {
+        return this.priceWrapper.getPrice();
+    }
 }
 
 class CharUiTextWithPointsElement {
@@ -260,7 +264,7 @@ class CharUiTextWithPointsElement {
     }
 
     getPrice() {
-        return this.points.priceWrapper.getPrice();
+        return this.points.getPrice();
     }
 }
 
@@ -589,7 +593,10 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
 export class CharUiLineInputPointsElement {
     constructor(input) {
         const {
-            data,
+            data: {
+                data,
+                defaultOptions,
+            },
             validations: {
                 validations,
                 partValidations,
@@ -612,10 +619,30 @@ export class CharUiLineInputPointsElement {
 
         this.textWrapper = new ValueWrapper(data, TEXT_FIELD, EMPTY_STRING);
 
+        // Elements
         this.removeButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        this.removeButton.setVisible(this.isEditable);
+
         this.text = new UIText(EMPTY_STRING, {});
+
         this.input = new UITextInput({}, UITextInputType.Text, undefined, undefined, DEFAULT_INPUT_SIZE);
-        this.variants = new UIDropdown({});
+        this.input.setReadOnly(!this.isEditable);
+        this.input.onChangedFunc(() => {
+            const text = instance.input.getValue();
+            instance.setTextToAllFields(text);
+            instance.updateEvent.invoke();
+        });
+
+        this.variants = new UIDropdown({}, { addEmptyOption: true, defaultOptions });
+        this.variants.setVisible(this.isEditable);
+        this.variants.setOnChangeEvent(input => {
+            const text = input.target.value;
+            input.target.selectedIndex = 0;
+
+            instance.setTextToAllFields(text);
+            instance.updateEvent.invoke();
+        });
+
         this.points = new CharUiPointsElement({
             data,
             validations: {
@@ -624,20 +651,6 @@ export class CharUiLineInputPointsElement {
                 dataForValidations: this.validationsInfo,
             },
             updateEvent,
-        });
-
-        this.input.onChangedFunc(() => {
-            const text = instance.input.getValue();
-            instance.setTextToAllFields(text);
-            instance.updateEvent.invoke();
-        });
-
-        this.variants.setOnChangeEvent(input => {
-            const text = input.target.value;
-            input.target.selectedIndex = 0;
-
-            instance.setTextToAllFields(text);
-            instance.updateEvent.invoke();
         });
     }
 
@@ -651,5 +664,23 @@ export class CharUiLineInputPointsElement {
     update() {
         this.setTextToAllFields(this.textWrapper.getValue());
         this.points.update();
+    }
+
+    validate() {
+        const errors = this.points.validate() ?? [];
+
+        const text = this.textWrapper.getValue(EMPTY_STRING).trim();
+        if (text.length < 1) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Необходимо заполнит текст`,
+            });
+        }
+
+        return errors;
+    }
+
+    getPrice() {
+        return this.points.getPrice();
     }
 }

@@ -622,7 +622,7 @@ export class CharUiLineInputPointsElement {
         this.partValidations = partValidations;
         this.isEditable = validations?.editable;
 
-        this.validationsInfo = { ...dataForValidations, value: EMPTY_STRING, };
+        this.validationsInfo = dataForValidations;
 
         this.textWrapper = new ValueWrapper(data, TEXT_FIELD, EMPTY_STRING);
 
@@ -662,7 +662,6 @@ export class CharUiLineInputPointsElement {
     }
 
     setTextToAllFields(text) {
-        this.validationsInfo.value = text;
         this.textWrapper.setValue(text);
         this.text.setText(text);
         this.input.setValue(text);

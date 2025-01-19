@@ -635,7 +635,7 @@ export class CharUiLineInputPointsElement {
         if (this.isEditable) {
             this.input.setOnChangedEvent(() => {
                 const text = instance.input.getValue();
-                instance.setTextToAllFields(text);
+                instance.textWrapper.setValue(text);
                 instance.updateEvent.invoke();
             });
         }
@@ -643,11 +643,11 @@ export class CharUiLineInputPointsElement {
         this.variants = new UIDropdown({}, { addEmptyOption: true, defaultOptions });
         this.variants.setVisible(this.isEditable);
         if (this.isEditable) {
-            this.variants.setOnChangeEvent(input => {
-                const text = input.target.value;
-                input.target.selectedIndex = 0;
+            this.variants.setOnChangeEvent(eventInput => {
+                const text = eventInput.target.value;
+                eventInput.target.selectedIndex = 0;
 
-                instance.setTextToAllFields(text);
+                instance.textWrapper.setValue(text);
                 instance.updateEvent.invoke();
             });
         }

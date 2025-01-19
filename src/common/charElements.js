@@ -1,7 +1,7 @@
 import { SVGIcons } from './svg.js'
 import { HTMLTags, render } from './render.js'
 import { DarkEvent, ValueWrapper } from './utilities.js'
-import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine } from './uiElements.js'
+import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton } from './uiElements.js'
 
 const CSS = Object.freeze({
     TABLE: 'table',
@@ -92,11 +92,13 @@ class PointsValuePriceWrapper {
 }
 
 const DEFAULT_POINTS_COUNT = 5;
+const DEFAULT_INPUT_SIZE = 10;
 const EMPTY_STRING = '';
 
 const DEFAULT_COMPARATOR = (a, b) => b - a;
 
 const SPECIALTY_FIELD = 'specialty'
+const TEXT_FIELD = 'text';
 
 class CharUiPointsElement {
     constructor(input) {
@@ -283,7 +285,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         this.specialtyWrapper = new ValueWrapper(this.points.data, SPECIALTY_FIELD, EMPTY_STRING);
 
-        this.specialty = new UITextInput({}, UITextInputType.Text, null, null, 10);
+        this.specialty = new UITextInput({}, UITextInputType.Text, null, null, DEFAULT_INPUT_SIZE);
         this.priceText = new UIText(EMPTY_STRING, {});
 
         this.priceText.setVisible(this.isEditable);
@@ -584,15 +586,10 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
     }
 }
 
-export class CharUiLineInputPointsElement extends CharUiTextWithPointsElement {
+export class CharUiLineInputPointsElement {
     constructor(input) {
-        super(input);
-
         const {
-            data: {
-                keeper,
-                valueInfo,
-            },
+            data,
             validations: {
                 validations,
                 partValidations,
@@ -600,5 +597,50 @@ export class CharUiLineInputPointsElement extends CharUiTextWithPointsElement {
             },
             updateEvent,
         } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: EMPTY_STRING, };
+
+        this.textWrapper = new ValueWrapper(data, TEXT_FIELD, EMPTY_STRING);
+
+        this.removeButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        this.text = new UIText(EMPTY_STRING, {});
+        this.input = new UITextInput({}, UITextInputType.Text, undefined, undefined, DEFAULT_INPUT_SIZE);
+        this.points = new CharUiPointsElement({
+            data,
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: this.validationsInfo,
+            },
+            updateEvent,
+        });
+
+        this.input.onChangedFunc(() => {
+            const text = instance.input.getValue();
+            instance.setTextToAllFields(text);
+            instance.updateEvent.invoke();
+        });
+    }
+
+    setTextToAllFields(text) {
+        this.validationsInfo.value = text;
+        this.textWrapper.setValue(text);
+        this.text.setText(text);
+        this.input.setValue(text);
+    }
+
+    update() {
+        this.setTextToAllFields(this.textWrapper.getValue());
+        this.points.update();
     }
 }

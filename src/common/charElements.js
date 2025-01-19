@@ -133,6 +133,7 @@ class CharUiPointsElement {
         );
         this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
+        // Elements
         this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
 
         if (this.isEditable) {
@@ -227,9 +228,11 @@ class CharUiTextWithPointsElement {
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
+        const data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
+
+        // Elements
         this.text = new UIText(valueInfo.translation, {});
 
-        const data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
         this.points = new CharUiPointsElement({
             data,
             validations: {
@@ -289,10 +292,8 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         this.specialtyWrapper = new ValueWrapper(this.points.data, SPECIALTY_FIELD, EMPTY_STRING);
 
+        // Elements
         this.specialty = new UITextInput({}, UITextInputType.Text, null, null, DEFAULT_INPUT_SIZE);
-        this.priceText = new UIText(EMPTY_STRING, {});
-
-        this.priceText.setVisible(this.isEditable);
 
         if (this.isEditable) {
             this.specialty.setOnChangedEvent(() => {
@@ -303,6 +304,9 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
                 instance.updateEvent.invoke();
             });
         }
+
+        this.priceText = new UIText(EMPTY_STRING, {});
+        this.priceText.setVisible(this.isEditable);
     }
 
     update() {
@@ -378,6 +382,7 @@ export class CharUiLinePointsSectionElement {
             updateEvent,
         })) ?? [];
 
+        // Elements
         this.element = render(
             HTMLTags.Table, {},
             render(
@@ -470,6 +475,7 @@ export class CharUiLinePointsSectionsPartElement {
             updateEvent,
         })) ?? [];
 
+        // Elements
         this.element = render(
             HTMLTags.Table, {},
             render(
@@ -560,6 +566,7 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
             updateEvent,
         } = input;
 
+        // Elements
         this.element = render(
             HTMLTags.Table, {},
             render(

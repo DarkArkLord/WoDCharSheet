@@ -1,7 +1,7 @@
 import { SVGIcons } from './svg.js'
 import { HTMLTags, render } from './render.js'
 import { DarkEvent, ValueWrapper } from './utilities.js'
-import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton } from './uiElements.js'
+import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements.js'
 
 const CSS = Object.freeze({
     TABLE: 'table',
@@ -615,6 +615,7 @@ export class CharUiLineInputPointsElement {
         this.removeButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         this.text = new UIText(EMPTY_STRING, {});
         this.input = new UITextInput({}, UITextInputType.Text, undefined, undefined, DEFAULT_INPUT_SIZE);
+        this.variants = new UIDropdown({});
         this.points = new CharUiPointsElement({
             data,
             validations: {
@@ -627,6 +628,14 @@ export class CharUiLineInputPointsElement {
 
         this.input.onChangedFunc(() => {
             const text = instance.input.getValue();
+            instance.setTextToAllFields(text);
+            instance.updateEvent.invoke();
+        });
+
+        this.variants.setOnChangeEvent(input => {
+            const text = input.target.value;
+            input.target.selectedIndex = 0;
+
             instance.setTextToAllFields(text);
             instance.updateEvent.invoke();
         });

@@ -237,23 +237,24 @@ class CharacterMtA {
     }
 
     update() {
-        const errors = this.validate()?.map(error => [
+        const states = Object.values(this.states);
+
+        for (const state of states) {
+            state.update();
+        }
+
+        const errors = states.flatMap(state => state.validate() ?? []) ?? [];
+        const errorTexts = errors.map(error => [
             error.state, error.part, error.section, error.value, error.text
         ].filter(x => x).join(': ')) ?? [];
 
-        for (const state of Object.values(this.states)) {
-            state.update();
-
+        for (const state of states) {
             state.errorsList.clear();
 
-            for (const error of errors) {
+            for (const error of errorTexts) {
                 state.errorsList.addItem(error, { class: CSS.BORDER_RED_1 });
             }
         }
-    }
-
-    validate() {
-        return Object.values(this.states).flatMap(state => state.validate() ?? []) ?? [];
     }
 }
 

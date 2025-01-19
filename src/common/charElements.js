@@ -756,7 +756,6 @@ export class CharUiLineInputPointsListElement {
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? [];
-        this.isDirty = true;
 
         // Elements
         this.headerRow = render(
@@ -780,8 +779,6 @@ export class CharUiLineInputPointsListElement {
         if (this.isEditable) {
             this.addButton.setOnClickEvent(() => {
                 instance.data.push({});
-
-                instance.isDirty = true;
                 instance.updateEvent.invoke();
             });
         }
@@ -796,6 +793,8 @@ export class CharUiLineInputPointsListElement {
         );
 
         this.element = render(HTMLTags.Table, {});
+
+        this.refreshItems();
     }
 
     createItemWrapper(itemData) {
@@ -818,7 +817,6 @@ export class CharUiLineInputPointsListElement {
             const dataIndex = instance.data.findIndex(value => value === itemData);
             if (dataIndex >= 0) {
                 instance.data.splice(dataIndex, 1);
-                instance.isDirty = true;
                 instance.updateEvent.invoke();
             }
         });
@@ -826,22 +824,26 @@ export class CharUiLineInputPointsListElement {
         return item;
     }
 
+    refreshItems() {
+        this.items = [];
+        this.element.innerHTML = EMPTY_STRING;
+
+        this.element.append(this.headerRow);
+
+        for (const itemData of this.data) {
+            const item = this.createItemWrapper(itemData);
+            this.items.push(item);
+            this.element.append(item.rowElement);
+        }
+
+        if (this.isEditable) {
+            this.element.append(this.addButtonRow);
+        }
+    }
+
     update() {
-        if (this.isDirty) {
-            this.items = [];
-            this.element.innerHTML = EMPTY_STRING;
-
-            this.element.append(this.headerRow);
-
-            for (const itemData of this.data) {
-                const item = this.createItemWrapper(itemData);
-                this.items.push(item);
-                this.element.append(item.rowElement);
-            }
-
-            if (this.isEditable) {
-                this.element.append(this.addButtonRow);
-            }
+        if (this.items.length !== this.data.length) {
+            this.refreshItems();
         }
 
         for (const item of this.items) {

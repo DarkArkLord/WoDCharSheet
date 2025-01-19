@@ -690,3 +690,106 @@ export class CharUiLineInputPointsElement {
         return this.points.getPrice();
     }
 }
+
+export class CharUiLineInputPointsListElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.isEditable = validations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? [];
+        this.isDirty = true;
+
+        // Elements
+        this.items = this.data.map(createListItem);
+
+        this.addPoint = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        this.addPoint.setVisible(this.isEditable);
+        if (this.isEditable) {
+            this.addPoint.onClickFunc(() => {
+                const item = {};
+                instance.data.push(item);
+
+                const itemElement = createListItem(item);
+                instance.items.push(itemElement);
+
+                instance.isDirty = true;
+                instance.updateEvent.invoke();
+            });
+        }
+
+        this.element = render(HTMLTags.Table, {});
+
+        function createListItem(data) {
+            const item = new CharUiLineInputPointsElement({
+                data: {
+                    data,
+                    defaultOptions: valueInfo.variants ?? [],
+                },
+                validations: {
+                    validations,
+                    partValidations,
+                    dataForValidations,
+                },
+                updateEvent,
+            });
+
+            item.removeButton.setOnClickEvent(() => {
+                const itemIndex = instance.items.findIndex(value => value === item);
+                if (itemIndex >= 0) {
+                    instance.items.splice(itemIndex, 1);
+                    instance.isDirty = true;
+                }
+
+                const dataIndex = instance.data.findIndex(value => value === data);
+                if (dataIndex >= 0) {
+                    instance.data.splice(dataIndex, 1);
+                    instance.isDirty = true;
+                }
+
+                if (instance.isDirty) {
+                    instance.updateEvent.invoke();
+                }
+            });
+
+            return item;
+        }
+    }
+
+    update() {
+        this.element.innerHTML = EMPTY_STRING;
+    }
+
+    validate() {
+        const errors = [];
+
+        //
+
+        return errors;
+    }
+
+    getPrice() {
+        // return this.points.getPrice();
+    }
+}

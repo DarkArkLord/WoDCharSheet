@@ -768,22 +768,18 @@ export class CharUiLineInputPointsListElement {
             ),
         );
 
-        const defaultOptions = (valueInfo.variants ?? []).map(variant => ({
+        this.optionsForItemWrapper = (valueInfo.variants ?? []).map(variant => ({
             text: variant.translation,
             attrubutes: {},
         }));
 
-        this.items = this.data.map(createListItem);
+        this.items = [];
 
         this.addButton = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
         this.addButton.setVisible(this.isEditable);
         if (this.isEditable) {
             this.addButton.setOnClickEvent(() => {
-                const item = {};
-                instance.data.push(item);
-
-                const itemElement = createListItem(item);
-                instance.items.push(itemElement);
+                instance.data.push({});
 
                 instance.isDirty = true;
                 instance.updateEvent.invoke();
@@ -800,60 +796,56 @@ export class CharUiLineInputPointsListElement {
         );
 
         this.element = render(HTMLTags.Table, {});
+    }
 
-        function createListItem(data) {
-            const item = new CharUiLineInputPointsElement({
-                data: {
-                    data,
-                    defaultOptions,
-                },
-                validations: {
-                    validations,
-                    partValidations,
-                    dataForValidations,
-                },
-                updateEvent,
-            });
+    createItemWrapper(itemData) {
+        const item = new CharUiLineInputPointsElement({
+            data: {
+                data: itemData,
+                defaultOptions: this.optionsForItemWrapper,
+            },
+            validations: {
+                validations: this.validations,
+                partValidations: this.partValidations,
+                dataForValidations: this.validationsInfo,
+            },
+            updateEvent: this.updateEvent,
+        });
 
-            item.removeButton.setOnClickEvent(() => {
-                const itemIndex = instance.items.findIndex(value => value === item);
-                if (itemIndex >= 0) {
-                    instance.items.splice(itemIndex, 1);
-                    instance.isDirty = true;
-                }
+        const instance = this;
 
-                const dataIndex = instance.data.findIndex(value => value === data);
-                if (dataIndex >= 0) {
-                    instance.data.splice(dataIndex, 1);
-                    instance.isDirty = true;
-                }
+        item.removeButton.setOnClickEvent(() => {
+            const dataIndex = instance.data.findIndex(value => value === itemData);
+            if (dataIndex >= 0) {
+                instance.data.splice(dataIndex, 1);
+                instance.isDirty = true;
+                instance.updateEvent.invoke();
+            }
+        });
 
-                if (instance.isDirty) {
-                    instance.updateEvent.invoke();
-                }
-            });
-
-            return item;
-        }
+        return item;
     }
 
     update() {
-        for (const item of this.items) {
-            item.update();
-        }
-
         if (this.isDirty) {
+            this.items = [];
             this.element.innerHTML = EMPTY_STRING;
 
             this.element.append(this.headerRow);
 
-            for (const item of this.items) {
+            for (const itemData of this.data) {
+                const item = this.createItemWrapper(itemData);
+                this.items.push(item);
                 this.element.append(item.rowElement);
             }
 
             if (this.isEditable) {
                 this.element.append(this.addButtonRow);
             }
+        }
+
+        for (const item of this.items) {
+            item.update();
         }
     }
 

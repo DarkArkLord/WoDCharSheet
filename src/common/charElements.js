@@ -1,5 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { HTMLTags, render } from './render.js'
+import { DarkEvent, ValueWrapper } from './utilities.js'
 import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine } from './uiElements.js'
 
 const CSS = Object.freeze({
@@ -11,41 +12,6 @@ const CSS = Object.freeze({
     NOWRAP: 'nowrap',
     BORDER_RED_1: 'border-red-1',
 });
-
-export class DarkEvent {
-    constructor() {
-        this.handlers = [];
-    }
-
-    addHandler(handler) {
-        this.handlers.push(handler);
-    }
-
-    invoke() {
-        for (const handler of this.handlers) {
-            handler();
-        }
-    }
-}
-
-class ValueWrapper {
-    constructor(data, field, defaultValue) {
-        this.data = data;
-        this.field = field;
-
-        if (field !== undefined && defaultValue !== undefined && this.data[this.field] === undefined) {
-            this.setValue(defaultValue);
-        }
-    }
-
-    getValue(defaultValue) {
-        return this.data[this.field] ?? defaultValue;
-    }
-
-    setValue(value) {
-        this.data[this.field] = value;
-    }
-}
 
 class PointsValueWrapper extends ValueWrapper {
     constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {

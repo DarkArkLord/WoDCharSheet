@@ -11,8 +11,9 @@ import { configureTabsAndButtons } from '../common/tabs.js'
 
 import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
+import { DarkEvent, ValueWrapper } from '../common/utilities.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
-import { DarkEvent, CharUiLinePointsElement, CharUiLinePointsSectionElement, CharUiLinePointsSectionsPartElement, CharUiBlockPointsElement } from '../common/charElements.js'
+import { CharUiLinePointsElement, CharUiLinePointsSectionElement, CharUiLinePointsSectionsPartElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 

@@ -688,24 +688,38 @@ export class CharUiLineInputPointsElement {
     validate() {
         const errors = this.points.validate() ?? [];
 
+        this.setPointsHighlight(errors.length > 0);
+
         const text = this.textWrapper.getValue(EMPTY_STRING).trim();
         if (text.length < 1) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнит текст`,
             });
-        }
 
-        this.setHighlight(errors.length > 0);
+            this.setTextHighlight(true);
+        } else {
+            this.setTextHighlight(false);
+        }
 
         return errors;
     }
 
-    setHighlight(isVisible) {
+    setPointsHighlight(isVisible) {
         if (isVisible) {
-            this.rowElement.classList.add(CSS.BORDER_RED_1);
+            this.points.element.classList.add(CSS.BORDER_RED_1);
         } else {
-            this.rowElement.classList.remove(CSS.BORDER_RED_1);
+            this.points.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
+    setTextHighlight(isVisible) {
+        if (isVisible) {
+            this.text.element.classList.add(CSS.BORDER_RED_1);
+            this.input.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.text.element.classList.remove(CSS.BORDER_RED_1);
+            this.input.element.classList.remove(CSS.BORDER_RED_1);
         }
     }
 

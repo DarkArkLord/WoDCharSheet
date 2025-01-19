@@ -13,7 +13,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { DarkEvent, ValueWrapper } from '../common/utilities.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
-import { CharUiLinePointsElement, CharUiLinePointsSectionElement, CharUiLinePointsSectionsPartElement, CharUiBlockPointsElement } from '../common/charElements.js'
+import { CharUiLinePointsElement, CharUiLinePointsSectionElement, CharUiLinePointsSectionsPartElement, CharUiBlockPointsElement, CharUiLineInputPointsElement, CharUiLineInputPointsListElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
@@ -99,6 +99,18 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
+            [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputPointsListElement({
+                data: {
+                    keeper,
+                    valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.BACKGROUNDS],
+                },
+                validations: {
+                    validations: this.validations,
+                    partValidations: this.validations[CHAR_PARTS.BACKGROUNDS],
+                    dataForValidations: this.validationsInfo,
+                },
+                updateEvent: updateEvent,
+            }),
         };
 
         const charElement = render(
@@ -128,6 +140,10 @@ class CharacterMtAState {
                         ),
                     ),
                 ),
+            ),
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.BACKGROUNDS].element),
             ),
         );
 

@@ -98,43 +98,6 @@ const DEFAULT_COMPARATOR = (a, b) => b - a;
 
 const SPECIALTY_FIELD = 'specialty'
 
-class CharUiBaseElement {
-    constructor(input) {
-        const {
-            data: {
-                keeper,
-                valueInfo,
-            },
-            validations: {
-                validations,
-                partValidations,
-                dataForValidations,
-            },
-            updateEvent,
-        } = input;
-
-        this.updateEvent = updateEvent;
-
-        this.info = valueInfo;
-
-        this.validations = validations;
-        this.partValidations = partValidations;
-        this.pointsCount = partValidations.pointsCount ?? DEFAULT_POINTS_COUNT;
-        this.isEditable = validations?.editable;
-
-        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
-    }
-
-    update() {
-        // Not implemented
-    }
-
-    validate() {
-        // Not implemented
-        return [];
-    }
-}
-
 class CharUiPointsElement {
     constructor(input) {
         const {

@@ -216,28 +216,15 @@ class CharUiTextWithPointsElement {
             updateEvent,
         } = input;
 
-        const instance = this;
-
         this.updateEvent = updateEvent;
 
         this.info = valueInfo;
 
         this.validations = validations;
         this.partValidations = partValidations;
-        this.pointsCount = partValidations.pointsCount ?? DEFAULT_POINTS_COUNT;
         this.isEditable = validations?.editable;
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
-
-        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
-        this.wrapper = new PointsValueWrapper(
-            this.data,
-            this.validations?.state,
-            this.partValidations?.min,
-            this.validations?.prev,
-            this.validations?.next,
-        );
-        this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.partValidations?.price);
 
         this.text = new UIText(valueInfo.translation, {});
         this.points = new CharUiPointsElement(input);
@@ -266,7 +253,7 @@ class CharUiTextWithPointsElement {
     }
 
     getPrice() {
-        return this.priceWrapper.getPrice();
+        return this.points.priceWrapper.getPrice();
     }
 }
 
@@ -289,7 +276,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         const instance = this;
 
-        this.specialtyWrapper = new ValueWrapper(this.data, SPECIALTY_FIELD, EMPTY_STRING);
+        this.specialtyWrapper = new ValueWrapper(this.points.data, SPECIALTY_FIELD, EMPTY_STRING);
 
         this.specialty = new UITextInput({}, UITextInputType.Text, null, null, 10);
         this.priceText = new UIText(EMPTY_STRING, {});
@@ -308,9 +295,9 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
     }
 
     update() {
-        const prevValue = this.wrapper.getPrevValue()
-        const value = this.wrapper.getValue(0)
-        const totalValue = this.wrapper.getTotalValue(0);
+        const prevValue = this.points.wrapper.getPrevValue()
+        const value = this.points.wrapper.getValue(0)
+        const totalValue = this.points.wrapper.getTotalValue(0);
 
         this.priceText.setText(`(${this.getPrice()})`);
 
@@ -592,8 +579,21 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
     }
 }
 
-export class CharUiLineInputPointsElement {
+export class CharUiLineInputPointsElement extends CharUiTextWithPointsElement {
     constructor(input) {
-        //
+        super(input);
+
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
     }
 }

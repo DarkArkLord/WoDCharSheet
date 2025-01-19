@@ -634,21 +634,25 @@ export class CharUiLineInputPointsElement {
 
         this.input = new UITextInput({}, UITextInputType.Text, undefined, undefined, DEFAULT_INPUT_SIZE);
         this.input.setReadOnly(!this.isEditable);
-        this.input.onChangedFunc(() => {
-            const text = instance.input.getValue();
-            instance.setTextToAllFields(text);
-            instance.updateEvent.invoke();
-        });
+        if (this.isEditable) {
+            this.input.onChangedFunc(() => {
+                const text = instance.input.getValue();
+                instance.setTextToAllFields(text);
+                instance.updateEvent.invoke();
+            });
+        }
 
         this.variants = new UIDropdown({}, { addEmptyOption: true, defaultOptions });
         this.variants.setVisible(this.isEditable);
-        this.variants.setOnChangeEvent(input => {
-            const text = input.target.value;
-            input.target.selectedIndex = 0;
+        if (this.isEditable) {
+            this.variants.setOnChangeEvent(input => {
+                const text = input.target.value;
+                input.target.selectedIndex = 0;
 
-            instance.setTextToAllFields(text);
-            instance.updateEvent.invoke();
-        });
+                instance.setTextToAllFields(text);
+                instance.updateEvent.invoke();
+            });
+        }
 
         this.points = new CharUiPointsElement({
             data,
@@ -659,6 +663,17 @@ export class CharUiLineInputPointsElement {
             },
             updateEvent,
         });
+
+        this.rowElement = render(
+            HTMLTags.TableRow, {},
+            render(HTMLTags.TableData, {}, this.removeButton.element),
+            render(HTMLTags.TableData, {}, this.isEditable
+                ? this.input
+                : this.text.element
+            ),
+            render(HTMLTags.TableData, {}, this.variants.element),
+            render(HTMLTags.TableData, {}, this.points.element),
+        );
     }
 
     setTextToAllFields(text) {
@@ -683,7 +698,17 @@ export class CharUiLineInputPointsElement {
             });
         }
 
+        this.setHighlight(errors.length > 0);
+
         return errors;
+    }
+
+    setHighlight(isVisible) {
+        if (isVisible) {
+            this.rowElement.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.rowElement.classList.remove(CSS.BORDER_RED_1);
+        }
     }
 
     getPrice() {
@@ -722,12 +747,17 @@ export class CharUiLineInputPointsListElement {
         this.isDirty = true;
 
         // Elements
+        this.headerRow = render(
+            HTMLTags.TableRow, {},
+            render(HTMLTags.TableData, {}, valueInfo.translation),
+        );
+
         this.items = this.data.map(createListItem);
 
-        this.addPoint = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
-        this.addPoint.setVisible(this.isEditable);
+        this.addButton = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        this.addButton.setVisible(this.isEditable);
         if (this.isEditable) {
-            this.addPoint.onClickFunc(() => {
+            this.addButton.onClickFunc(() => {
                 const item = {};
                 instance.data.push(item);
 
@@ -738,6 +768,11 @@ export class CharUiLineInputPointsListElement {
                 instance.updateEvent.invoke();
             });
         }
+
+        this.addButtonRow = render(
+            HTMLTags.TableRow, {},
+            render(HTMLTags.TableData, {}, this.addButton.element),
+        );
 
         this.element = render(HTMLTags.Table, {});
 
@@ -778,18 +813,42 @@ export class CharUiLineInputPointsListElement {
     }
 
     update() {
-        this.element.innerHTML = EMPTY_STRING;
+        for (const item of this.items) {
+            item.update();
+        }
+
+        if (this.isDirty) {
+            this.element.innerHTML = EMPTY_STRING;
+
+            this.element.append(this.headerRow);
+
+            for (const item of this.items) {
+                this.element.append(item.rowElement);
+            }
+
+            if (this.isEditable) {
+                this.element.append(this.addButtonRow);
+            }
+        }
     }
 
     validate() {
-        const errors = [];
+        const errors = this.items.flatMap(item => item.validate() ?? []) ?? [];
 
-        //
+        this.setHighlight(errors.length > 0);
 
         return errors;
     }
 
+    setHighlight(isVisible) {
+        if (isVisible) {
+            this.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
     getPrice() {
-        // return this.points.getPrice();
+        return this.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }

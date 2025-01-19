@@ -591,3 +591,9 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
         }
     }
 }
+
+export class CharUiLineInputPointsElement {
+    constructor(input) {
+        //
+    }
+}

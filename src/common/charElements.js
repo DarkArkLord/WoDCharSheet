@@ -616,8 +616,6 @@ export class CharUiLineInputPointsElement {
 
         this.updateEvent = updateEvent;
 
-        this.info = valueInfo;
-
         this.validations = validations;
         this.partValidations = partValidations;
         this.isEditable = validations?.editable;
@@ -635,7 +633,7 @@ export class CharUiLineInputPointsElement {
         this.input = new UITextInput({}, UITextInputType.Text, undefined, undefined, DEFAULT_INPUT_SIZE);
         this.input.setReadOnly(!this.isEditable);
         if (this.isEditable) {
-            this.input.onChangedFunc(() => {
+            this.input.setOnChangedEvent(() => {
                 const text = instance.input.getValue();
                 instance.setTextToAllFields(text);
                 instance.updateEvent.invoke();
@@ -668,7 +666,7 @@ export class CharUiLineInputPointsElement {
             HTMLTags.TableRow, {},
             render(HTMLTags.TableData, {}, this.removeButton.element),
             render(HTMLTags.TableData, {}, this.isEditable
-                ? this.input
+                ? this.input.element
                 : this.text.element
             ),
             render(HTMLTags.TableData, {}, this.variants.element),
@@ -749,15 +747,24 @@ export class CharUiLineInputPointsListElement {
         // Elements
         this.headerRow = render(
             HTMLTags.TableRow, {},
-            render(HTMLTags.TableData, {}, valueInfo.translation),
+            render(
+                HTMLTags.TableData,
+                { class: CSS.TEXT_ALIGN_CENTER, colspan: 4 },
+                valueInfo.translation
+            ),
         );
+
+        const defaultOptions = (valueInfo.variants ?? []).map(variant => ({
+            text: variant.translation,
+            attrubutes: {},
+        }));
 
         this.items = this.data.map(createListItem);
 
         this.addButton = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
         this.addButton.setVisible(this.isEditable);
         if (this.isEditable) {
-            this.addButton.onClickFunc(() => {
+            this.addButton.setOnClickEvent(() => {
                 const item = {};
                 instance.data.push(item);
 
@@ -771,7 +778,11 @@ export class CharUiLineInputPointsListElement {
 
         this.addButtonRow = render(
             HTMLTags.TableRow, {},
-            render(HTMLTags.TableData, {}, this.addButton.element),
+            render(
+                HTMLTags.TableData,
+                { class: CSS.TEXT_ALIGN_CENTER, colspan: 4 },
+                this.addButton.element
+            ),
         );
 
         this.element = render(HTMLTags.Table, {});
@@ -780,7 +791,7 @@ export class CharUiLineInputPointsListElement {
             const item = new CharUiLineInputPointsElement({
                 data: {
                     data,
-                    defaultOptions: valueInfo.variants ?? [],
+                    defaultOptions,
                 },
                 validations: {
                     validations,

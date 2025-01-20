@@ -31,6 +31,16 @@ class PointsValueWrapper extends ValueWrapper {
         return result;
     }
 
+    hasPrevValue() {
+        for (const field of this.prevFileds) {
+            if (this.data[field]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     getNextValue() {
         let result = 0;
 
@@ -41,10 +51,6 @@ class PointsValueWrapper extends ValueWrapper {
         return result;
     }
 
-    getTotalValue(defaultValue) {
-        return this.getPrevValue() + this.getValue(defaultValue) + this.getNextValue();
-    }
-
     hasNextValue() {
         for (const field of this.nextFileds) {
             if (this.data[field]) {
@@ -53,6 +59,10 @@ class PointsValueWrapper extends ValueWrapper {
         }
 
         return false;
+    }
+
+    getTotalValue(defaultValue) {
+        return this.getPrevValue() + this.getValue(defaultValue) + this.getNextValue();
     }
 }
 
@@ -683,6 +693,10 @@ export class CharUiLineInputPointsElement {
     update() {
         this.setTextToAllFields(this.textWrapper.getValue());
         this.points.update();
+
+        const hasPrevValue = this.points.wrapper.hasPrevValue();
+        const hasNextValue = this.points.wrapper.hasNextValue();
+        this.removeButton.setActive(!hasPrevValue && !hasNextValue);
     }
 
     validate() {

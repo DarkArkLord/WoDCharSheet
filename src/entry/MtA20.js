@@ -13,7 +13,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { DarkEvent, ValueWrapper } from '../common/utilities.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
-import { CharUiLinePointsElement, CharUiLinePointsSectionElement, CharUiLinePointsSectionsPartElement, CharUiBlockPointsElement, CharUiLineInputPointsElement, CharUiLineInputPointsListElement } from '../common/charElements.js'
+import { CharUiLineDotsElement, CharUiLineDotsSectionElement, CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsElement, CharUiLineInputDotsListElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_EDIT_STATES_TRANSLATIONS, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
@@ -42,7 +42,7 @@ class CharacterMtAState {
         this.validationsInfo = { state: validations.stateTranslation };
 
         this.parts = {
-            [CHAR_PARTS.ATTRIBUTES]: new CharUiLinePointsSectionsPartElement({
+            [CHAR_PARTS.ATTRIBUTES]: new CharUiLineDotsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
@@ -53,7 +53,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.ABILITIES]: new CharUiLinePointsSectionsPartElement({
+            [CHAR_PARTS.ABILITIES]: new CharUiLineDotsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
@@ -64,7 +64,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.SPHERES]: new CharUiLinePointsSectionsPartElement({
+            [CHAR_PARTS.SPHERES]: new CharUiLineDotsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.SPHERES],
@@ -75,7 +75,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.ARETE]: new CharUiBlockPointsElement({
+            [CHAR_PARTS.ARETE]: new CharUiBlockDotsElement({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ARETE],
@@ -87,7 +87,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.WILLPOWER]: new CharUiBlockPointsElement({
+            [CHAR_PARTS.WILLPOWER]: new CharUiBlockDotsElement({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.WILLPOWER],
@@ -99,7 +99,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputPointsListElement({
+            [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputDotsListElement({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.BACKGROUNDS],

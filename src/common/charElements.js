@@ -14,7 +14,7 @@ const CSS = Object.freeze({
     DROPDOWN_AS_BUTTON: 'dropdown-as-button',
 });
 
-class PointsValueWrapper extends ValueWrapper {
+class DotsValueWrapper extends ValueWrapper {
     constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
         super(data, field, defaultValue);
 
@@ -67,9 +67,9 @@ class PointsValueWrapper extends ValueWrapper {
     }
 }
 
-class PointsValuePriceWrapper {
-    constructor(pointsValueWrapper, priceFunc) {
-        this.pointsValueWrapper = pointsValueWrapper;
+class DotsValuePriceWrapper {
+    constructor(dotsValueWrapper, priceFunc) {
+        this.dotsValueWrapper = dotsValueWrapper;
         this.priceFunc = priceFunc;
         this.isDirty = true;
         this.price = 0;
@@ -79,8 +79,8 @@ class PointsValuePriceWrapper {
         this.price = 0;
 
         if (this.priceFunc) {
-            const prev = this.pointsValueWrapper.getPrevValue();
-            const value = this.pointsValueWrapper.getValue();
+            const prev = this.dotsValueWrapper.getPrevValue();
+            const value = this.dotsValueWrapper.getValue();
             for (let cur = 0; cur < value; cur++) {
                 this.price += this.priceFunc(prev + cur);
             }
@@ -102,7 +102,7 @@ class PointsValuePriceWrapper {
     }
 }
 
-const DEFAULT_POINTS_COUNT = 5;
+const DEFAULT_DOTS_COUNT = 5;
 const DEFAULT_INPUT_SIZE = 10;
 const EMPTY_STRING = '';
 
@@ -111,7 +111,7 @@ const DEFAULT_COMPARATOR = (a, b) => b - a;
 const SPECIALTY_FIELD = 'specialty'
 const TEXT_FIELD = 'text';
 
-class CharUiPointsElement {
+class CharUiDotsElement {
     constructor(input) {
         const {
             data,
@@ -130,26 +130,26 @@ class CharUiPointsElement {
         this.validations = validations;
         this.partValidations = partValidations;
         this.dotsInputValidations = partValidations?.dotsInput;
-        this.pointsCount = this.dotsInputValidations?.dotsCount ?? DEFAULT_POINTS_COUNT;
+        this.dotsCount = this.dotsInputValidations?.dotsCount ?? DEFAULT_DOTS_COUNT;
         this.isEditable = validations?.editable;
 
         this.validationsInfo = dataForValidations;
 
         this.data = data;
-        this.wrapper = new PointsValueWrapper(
+        this.wrapper = new DotsValueWrapper(
             this.data,
             this.validations?.state,
             this.dotsInputValidations?.min,
             this.validations?.prev,
             this.validations?.next,
         );
-        this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.dotsInputValidations?.price);
+        this.priceWrapper = new DotsValuePriceWrapper(this.wrapper, this.dotsInputValidations?.price);
 
         // Elements
-        this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
+        this.dots = new UIPointsLine(this.dotsCount, this.isEditable, { class: CSS.NOWRAP });
 
         if (this.isEditable) {
-            this.points.subButton.setOnClickEvent(() => {
+            this.dots.subButton.setOnClickEvent(() => {
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value - 1);
 
@@ -158,7 +158,7 @@ class CharUiPointsElement {
                 instance.updateEvent.invoke();
             });
 
-            this.points.addButton.setOnClickEvent(() => {
+            this.dots.addButton.setOnClickEvent(() => {
                 const value = instance.wrapper.getValue();
                 instance.wrapper.setValue(value + 1);
 
@@ -168,7 +168,7 @@ class CharUiPointsElement {
             });
         }
 
-        this.element = this.points.element;
+        this.element = this.dots.element;
     }
 
     update() {
@@ -177,16 +177,16 @@ class CharUiPointsElement {
             const value = this.wrapper.getValue(0);
             const hasNextValue = this.wrapper.hasNextValue();
 
-            this.points.setValue(prevValue, value);
+            this.dots.setValue(prevValue, value);
 
             const enableSubButton = this.dotsInputValidations?.min === undefined ? true : value > this.dotsInputValidations?.min;
-            this.points.subButton.setActive(enableSubButton && !hasNextValue);
+            this.dots.subButton.setActive(enableSubButton && !hasNextValue);
             const enableAddButton = (this.dotsInputValidations?.max === undefined ? true : value < this.dotsInputValidations?.max)
-                && prevValue + value < this.pointsCount;
-            this.points.addButton.setActive(enableAddButton && !hasNextValue);
+                && prevValue + value < this.dotsCount;
+            this.dots.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
             const totalValue = this.wrapper.getTotalValue(0);
-            this.points.setValue(0, totalValue);
+            this.dots.setValue(0, totalValue);
         }
     }
 
@@ -215,7 +215,7 @@ class CharUiPointsElement {
     }
 }
 
-class CharUiTextWithPointsElement {
+class CharUiTextWithDotsElement {
     constructor(input) {
         const {
             data: {
@@ -245,7 +245,7 @@ class CharUiTextWithPointsElement {
         // Elements
         this.text = new UIText(valueInfo.translation, {});
 
-        this.points = new CharUiPointsElement({
+        this.dots = new CharUiDotsElement({
             data,
             validations: {
                 validations,
@@ -257,11 +257,11 @@ class CharUiTextWithPointsElement {
     }
 
     update() {
-        this.points.update();
+        this.dots.update();
     }
 
     validate() {
-        const errors = this.points.validate() ?? [];
+        const errors = this.dots.validate() ?? [];
 
         this.setHighlight(errors.length > 0);
 
@@ -271,19 +271,19 @@ class CharUiTextWithPointsElement {
     setHighlight(isVisible) {
         if (isVisible) {
             this.text.element.classList.add(CSS.BORDER_RED_1);
-            this.points.element.classList.add(CSS.BORDER_RED_1);
+            this.dots.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.text.element.classList.remove(CSS.BORDER_RED_1);
-            this.points.element.classList.remove(CSS.BORDER_RED_1);
+            this.dots.element.classList.remove(CSS.BORDER_RED_1);
         }
     }
 
     getPrice() {
-        return this.points.getPrice();
+        return this.dots.getPrice();
     }
 }
 
-export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
+export class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     constructor(input) {
         super(input);
 
@@ -302,7 +302,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         const instance = this;
 
-        this.specialtyWrapper = new ValueWrapper(this.points.data, SPECIALTY_FIELD, EMPTY_STRING);
+        this.specialtyWrapper = new ValueWrapper(this.dots.data, SPECIALTY_FIELD, EMPTY_STRING);
 
         // Elements
         this.specialty = new UITextInput({}, UITextInputType.Text, null, null, DEFAULT_INPUT_SIZE);
@@ -322,9 +322,9 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
     }
 
     update() {
-        const prevValue = this.points.wrapper.getPrevValue()
-        const value = this.points.wrapper.getValue(0)
-        const totalValue = this.points.wrapper.getTotalValue(0);
+        const prevValue = this.dots.wrapper.getPrevValue()
+        const value = this.dots.wrapper.getValue(0)
+        const totalValue = this.dots.wrapper.getTotalValue(0);
 
         this.priceText.setText(`(${this.getPrice()})`);
 
@@ -355,7 +355,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
     }
 }
 
-export class CharUiLinePointsSectionElement {
+export class CharUiLineDotsSectionElement {
     constructor(input) {
         const {
             data: {
@@ -381,7 +381,7 @@ export class CharUiLinePointsSectionElement {
         this.sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
         this.header = new UIText(this.sectionTitle, {});
 
-        this.items = sectionInfo?.values?.map(valueInfo => new CharUiLinePointsElement({
+        this.items = sectionInfo?.values?.map(valueInfo => new CharUiLineDotsElement({
             data: {
                 keeper,
                 valueInfo,
@@ -409,7 +409,7 @@ export class CharUiLinePointsSectionElement {
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, {}, item.text.element),
                 render(HTMLTags.TableData, {}, item.specialty.element),
-                render(HTMLTags.TableData, {}, item.points.element),
+                render(HTMLTags.TableData, {}, item.dots.element),
                 render(HTMLTags.TableData, {}, item.priceText.element),
             )),
         );
@@ -446,7 +446,7 @@ export class CharUiLinePointsSectionElement {
     }
 }
 
-export class CharUiLinePointsSectionsPartElement {
+export class CharUiLineDotsSectionsPartElement {
     constructor(input) {
         const {
             data: {
@@ -474,7 +474,7 @@ export class CharUiLinePointsSectionsPartElement {
         this.partTitle = partInfo.translation ?? EMPTY_STRING;
         this.header = new UIText(this.partTitle, {});
 
-        this.sections = partInfo.sections?.map(section => new CharUiLinePointsSectionElement({
+        this.sections = partInfo.sections?.map(section => new CharUiLineDotsSectionElement({
             data: {
                 keeper: this.data,
                 sectionInfo: section,
@@ -561,7 +561,7 @@ export class CharUiLinePointsSectionsPartElement {
     }
 }
 
-export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
+export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
     constructor(input) {
         super(input);
 
@@ -587,7 +587,7 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
             ),
             render(
                 HTMLTags.TableRow, { class: CSS.TEXT_ALIGN_CENTER },
-                render(HTMLTags.TableData, {}, this.points.element),
+                render(HTMLTags.TableData, {}, this.dots.element),
             ),
         );
     }
@@ -609,7 +609,7 @@ export class CharUiBlockPointsElement extends CharUiTextWithPointsElement {
     }
 }
 
-export class CharUiLineInputPointsElement {
+export class CharUiLineInputDotsElement {
     constructor(input) {
         const {
             data: {
@@ -664,7 +664,7 @@ export class CharUiLineInputPointsElement {
             });
         }
 
-        this.points = new CharUiPointsElement({
+        this.dots = new CharUiDotsElement({
             data,
             validations: {
                 validations,
@@ -682,7 +682,7 @@ export class CharUiLineInputPointsElement {
                 : this.text.element
             ),
             render(HTMLTags.TableData, {}, this.variants.element),
-            render(HTMLTags.TableData, {}, this.points.element),
+            render(HTMLTags.TableData, {}, this.dots.element),
         );
     }
 
@@ -695,15 +695,15 @@ export class CharUiLineInputPointsElement {
 
     update() {
         this.setTextToAllFields(this.textWrapper.getValue());
-        this.points.update();
+        this.dots.update();
 
-        const hasPrevValue = this.points.wrapper.hasPrevValue();
-        const hasNextValue = this.points.wrapper.hasNextValue();
+        const hasPrevValue = this.dots.wrapper.hasPrevValue();
+        const hasNextValue = this.dots.wrapper.hasNextValue();
         this.removeButton.setActive(!hasPrevValue && !hasNextValue);
     }
 
     validate() {
-        const errors = this.points.validate() ?? [];
+        const errors = this.dots.validate() ?? [];
 
         this.setPointsHighlight(errors.length > 0);
 
@@ -724,9 +724,9 @@ export class CharUiLineInputPointsElement {
 
     setPointsHighlight(isVisible) {
         if (isVisible) {
-            this.points.element.classList.add(CSS.BORDER_RED_1);
+            this.dots.element.classList.add(CSS.BORDER_RED_1);
         } else {
-            this.points.element.classList.remove(CSS.BORDER_RED_1);
+            this.dots.element.classList.remove(CSS.BORDER_RED_1);
         }
     }
 
@@ -741,11 +741,11 @@ export class CharUiLineInputPointsElement {
     }
 
     getPrice() {
-        return this.points.getPrice();
+        return this.dots.getPrice();
     }
 }
 
-export class CharUiLineInputPointsListElement {
+export class CharUiLineInputDotsListElement {
     constructor(input) {
         const {
             data: {
@@ -815,7 +815,7 @@ export class CharUiLineInputPointsListElement {
     }
 
     createItemWrapper(itemData) {
-        const item = new CharUiLineInputPointsElement({
+        const item = new CharUiLineInputDotsElement({
             data: {
                 data: itemData,
                 defaultOptions: this.optionsForItemWrapper,

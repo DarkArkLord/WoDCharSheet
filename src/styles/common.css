@@ -25,3 +25,10 @@
 .nowrap {
     white-space: nowrap;
 }
+
+.dropdown-as-button {
+    /* background: url(some data); */
+    /* width: 16px; */
+    appearance: none;
+    border: 0;
+}

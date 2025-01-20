@@ -200,3 +200,10 @@ export const SVGIcons = Object.freeze({
     BUTTON_SUB_DISABLED: SVGtoData(SVG_BUTTON_SUB_DISABLED),
     RECT: SVGtoData(SVG_RECT),
 });
+
+
+// Грязный хак с изменением стилей
+// Не надо так делать, но я не придумал чего-то получше
+const BUTTON_OF_DROPDOWN_STYLE = [...document.styleSheets].map(x => [...x.rules]).flat().find(x => x.selectorText === '.dropdown-as-button').style;
+BUTTON_OF_DROPDOWN_STYLE.background = `url("${SVGIcons.BUTTON_ADD_ENABLED}")`;
+BUTTON_OF_DROPDOWN_STYLE.width = `${SVG_ITEM_SIZE}px`;

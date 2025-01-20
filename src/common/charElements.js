@@ -11,6 +11,7 @@ const CSS = Object.freeze({
     TEXT_ALIGN_CENTER: 'text-align-center',
     NOWRAP: 'nowrap',
     BORDER_RED_1: 'border-red-1',
+    DROPDOWN_AS_BUTTON: 'dropdown-as-button',
 });
 
 class PointsValueWrapper extends ValueWrapper {
@@ -650,7 +651,7 @@ export class CharUiLineInputPointsElement {
             });
         }
 
-        this.variants = new UIDropdown({}, { addEmptyOption: true, defaultOptions });
+        this.variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
         this.variants.setVisible(this.isEditable);
         if (this.isEditable) {
             this.variants.setOnChangeEvent(eventInput => {

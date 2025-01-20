@@ -252,7 +252,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
         [CHAR_PARTS.BACKGROUNDS]: {
             pointsCount: DEFAULT_POINTS_COUNT,
             freePoints: 7,
-            min: 1,
+            min: 0,
+            totalMin: 0,
             price: (total) => 1,
         },
         [CHAR_PARTS.ARETE]: {
@@ -373,7 +374,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
         [CHAR_PARTS.BACKGROUNDS]: {
             pointsCount: DEFAULT_POINTS_COUNT,
-            totalMin: 0,
+            totalMin: 1,
             totalMax: 5,
         },
         [CHAR_PARTS.ARETE]: {

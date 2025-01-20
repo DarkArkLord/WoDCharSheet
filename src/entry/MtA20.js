@@ -245,7 +245,7 @@ class CharacterMtA {
 
         const errors = states.flatMap(state => state.validate() ?? []) ?? [];
         const errorTexts = errors.map(error => [
-            error.state, error.part, error.section, error.value, error.text
+            error.state, error.part, error.section, error.value, error.commonValue, error.text
         ].filter(x => x).join(': ')) ?? [];
 
         for (const state of states) {

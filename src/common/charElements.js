@@ -327,7 +327,7 @@ export class CharUiLinePointsElement extends CharUiTextWithPointsElement {
 
         this.priceText.setText(`(${this.getPrice()})`);
 
-        const specialtyEditableFrom = this.partValidations?.specialty;
+        const specialtyEditableFrom = this.partValidations?.specialtyEditableFrom;
         if (specialtyEditableFrom) {
             this.specialty.setVisible(true);
             this.specialty.setReadOnly(prevValue + value < specialtyEditableFrom);

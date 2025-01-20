@@ -229,14 +229,14 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         [CHAR_PARTS.ATTRIBUTES]: {
             sectionPoints: [7 + 3, 5 + 3, 3 + 3],
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 1,
             price: (total) => 1,
         },
         [CHAR_PARTS.ABILITIES]: {
             sectionPoints: [13, 9, 5],
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             max: 3,
@@ -245,7 +245,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         [CHAR_PARTS.SPHERES]: {
             freePoints: 6,
             pointsCount: DEFAULT_POINTS_COUNT,
-            specialty: 4,
+            specialtyEditableFrom: 4,
             min: 0,
             price: (total) => 1,
         },
@@ -283,19 +283,19 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
         [CHAR_PARTS.ATTRIBUTES]: {
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             price: (total) => 5,
         },
         [CHAR_PARTS.ABILITIES]: {
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             price: (total) => 2,
         },
         [CHAR_PARTS.SPHERES]: {
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             price: (total) => 7,
@@ -329,19 +329,19 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             price: (total) => total * 4,
         },
         [CHAR_PARTS.ABILITIES]: {
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             price: (total) => total == 0 ? 3 : total * 2,
         },
         [CHAR_PARTS.SPHERES]: {
-            specialty: 4,
+            specialtyEditableFrom: 4,
             pointsCount: DEFAULT_POINTS_COUNT,
             min: 0,
             price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere

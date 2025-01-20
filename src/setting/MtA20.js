@@ -266,6 +266,14 @@ export const CHAR_VALIDATIONS = Object.freeze({
             min: 5,
             max: 5,
         },
+        [CHAR_PARTS.MERITS]: {
+            min: 0,
+            max: 0,
+        },
+        [CHAR_PARTS.FLAWS]: {
+            min: 0,
+            max: 0,
+        },
     },
     [CHAR_EDIT_STATES.POINTS]: {
         editable: true,
@@ -309,6 +317,10 @@ export const CHAR_VALIDATIONS = Object.freeze({
             min: 0,
             price: (total) => 1,
         },
+        [CHAR_PARTS.MERITS]: {
+            totalMaxPoints: 7,
+        },
+        [CHAR_PARTS.FLAWS]: {},
     },
     [CHAR_EDIT_STATES.EXP]: {
         editable: true,
@@ -350,6 +362,14 @@ export const CHAR_VALIDATIONS = Object.freeze({
             min: 0,
             price: (total) => total,
         },
+        [CHAR_PARTS.MERITS]: {
+            min: 0,
+            max: 0,
+        },
+        [CHAR_PARTS.FLAWS]: {
+            min: 0,
+            max: 0,
+        },
     },
     [CHAR_EDIT_STATES.TOTAL]: {
         editable: false,
@@ -386,6 +406,14 @@ export const CHAR_VALIDATIONS = Object.freeze({
             pointsCount: DEFAULT_MANY_POINTS_COUNT,
             totalMin: 0,
             totalMax: 10,
+        },
+        [CHAR_PARTS.MERITS]: {
+            min: 0,
+            max: 0,
+        },
+        [CHAR_PARTS.FLAWS]: {
+            min: 0,
+            max: 0,
         },
     },
 });

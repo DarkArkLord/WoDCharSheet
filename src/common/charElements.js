@@ -674,16 +674,8 @@ export class CharUiLineInputDotsElement {
             updateEvent,
         });
 
-        this.rowElement = render(
-            HTMLTags.TableRow, {},
-            render(HTMLTags.TableData, {}, this.removeButton.element),
-            render(HTMLTags.TableData, {}, this.isEditable
-                ? this.input.element
-                : this.text.element
-            ),
-            render(HTMLTags.TableData, {}, this.variants.element),
-            render(HTMLTags.TableData, {}, this.dots.element),
-        );
+        this.priceText = new UIText(EMPTY_STRING, {});
+        this.priceText.setVisible(this.isEditable);
     }
 
     setTextToAllFields(text) {
@@ -696,6 +688,8 @@ export class CharUiLineInputDotsElement {
     update() {
         this.setTextToAllFields(this.textWrapper.getValue());
         this.dots.update();
+
+        this.priceText.setText(`(${this.getPrice()})`);
 
         const hasPrevValue = this.dots.wrapper.hasPrevValue();
         const hasNextValue = this.dots.wrapper.hasNextValue();
@@ -775,12 +769,16 @@ export class CharUiLineInputDotsListElement {
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? [];
 
         // Elements
+        const COLS_IN_ROW = 5;
+
+        this.headerText = valueInfo.translation;
+        this.header = new UIText(this.headerText, {});
         this.headerRow = render(
             HTMLTags.TableRow, {},
             render(
                 HTMLTags.TableData,
-                { class: CSS.TEXT_ALIGN_CENTER, colspan: 4 },
-                valueInfo.translation
+                { class: CSS.TEXT_ALIGN_CENTER, colspan: COLS_IN_ROW },
+                this.header.element,
             ),
         );
 
@@ -804,7 +802,7 @@ export class CharUiLineInputDotsListElement {
             HTMLTags.TableRow, {},
             render(
                 HTMLTags.TableData,
-                { class: CSS.TEXT_ALIGN_CENTER, colspan: 4 },
+                { class: CSS.TEXT_ALIGN_CENTER, colspan: COLS_IN_ROW },
                 this.addButton.element
             ),
         );
@@ -849,8 +847,17 @@ export class CharUiLineInputDotsListElement {
 
         for (const itemData of this.data) {
             const item = this.createItemWrapper(itemData);
+
             this.items.push(item);
-            this.element.append(item.rowElement);
+
+            this.element.append(render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, item.removeButton.element),
+                render(HTMLTags.TableData, {}, item.isEditable ? item.input.element : item.text.element),
+                render(HTMLTags.TableData, {}, item.variants.element),
+                render(HTMLTags.TableData, {}, item.dots.element),
+                render(HTMLTags.TableData, {}, item.priceText.element),
+            ));
         }
 
         if (this.isEditable) {
@@ -865,6 +872,10 @@ export class CharUiLineInputDotsListElement {
 
         for (const item of this.items) {
             item.update();
+        }
+
+        if (this.isEditable) {
+            this.header.setText(`${this.headerText} (${this.getPrice()})`);
         }
     }
 

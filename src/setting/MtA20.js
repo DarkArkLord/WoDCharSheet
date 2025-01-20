@@ -230,41 +230,52 @@ export const CHAR_VALIDATIONS = Object.freeze({
         [CHAR_PARTS.ATTRIBUTES]: {
             sectionPoints: [7 + 3, 5 + 3, 3 + 3],
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 1,
-            price: (total) => 1,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 1,
+                price: (total) => 1,
+            },
         },
         [CHAR_PARTS.ABILITIES]: {
             sectionPoints: [13, 9, 5],
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            max: 3,
-            price: (total) => 1,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                max: 3,
+                price: (total) => 1,
+            },
         },
         [CHAR_PARTS.SPHERES]: {
             freePoints: 6,
-            pointsCount: DEFAULT_POINTS_COUNT,
             specialtyEditableFrom: 4,
-            min: 0,
-            price: (total) => 1,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => 1,
+            },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
             freePoints: 7,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            totalMin: 0,
-            price: (total) => 1,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => 1,
+            },
         },
         [CHAR_PARTS.ARETE]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            min: 1,
-            max: 1,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                min: 1,
+                max: 1,
+            },
         },
         [CHAR_PARTS.WILLPOWER]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            min: 5,
-            max: 5,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                min: 5,
+                max: 5,
+            },
         },
         [CHAR_PARTS.MERITS]: {
             min: 0,
@@ -284,38 +295,50 @@ export const CHAR_VALIDATIONS = Object.freeze({
         freePoints: 15,
         [CHAR_PARTS.ATTRIBUTES]: {
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            price: (total) => 5,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => 5,
+            },
         },
         [CHAR_PARTS.ABILITIES]: {
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            price: (total) => 2,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => 2,
+            },
         },
         [CHAR_PARTS.SPHERES]: {
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            price: (total) => 7,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => 7,
+            },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            totalMin: 0,
-            price: (total) => 1,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                totalMin: 0,
+                price: (total) => 1,
+            },
         },
         [CHAR_PARTS.ARETE]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            min: 0,
-            totalMax: 3,
-            price: (total) => 4,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                min: 0,
+                totalMax: 3,
+                price: (total) => 4,
+            },
         },
         [CHAR_PARTS.WILLPOWER]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            min: 0,
-            price: (total) => 1,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                min: 0,
+                price: (total) => 1,
+            },
         },
         [CHAR_PARTS.MERITS]: {
             totalMaxPoints: 7,
@@ -330,37 +353,48 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            price: (total) => total * 4,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => total * 4,
+            },
         },
         [CHAR_PARTS.ABILITIES]: {
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            price: (total) => total == 0 ? 3 : total * 2,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => total == 0 ? 3 : total * 2,
+            },
         },
         [CHAR_PARTS.SPHERES]: {
             specialtyEditableFrom: 4,
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
+            },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
-            pointsCount: DEFAULT_POINTS_COUNT,
-            min: 0,
-            totalMin: 0,
-            price: (total) => total * 3,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                min: 0,
+                price: (total) => total * 3,
+            },
         },
         [CHAR_PARTS.ARETE]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            min: 0,
-            price: (total) => total * 8,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                min: 0,
+                price: (total) => total * 8,
+            },
         },
         [CHAR_PARTS.WILLPOWER]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            min: 0,
-            price: (total) => total,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                min: 0,
+                price: (total) => total,
+            },
         },
         [CHAR_PARTS.MERITS]: {
             min: 0,
@@ -378,34 +412,46 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {
-            pointsCount: DEFAULT_POINTS_COUNT,
-            totalMin: 1,
-            totalMax: 5,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                totalMin: 1,
+                totalMax: 5,
+            },
         },
         [CHAR_PARTS.ABILITIES]: {
-            pointsCount: DEFAULT_POINTS_COUNT,
-            totalMin: 0,
-            totalMax: 5,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                totalMin: 0,
+                totalMax: 5,
+            },
         },
         [CHAR_PARTS.SPHERES]: {
-            pointsCount: DEFAULT_POINTS_COUNT,
-            totalMin: 0,
-            totalMax: 5,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                totalMin: 0,
+                totalMax: 5,
+            },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
-            pointsCount: DEFAULT_POINTS_COUNT,
-            totalMin: 1,
-            totalMax: 5,
+            dotsInput: {
+                dotsCount: DEFAULT_POINTS_COUNT,
+                totalMin: 1,
+                totalMax: 5,
+            },
         },
         [CHAR_PARTS.ARETE]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            totalMin: 1,
-            totalMax: 10,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                totalMin: 1,
+                totalMax: 10,
+            },
         },
         [CHAR_PARTS.WILLPOWER]: {
-            pointsCount: DEFAULT_MANY_POINTS_COUNT,
-            totalMin: 0,
-            totalMax: 10,
+            dotsInput: {
+                dotsCount: DEFAULT_MANY_POINTS_COUNT,
+                totalMin: 0,
+                totalMax: 10,
+            },
         },
         [CHAR_PARTS.MERITS]: {
             min: 0,

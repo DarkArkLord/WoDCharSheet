@@ -129,7 +129,8 @@ class CharUiPointsElement {
 
         this.validations = validations;
         this.partValidations = partValidations;
-        this.pointsCount = partValidations.pointsCount ?? DEFAULT_POINTS_COUNT;
+        this.dotsInputValidations = partValidations?.dotsInput;
+        this.pointsCount = this.dotsInputValidations?.dotsCount ?? DEFAULT_POINTS_COUNT;
         this.isEditable = validations?.editable;
 
         this.validationsInfo = dataForValidations;
@@ -138,11 +139,11 @@ class CharUiPointsElement {
         this.wrapper = new PointsValueWrapper(
             this.data,
             this.validations?.state,
-            this.partValidations?.min,
+            this.dotsInputValidations?.min,
             this.validations?.prev,
             this.validations?.next,
         );
-        this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.partValidations?.price);
+        this.priceWrapper = new PointsValuePriceWrapper(this.wrapper, this.dotsInputValidations?.price);
 
         // Elements
         this.points = new UIPointsLine(this.pointsCount, this.isEditable, { class: CSS.NOWRAP });
@@ -178,9 +179,9 @@ class CharUiPointsElement {
 
             this.points.setValue(prevValue, value);
 
-            const enableSubButton = this.partValidations?.min === undefined ? true : value > this.partValidations?.min;
+            const enableSubButton = this.dotsInputValidations?.min === undefined ? true : value > this.dotsInputValidations?.min;
             this.points.subButton.setActive(enableSubButton && !hasNextValue);
-            const enableAddButton = (this.partValidations?.max === undefined ? true : value < this.partValidations?.max)
+            const enableAddButton = (this.dotsInputValidations?.max === undefined ? true : value < this.dotsInputValidations?.max)
                 && prevValue + value < this.pointsCount;
             this.points.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
@@ -193,16 +194,16 @@ class CharUiPointsElement {
         const errors = [];
 
         const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue(0);
-        if (totalValue < this.partValidations?.totalMin) {
+        if (totalValue < this.dotsInputValidations?.totalMin) {
             errors.push({
                 ...this.validationsInfo,
-                text: `Не может быть меньше ${this.partValidations?.totalMin} (сейчас ${totalValue})`,
+                text: `Не может быть меньше ${this.dotsInputValidations?.totalMin} (сейчас ${totalValue})`,
             });
         }
-        if (totalValue > this.partValidations?.totalMax) {
+        if (totalValue > this.dotsInputValidations?.totalMax) {
             errors.push({
                 ...this.validationsInfo,
-                text: `Не может быть больше ${this.partValidations?.totalMax} (сейчас ${totalValue})`,
+                text: `Не может быть больше ${this.dotsInputValidations?.totalMax} (сейчас ${totalValue})`,
             });
         }
 

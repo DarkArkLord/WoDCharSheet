@@ -854,6 +854,17 @@ export class CharUiLineInputPointsListElement {
     validate() {
         const errors = this.items.flatMap(item => item.validate() ?? []) ?? [];
 
+        if (this.partValidations?.freePoints !== undefined) {
+            const price = this.getPrice();
+
+            if (price !== this.partValidations.freePoints) {
+                errors.push({
+                    ...this.validationsInfo,
+                    text: `Должно быть распределено ${this.partValidations.freePoints} точек (сейчас ${price})`,
+                });
+            }
+        }
+
         this.setHighlight(errors.length > 0);
 
         return errors;

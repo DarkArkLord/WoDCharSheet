@@ -185,6 +185,37 @@ const SVG_RECT = Object.freeze(renderSVG(
     ),
 ));
 
+const SVG_DROPDOWN_BUTTON = Object.freeze(renderSVG(
+    SVGTags.SVG,
+    {
+        height: SVG_ITEM_SIZE,
+        width: SVG_ITEM_SIZE,
+        xmlns: SVG_NAMESPACE,
+    },
+    renderSVG(
+        SVGTags.Line,
+        {
+            x1: 0,
+            y1: SVG_ITEM_SIZE_QUARTER,
+            x2: SVG_ITEM_SIZE_HALF,
+            y2: SVG_ITEM_SIZE - SVG_ITEM_SIZE_HALF,
+            ['stroke-width']: SVG_STROKE_WIDTH,
+            stroke: SVG_COLOR_BLACK,
+        },
+    ),
+    renderSVG(
+        SVGTags.Line,
+        {
+            x1: SVG_ITEM_SIZE,
+            y1: SVG_ITEM_SIZE_QUARTER,
+            x2: SVG_ITEM_SIZE_HALF,
+            y2: SVG_ITEM_SIZE - SVG_ITEM_SIZE_HALF,
+            ['stroke-width']: SVG_STROKE_WIDTH,
+            stroke: SVG_COLOR_BLACK,
+        },
+    ),
+));
+
 function SVGtoData(svg) {
     // return `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svg.outerHTML)))}`;
     return `data:image/svg+xml;base64,${window.btoa(svg.outerHTML)}`;
@@ -205,5 +236,5 @@ export const SVGIcons = Object.freeze({
 // Грязный хак с изменением стилей
 // Не надо так делать, но я не придумал чего-то получше
 const BUTTON_OF_DROPDOWN_STYLE = [...document.styleSheets].map(x => [...x.rules]).flat().find(x => x.selectorText === '.dropdown-as-button').style;
-BUTTON_OF_DROPDOWN_STYLE.background = `url("${SVGIcons.BUTTON_ADD_ENABLED}")`;
+BUTTON_OF_DROPDOWN_STYLE.background = `url("${SVGtoData(SVG_DROPDOWN_BUTTON)}")`;
 BUTTON_OF_DROPDOWN_STYLE.width = `${SVG_ITEM_SIZE}px`;

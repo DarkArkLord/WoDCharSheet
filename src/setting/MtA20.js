@@ -228,6 +228,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         [CHAR_PARTS.ATTRIBUTES]: {
+            editable: true,
             sectionPoints: [7 + 3, 5 + 3, 3 + 3],
             specialtyEditableFrom: 4,
             dotsInput: {
@@ -237,6 +238,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ABILITIES]: {
+            editable: true,
             sectionPoints: [13, 9, 5],
             specialtyEditableFrom: 4,
             dotsInput: {
@@ -247,6 +249,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.SPHERES]: {
+            editable: true,
             freePoints: 6,
             specialtyEditableFrom: 4,
             dotsInput: {
@@ -256,6 +259,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
+            editable: true,
             freePoints: 7,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -264,6 +268,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ARETE]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 min: 1,
@@ -271,6 +276,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.WILLPOWER]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 min: 5,
@@ -292,6 +298,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
         [CHAR_PARTS.ATTRIBUTES]: {
+            editable: true,
             specialtyEditableFrom: 4,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -300,6 +307,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ABILITIES]: {
+            editable: true,
             specialtyEditableFrom: 4,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -308,6 +316,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.SPHERES]: {
+            editable: true,
             specialtyEditableFrom: 4,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -316,6 +325,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
+            editable: true,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 min: 0,
@@ -324,6 +334,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ARETE]: {
+            editable: true,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 min: 0,
@@ -332,6 +343,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.WILLPOWER]: {
+            editable: true,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 min: 0,
@@ -355,6 +367,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {
+            editable: true,
             specialtyEditableFrom: 4,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -363,6 +376,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ABILITIES]: {
+            editable: true,
             specialtyEditableFrom: 4,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -371,6 +385,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.SPHERES]: {
+            editable: true,
             specialtyEditableFrom: 4,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
@@ -379,6 +394,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
+            editable: true,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 min: 0,
@@ -386,6 +402,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ARETE]: {
+            editable: true,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 min: 0,
@@ -393,6 +410,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.WILLPOWER]: {
+            editable: true,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 min: 0,
@@ -413,6 +431,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         next: [],
         [CHAR_PARTS.ATTRIBUTES]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 totalMin: 1,
@@ -420,6 +439,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ABILITIES]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 totalMin: 0,
@@ -427,6 +447,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.SPHERES]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 totalMin: 0,
@@ -434,6 +455,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 totalMin: 1,
@@ -441,6 +463,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.ARETE]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 totalMin: 1,
@@ -448,6 +471,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.WILLPOWER]: {
+            editable: false,
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_10,
                 totalMin: 0,

@@ -378,6 +378,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.EXP],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
+        freePointsField: CHAR_PARTS.EXPERIENCE,
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: true,
             specialtyEditableFrom: 4,

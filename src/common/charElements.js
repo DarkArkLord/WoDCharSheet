@@ -624,6 +624,7 @@ class CharUiTextOrInputElement {
             } = {},
             inputConfig: {
                 wrapAttributes: inputAttributes = {},
+                styles: inputStyles = undefined,
                 type: inputType = UITextInputType.Text,
                 min: inputMin = undefined,
                 max: inputMax = undefined,
@@ -643,7 +644,7 @@ class CharUiTextOrInputElement {
 
         // Elements
         this.text = new UIText(defaultValue, textAttributes);
-        this.input = new UITextInput(inputAttributes, inputType, inputMin, inputMax, inputSize);
+        this.input = new UITextInput(inputAttributes, inputType, inputMin, inputMax, inputSize, inputStyles);
         if (this.isEditable) {
             this.input.setOnChangedEvent(() => {
                 const text = instance.input.getValue();
@@ -1003,6 +1004,9 @@ class CharUiLineInputPointsElement {
                 data,
                 fieldName: TYPE_FIELD,
             },
+            inputConfig: {
+                size: 4,
+            },
             isEditable: this.isEditable,
             updateEvent,
         });
@@ -1016,6 +1020,8 @@ class CharUiLineInputPointsElement {
             inputConfig: {
                 type: UITextInputType.Number,
                 min: 0,
+                size: undefined,
+                styles: 'width: 50px',
             },
             isEditable: this.isEditable,
             updateEvent,

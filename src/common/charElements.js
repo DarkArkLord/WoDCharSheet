@@ -653,6 +653,10 @@ class CharUiTextOrInputElement {
         this.element = isEditable ? this.input.element : this.text.element;
     }
 
+    getText() {
+        return this.textWrapper.getValue();
+    }
+
     setText(text) {
         this.textWrapper.setValue(text);
         this.text.setText(text);

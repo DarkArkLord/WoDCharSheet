@@ -1065,7 +1065,7 @@ class CharUiLineInputPointsElement {
         }
 
         const type = this.type.getValue();
-        if (text.length < 1) {
+        if (type.length < 1) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнит тип`,

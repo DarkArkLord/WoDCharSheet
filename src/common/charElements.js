@@ -1018,7 +1018,7 @@ class CharUiLineInputPointsElement {
                 eventInput.target.selectedIndex = 0;
 
                 instance.text.setValue(value.text);
-                instance.points.setValue(value.points);
+                instance.points.setValue(value.cost);
 
                 instance.updateEvent.invoke();
             });
@@ -1092,5 +1092,177 @@ class CharUiLineInputPointsElement {
     getPrice() {
         const price = +this.points.getValue().trim();
         return Number.isNaN(price) ? 0 : price;
+    }
+}
+
+export class CharUiLineInputPointsListElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.listInputValidations = partValidations?.listInput;
+        this.pointsInputValidations = partValidations?.pointsInput;
+        this.isEditable = validations?.editable && partValidations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? [];
+
+        // Elements
+        const COLS_IN_ROW = 4;
+
+        this.headerText = valueInfo.translation;
+        this.header = new UIText(this.headerText, {});
+        this.headerRow = render(
+            HTMLTags.TableRow, {},
+            render(
+                HTMLTags.TableData,
+                { class: CSS.TEXT_ALIGN_CENTER, colspan: COLS_IN_ROW },
+                this.header.element,
+            ),
+        );
+
+        this.optionsForItemWrapper = (valueInfo.variants ?? []).flatMap(variant =>
+            variant.points.map(cost => ({
+                text: variant.translation,
+                attrubutes: { value: JSON.stringify({ text: variant.translation, cost }) },
+            })));
+
+        this.items = [];
+
+        this.addButton = new UIButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        this.addButton.setVisible(this.isEditable);
+        if (this.isEditable) {
+            this.addButton.setOnClickEvent(() => {
+                instance.data.push({});
+                instance.updateEvent.invoke();
+            });
+        }
+
+        this.addButtonRow = render(
+            HTMLTags.TableRow, {},
+            render(
+                HTMLTags.TableData,
+                { class: CSS.TEXT_ALIGN_CENTER, colspan: COLS_IN_ROW },
+                this.addButton.element
+            ),
+        );
+
+        this.element = render(HTMLTags.Table, {});
+
+        this.refreshItems();
+    }
+
+    createItemWrapper(itemData) {
+        const item = new CharUiLineInputPointsElement({
+            data: {
+                data: itemData,
+                defaultOptions: this.optionsForItemWrapper,
+            },
+            validations: {
+                validations: this.validations,
+                partValidations: this.partValidations,
+                dataForValidations: this.validationsInfo,
+            },
+            updateEvent: this.updateEvent,
+        });
+
+        const instance = this;
+
+        item.removeButton.setOnClickEvent(() => {
+            const dataIndex = instance.data.findIndex(value => value === itemData);
+            if (dataIndex >= 0) {
+                instance.data.splice(dataIndex, 1);
+                instance.updateEvent.invoke();
+            }
+        });
+
+        return item;
+    }
+
+    refreshItems() {
+        this.items = [];
+        this.element.innerHTML = EMPTY_STRING;
+
+        this.element.append(this.headerRow);
+
+        for (const itemData of this.data) {
+            const item = this.createItemWrapper(itemData);
+
+            this.items.push(item);
+
+            this.element.append(render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, item.removeButton.element),
+                render(HTMLTags.TableData, {}, item.text.element),
+                render(HTMLTags.TableData, {}, item.points.element),
+                render(HTMLTags.TableData, {}, item.variants.element),
+            ));
+        }
+
+        if (this.isEditable) {
+            this.element.append(this.addButtonRow);
+        }
+    }
+
+    update() {
+        if (this.items.length !== this.data.length) {
+            this.refreshItems();
+        }
+
+        for (const item of this.items) {
+            item.update();
+        }
+
+        if (this.isEditable) {
+            this.header.setText(`${this.headerText} (${this.getPrice()})`);
+        }
+    }
+
+    validate() {
+        const errors = this.items.flatMap(item => item.validate() ?? []) ?? [];
+
+        const totalPrice = this.items.reduce((acc, cur) => acc + cur.getPrice(0), 0);
+        if (totalPrice > this.listInputValidations?.maxPointsSum) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Набрано больше ${this.listInputValidations?.maxPointsSum} очков (сейчас ${totalPrice})`,
+            });
+        }
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        if (isVisible) {
+            this.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        const price = this.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return this.pointsInputValidations?.negativePrice ? -price : price;
     }
 }

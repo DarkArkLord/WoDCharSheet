@@ -653,18 +653,18 @@ class CharUiTextOrInputElement {
         this.element = isEditable ? this.input.element : this.text.element;
     }
 
-    getText() {
+    getValue() {
         return this.textWrapper.getValue();
     }
 
-    setText(text) {
+    setValue(text) {
         this.textWrapper.setValue(text);
         this.text.setText(text);
         this.input.setValue(text);
     }
 
     update() {
-        this.setText(this.textWrapper.getValue());
+        this.setValue(this.textWrapper.getValue());
     }
 }
 
@@ -693,23 +693,18 @@ export class CharUiLineInputDotsElement {
 
         this.validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
 
-        this.textWrapper = new ValueWrapper(data, TEXT_FIELD, EMPTY_STRING);
-
         // Elements
         this.removeButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         this.removeButton.setVisible(this.isEditable);
 
-        this.text = new UIText(EMPTY_STRING, {});
-
-        this.input = new UITextInput({}, UITextInputType.Text, undefined, undefined, DEFAULT_INPUT_SIZE);
-        this.input.setReadOnly(!this.isEditable);
-        if (this.isEditable) {
-            this.input.setOnChangedEvent(() => {
-                const text = instance.input.getValue();
-                instance.textWrapper.setValue(text);
-                instance.updateEvent.invoke();
-            });
-        }
+        this.text = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: TEXT_FIELD,
+            },
+            isEditable: this.isEditable,
+            updateEvent,
+        });
 
         this.variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
         this.variants.setVisible(this.isEditable);
@@ -718,7 +713,7 @@ export class CharUiLineInputDotsElement {
                 const text = eventInput.target.value;
                 eventInput.target.selectedIndex = 0;
 
-                instance.textWrapper.setValue(text);
+                instance.text.setValue(text);
                 instance.updateEvent.invoke();
             });
         }
@@ -737,15 +732,8 @@ export class CharUiLineInputDotsElement {
         this.priceText.setVisible(this.isEditable);
     }
 
-    setTextToAllFields(text) {
-        this.validationsInfo.commonValue = text;
-        this.textWrapper.setValue(text);
-        this.text.setText(text);
-        this.input.setValue(text);
-    }
-
     update() {
-        this.setTextToAllFields(this.textWrapper.getValue());
+        this.text.update();
         this.dots.update();
 
         this.priceText.setText(`(${this.getPrice()})`);
@@ -760,7 +748,7 @@ export class CharUiLineInputDotsElement {
 
         this.setPointsHighlight(errors.length > 0);
 
-        const text = this.textWrapper.getValue(EMPTY_STRING).trim();
+        const text = this.text.getValue().trim();
         if (text.length < 1) {
             errors.push({
                 ...this.validationsInfo,
@@ -786,10 +774,8 @@ export class CharUiLineInputDotsElement {
     setTextHighlight(isVisible) {
         if (isVisible) {
             this.text.element.classList.add(CSS.BORDER_RED_1);
-            this.input.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.text.element.classList.remove(CSS.BORDER_RED_1);
-            this.input.element.classList.remove(CSS.BORDER_RED_1);
         }
     }
 
@@ -912,7 +898,7 @@ export class CharUiLineInputDotsListElement {
             this.element.append(render(
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, {}, item.removeButton.element),
-                render(HTMLTags.TableData, {}, item.isEditable ? item.input.element : item.text.element),
+                render(HTMLTags.TableData, {}, item.text.element),
                 render(HTMLTags.TableData, {}, item.variants.element),
                 render(HTMLTags.TableData, {}, item.dots.element),
                 render(HTMLTags.TableData, {}, item.priceText.element),

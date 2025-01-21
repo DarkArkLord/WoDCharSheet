@@ -1313,3 +1313,71 @@ export class CharUiLineInputPointsWithVariantsListElement {
         return this.pointsInputValidations?.negativePrice ? -price : price;
     }
 }
+
+export class CharUiBlockPointsElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.pointsInputValidations = partValidations?.pointsInput;
+        this.isEditable = validations?.editable && partValidations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        // Elements
+        this.text = new UIText(valueInfo.translation, {});
+        this.points = new CharUiTextOrInputElement({
+            data: {
+                data: keeper,
+                fieldName: valueInfo.id,
+                defaultValue: this.pointsInputValidations?.min ?? 0,
+            },
+            inputConfig: {
+                type: UITextInputType.Number,
+                min: this.pointsInputValidations?.min ?? 0,
+                size: undefined,
+                styles: 'width: 50px',
+            },
+            isEditable: this.isEditable,
+            updateEvent,
+        });
+
+        this.element = render(
+            HTMLTags.Table, {},
+            render(
+                HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, { class: CSS.TEXT_ALIGN_CENTER }, this.text.element),
+            ),
+            render(
+                HTMLTags.TableRow, { class: CSS.TEXT_ALIGN_CENTER },
+                render(HTMLTags.TableData, {}, this.points.element),
+            ),
+        );
+    }
+
+    update() {
+        this.points.update();
+    }
+
+    validate() {
+        return [];
+    }
+}

@@ -41,6 +41,8 @@ class CharacterMtAState {
         this.validations = validations;
         this.validationsInfo = { state: validations.stateTranslation };
 
+        this.data = keeper;
+
         this.parts = {
             [CHAR_PARTS.ATTRIBUTES]: new CharUiLineDotsSectionsPartElement({
                 data: {
@@ -247,6 +249,26 @@ class CharacterMtAState {
                     ...this.validationsInfo,
                     text: `Должно быть распределено ${this.validations.freePoints} точек (сейчас ${price})`,
                 });
+            }
+        }
+
+        if (this.validations?.freePointsField) {
+            const freePointsCount = this.data[this.validations?.freePointsField];
+
+            if (freePointsCount === undefined || freePointsCount === '' || Number.isNaN(freePointsCount)) {
+                errors.push({
+                    ...this.validationsInfo,
+                    text: `Поле "${CHAR_SETTINGS_TRANSLATION[this.validations?.freePointsField]?.translation}" должно быть заполнено числом`,
+                });
+            } else {
+                const price = this.getPrice();
+
+                if (price > freePointsCount) {
+                    errors.push({
+                        ...this.validationsInfo,
+                        text: `Не может быть распределено больше ${freePointsCount} очков (сейчас ${price})`,
+                    });
+                }
             }
         }
 

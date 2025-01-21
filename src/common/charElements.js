@@ -283,7 +283,7 @@ class CharUiTextWithDotsElement {
     }
 }
 
-export class CharUiLineDotsElement extends CharUiTextWithDotsElement {
+class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     constructor(input) {
         super(input);
 
@@ -355,7 +355,7 @@ export class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     }
 }
 
-export class CharUiLineDotsSectionElement {
+class CharUiLineDotsSectionElement {
     constructor(input) {
         const {
             data: {
@@ -668,7 +668,7 @@ class CharUiTextOrInputElement {
     }
 }
 
-export class CharUiLineInputDotsElement {
+class CharUiLineInputDotsElement {
     constructor(input) {
         const {
             data: {

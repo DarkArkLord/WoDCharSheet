@@ -609,6 +609,61 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
     }
 }
 
+class CharUiTextOrInputElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue = EMPTY_STRING,
+            } = {},
+            textConfig: {
+                wrapAttributes: textAttributes = {},
+            } = {},
+            inputConfig: {
+                wrapAttributes: inputAttributes = {},
+                type: inputType = UITextInputType.Text,
+                min: inputMin = undefined,
+                max: inputMax = undefined,
+                size: inputSize = DEFAULT_INPUT_SIZE,
+            } = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.isEditable = isEditable;
+
+        this.textWrapper = new ValueWrapper(data, fieldName, defaultValue);
+
+        // Elements
+        this.text = new UIText(defaultValue, textAttributes);
+        this.input = new UITextInput(inputAttributes, inputType, inputMin, inputMax, inputSize);
+        if (this.isEditable) {
+            this.input.setOnChangedEvent(() => {
+                const text = instance.input.getValue();
+                instance.textWrapper.setValue(text);
+                instance.updateEvent.invoke();
+            });
+        }
+
+        this.element = isEditable ? this.input.element : this.text.element;
+    }
+
+    setText(text) {
+        this.textWrapper.setValue(text);
+        this.text.setText(text);
+        this.input.setValue(text);
+    }
+
+    update() {
+        this.setText(this.textWrapper.getValue());
+    }
+}
+
 export class CharUiLineInputDotsElement {
     constructor(input) {
         const {

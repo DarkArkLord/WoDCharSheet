@@ -355,15 +355,15 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
         [CHAR_PARTS.MERITS]: {
             editable: true,
+        },
+        [CHAR_PARTS.FLAWS]: {
+            editable: true,
             listInput: {
                 maxPointsSum: 7,
             },
             pointsInput: {
                 negativePrice: true,
             },
-        },
-        [CHAR_PARTS.FLAWS]: {
-            editable: true,
         },
     },
     [CHAR_EDIT_STATES.EXP]: {

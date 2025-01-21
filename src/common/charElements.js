@@ -131,7 +131,7 @@ class CharUiDotsElement {
         this.partValidations = partValidations;
         this.dotsInputValidations = partValidations?.dotsInput;
         this.dotsCount = this.dotsInputValidations?.dotsCount ?? DEFAULT_DOTS_COUNT;
-        this.isEditable = validations?.editable;
+        this.isEditable = validations?.editable && partValidations?.editable;
 
         this.validationsInfo = dataForValidations;
 
@@ -236,7 +236,7 @@ class CharUiTextWithDotsElement {
 
         this.validations = validations;
         this.partValidations = partValidations;
-        this.isEditable = validations?.editable;
+        this.isEditable = validations?.editable && partValidations?.editable;
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
@@ -372,7 +372,7 @@ export class CharUiLineDotsSectionElement {
 
         this.updateEvent = updateEvent;
 
-        this.isEditable = validations?.editable;
+        this.isEditable = validations?.editable && partValidations?.editable;
 
         this.validationsInfo = { ...dataForValidations, section: sectionInfo.translation, };
 
@@ -464,7 +464,7 @@ export class CharUiLineDotsSectionsPartElement {
 
         this.validations = validations;
         this.partValidations = validations?.[partInfo.id];
-        this.isEditable = validations?.editable;
+        this.isEditable = validations?.editable && this.partValidations?.editable;
 
         this.validationsInfo = { ...dataForValidations, part: partInfo.translation, };
 
@@ -630,7 +630,7 @@ export class CharUiLineInputDotsElement {
 
         this.validations = validations;
         this.partValidations = partValidations;
-        this.isEditable = validations?.editable;
+        this.isEditable = validations?.editable && partValidations?.editable;
 
         this.validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
 
@@ -762,7 +762,7 @@ export class CharUiLineInputDotsListElement {
 
         this.validations = validations;
         this.partValidations = partValidations;
-        this.isEditable = validations?.editable;
+        this.isEditable = validations?.editable && partValidations?.editable;
 
         this.validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 

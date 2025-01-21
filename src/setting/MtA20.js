@@ -160,6 +160,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
         id: CHAR_PARTS.BACKGROUNDS, translation: 'Факты биографии',
         variants: [
             { id: 'Avatar', translation: 'Аватар', },
+            { id: 'TestBackground', translation: 'ТестБио', },
         ],
     },
     [CHAR_PARTS.ARETE]: { id: CHAR_PARTS.ARETE, translation: 'Арете', },
@@ -182,22 +183,22 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
     [CHAR_PARTS.OTHER_TRAITS]: {
         id: CHAR_PARTS.OTHER_TRAITS, translation: 'Другие параметры',
         variants: [
-            { id: 'TestOtherTrait1', translation: 'Тестовый другой параметр 1', },
-            { id: 'TestOtherTrait2', translation: 'Тестовый другой параметр 2', },
+            { id: 'TestOtherTrait1', translation: 'ТестДрПар1', },
+            { id: 'TestOtherTrait2', translation: 'ТестДрПар2', },
         ],
     },
     [CHAR_PARTS.MERITS]: {
         id: CHAR_PARTS.MERITS, translation: 'Достоинства',
         variants: [
-            { id: 'TestMerit1', translation: 'Тестовое достоинство 1', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 3, 5] },
-            { id: 'TestMerit2', translation: 'Тестовое достоинство 2', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [2, 4, 6] },
+            { id: 'TestMerit1', translation: 'ТестДост1', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 3, 5] },
+            { id: 'TestMerit2', translation: 'ТестДост2', type: CHAR_MERIT_FLAW_TYPE.PHYSICAL, points: [2, 4, 6] },
         ],
     },
     [CHAR_PARTS.FLAWS]: {
         id: CHAR_PARTS.FLAWS, translation: 'Недостатки',
         variants: [
-            { id: 'TestFlaw1', translation: 'Тестовый недостаток 1', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
-            { id: 'TestFlaw2', translation: 'Тестовый недостаток 2', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [4, 5, 6] },
+            { id: 'TestFlaw1', translation: 'ТестНед1', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
+            { id: 'TestFlaw2', translation: 'ТестНед2', type: CHAR_MERIT_FLAW_TYPE.MENTAL, points: [4, 5, 6] },
         ],
     },
     // Add second page and other

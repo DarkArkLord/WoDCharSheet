@@ -110,6 +110,7 @@ const DEFAULT_COMPARATOR = (a, b) => b - a;
 
 const SPECIALTY_FIELD = 'specialty'
 const TEXT_FIELD = 'text';
+const POINTS_FIELD = 'points';
 
 class CharUiDotsElement {
     constructor(input) {
@@ -955,5 +956,141 @@ export class CharUiLineInputDotsListElement {
 
     getPrice() {
         return this.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
+}
+
+class CharUiLineInputPointsElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                defaultOptions,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.isEditable = validations?.editable && partValidations?.editable;
+
+        this.validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
+
+        // Elements
+        this.removeButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        this.removeButton.setVisible(this.isEditable);
+
+        this.text = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: TEXT_FIELD,
+            },
+            isEditable: this.isEditable,
+            updateEvent,
+        });
+
+        this.points = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: POINTS_FIELD,
+            },
+            inputConfig: {
+                type: UITextInputType.Number,
+                min: 0,
+            },
+            isEditable: this.isEditable,
+            updateEvent,
+        });
+
+        this.variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
+        this.variants.setVisible(this.isEditable);
+        if (this.isEditable) {
+            this.variants.setOnChangeEvent(eventInput => {
+                const value = JSON.parse(eventInput.target.value);
+                eventInput.target.selectedIndex = 0;
+
+                instance.text.setValue(value.text);
+                instance.points.setValue(value.points);
+
+                instance.updateEvent.invoke();
+            });
+        }
+    }
+
+    update() {
+        this.text.update();
+        this.points.update();
+
+        const hasPrevValue = this.dots.wrapper.hasPrevValue();
+        const hasNextValue = this.dots.wrapper.hasNextValue();
+        this.removeButton.setActive(!hasPrevValue && !hasNextValue);
+
+        this.validationsInfo.commonValue = this.text.getValue();
+    }
+
+    validate() {
+        const errors = [];
+
+        const text = this.text.getValue().trim();
+        if (text.length < 1) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Необходимо заполнит текст`,
+            });
+
+            this.setTextHighlight(true);
+        } else {
+            this.setTextHighlight(false);
+        }
+
+        const points = this.points.getValue().trim();
+        if (points.length < 1) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Необходимо заполнить стоимость`,
+            });
+
+            this.setPointsHighlight(true);
+        } else if (Number.isNaN(+points)) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Необходимо стоимость должна быть число`,
+            });
+
+            this.setPointsHighlight(true);
+        } else {
+            this.setPointsHighlight(false);
+        }
+
+        return errors;
+    }
+
+    setTextHighlight(isVisible) {
+        if (isVisible) {
+            this.text.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.text.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
+    setPointsHighlight(isVisible) {
+        if (isVisible) {
+            this.points.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.points.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        const price = +this.points.getValue().trim();
+        return Number.isNaN(price) ? 0 : price;
     }
 }

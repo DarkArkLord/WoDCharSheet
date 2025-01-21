@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { merge } = require('webpack-merge');
-const TerserPlugin = require('terser-webpack-plugin');
 
 const webpackConfiguration = require('../webpack.config');
 
@@ -11,14 +10,9 @@ module.exports = merge(webpackConfiguration, {
     devtool: false,
 
     /* Optimization configuration */
-    // optimization: {
-    //     minimize: true,
-    //     minimizer: [
-    //         new TerserPlugin({
-    //             parallel: true,
-    //         }),
-    //     ],
-    // },
+    optimization: {
+        minimize: false,
+    },
 
     /* Performance treshold configuration values */
     performance: {

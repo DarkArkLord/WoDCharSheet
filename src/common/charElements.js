@@ -1001,6 +1001,7 @@ class CharUiLineInputPointsElement {
             data: {
                 data,
                 fieldName: POINTS_FIELD,
+                defaultValue: 0,
             },
             inputConfig: {
                 type: UITextInputType.Number,
@@ -1029,9 +1030,9 @@ class CharUiLineInputPointsElement {
         this.text.update();
         this.points.update();
 
-        const hasPrevValue = this.dots.wrapper.hasPrevValue();
-        const hasNextValue = this.dots.wrapper.hasNextValue();
-        this.removeButton.setActive(!hasPrevValue && !hasNextValue);
+        // const hasPrevValue = this.dots.wrapper.hasPrevValue();
+        // const hasNextValue = this.dots.wrapper.hasNextValue();
+        // this.removeButton.setActive(!hasPrevValue && !hasNextValue);
 
         this.validationsInfo.commonValue = this.text.getValue();
     }
@@ -1039,7 +1040,7 @@ class CharUiLineInputPointsElement {
     validate() {
         const errors = [];
 
-        const text = this.text.getValue().trim();
+        const text = this.text.getValue();
         if (text.length < 1) {
             errors.push({
                 ...this.validationsInfo,
@@ -1051,8 +1052,8 @@ class CharUiLineInputPointsElement {
             this.setTextHighlight(false);
         }
 
-        const points = this.points.getValue().trim();
-        if (points.length < 1) {
+        const points = this.points.getValue();
+        if (points === undefined || points === EMPTY_STRING) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнить стоимость`,
@@ -1090,7 +1091,7 @@ class CharUiLineInputPointsElement {
     }
 
     getPrice() {
-        const price = +this.points.getValue().trim();
+        const price = +this.points.getValue();
         return Number.isNaN(price) ? 0 : price;
     }
 }

@@ -13,7 +13,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { DarkEvent, ValueWrapper } from '../common/utilities.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement } from '../common/charElements.js'
+import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
@@ -99,6 +99,18 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
+            [CHAR_PARTS.EXPERIENCE]: new CharUiBlockPointsElement({
+                data: {
+                    keeper,
+                    valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.EXPERIENCE],
+                },
+                validations: {
+                    validations: this.validations,
+                    partValidations: this.validations[CHAR_PARTS.EXPERIENCE],
+                    dataForValidations: this.validationsInfo,
+                },
+                updateEvent: updateEvent,
+            }),
             [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputDotsWithVariantsListElement({
                 data: {
                     keeper,
@@ -161,6 +173,7 @@ class CharacterMtAState {
                             HTMLTags.TableRow, {},
                             render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ARETE].element),
                             render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.WILLPOWER].element),
+                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.EXPERIENCE].element),
                         ),
                     ),
                 ),

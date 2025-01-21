@@ -159,11 +159,7 @@ class CharacterMtAState {
                         HTMLTags.Table, {},
                         render(
                             HTMLTags.TableRow, {},
-                            render(HTMLTags.TableData, { rowspan: 2 }, this.parts[CHAR_PARTS.BACKGROUNDS].element),
                             render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ARETE].element),
-                        ),
-                        render(
-                            HTMLTags.TableRow, {},
                             render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.WILLPOWER].element),
                         ),
                     ),
@@ -177,6 +173,7 @@ class CharacterMtAState {
                         HTMLTags.Table, {},
                         render(
                             HTMLTags.TableRow, {},
+                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.BACKGROUNDS].element),
                             render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.MERITS].element),
                             render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.FLAWS].element),
                         ),

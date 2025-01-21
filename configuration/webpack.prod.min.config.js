@@ -11,14 +11,14 @@ module.exports = merge(webpackConfiguration, {
     devtool: false,
 
     /* Optimization configuration */
-    // optimization: {
-    //     minimize: true,
-    //     minimizer: [
-    //         new TerserPlugin({
-    //             parallel: true,
-    //         }),
-    //     ],
-    // },
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+            }),
+        ],
+    },
 
     /* Performance treshold configuration values */
     performance: {

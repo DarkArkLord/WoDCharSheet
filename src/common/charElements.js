@@ -1380,4 +1380,8 @@ export class CharUiBlockPointsElement {
     validate() {
         return [];
     }
+
+    getPrice() {
+        return 0;
+    }
 }

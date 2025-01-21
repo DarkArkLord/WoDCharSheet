@@ -741,6 +741,8 @@ export class CharUiLineInputDotsElement {
         const hasPrevValue = this.dots.wrapper.hasPrevValue();
         const hasNextValue = this.dots.wrapper.hasNextValue();
         this.removeButton.setActive(!hasPrevValue && !hasNextValue);
+
+        this.validationsInfo.commonValue = this.text.getValue();
     }
 
     validate() {

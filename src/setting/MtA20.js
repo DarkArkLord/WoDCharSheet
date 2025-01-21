@@ -182,19 +182,22 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
     [CHAR_PARTS.OTHER_TRAITS]: {
         id: CHAR_PARTS.OTHER_TRAITS, translation: 'Другие параметры',
         variants: [
-            { id: 'TestOtherTrait', translation: 'Тестовый другой параметр', },
+            { id: 'TestOtherTrait1', translation: 'Тестовый другой параметр 1', },
+            { id: 'TestOtherTrait2', translation: 'Тестовый другой параметр 2', },
         ],
     },
     [CHAR_PARTS.MERITS]: {
         id: CHAR_PARTS.MERITS, translation: 'Достоинства',
         variants: [
-            { id: 'TestMerit', translation: 'Тестовое достоинство', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
+            { id: 'TestMerit1', translation: 'Тестовое достоинство 1', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 3, 5] },
+            { id: 'TestMerit2', translation: 'Тестовое достоинство 2', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [2, 4, 6] },
         ],
     },
     [CHAR_PARTS.FLAWS]: {
         id: CHAR_PARTS.FLAWS, translation: 'Недостатки',
         variants: [
-            { id: 'TestFlaw', translation: 'Тестовый недостаток', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
+            { id: 'TestFlaw1', translation: 'Тестовый недостаток 1', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [1, 2, 3] },
+            { id: 'TestFlaw2', translation: 'Тестовый недостаток 2', type: CHAR_MERIT_FLAW_TYPE.SOCIAL, points: [4, 5, 6] },
         ],
     },
     // Add second page and other
@@ -354,6 +357,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
             editable: true,
             listInput: {
                 maxPointsSum: 7,
+            },
+            pointsInput: {
+                negativePrice: true,
             },
         },
         [CHAR_PARTS.FLAWS]: {

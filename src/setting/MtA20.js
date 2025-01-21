@@ -431,7 +431,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
         },
         [CHAR_PARTS.EXPERIENCE]: {
-            editable: false,
+            editable: true,
             pointsInput: {
                 min: 0,
             },

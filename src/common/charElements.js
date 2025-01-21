@@ -671,7 +671,7 @@ class CharUiTextOrInputElement {
     }
 }
 
-class CharUiLineInputDotsElement {
+class CharUiLineInputDotsWithVariantsItemElement {
     constructor(input) {
         const {
             data: {
@@ -789,7 +789,7 @@ class CharUiLineInputDotsElement {
     }
 }
 
-export class CharUiLineInputDotsListElement {
+export class CharUiLineInputDotsWithVariantsListElement {
     constructor(input) {
         const {
             data: {
@@ -863,7 +863,7 @@ export class CharUiLineInputDotsListElement {
     }
 
     createItemWrapper(itemData) {
-        const item = new CharUiLineInputDotsElement({
+        const item = new CharUiLineInputDotsWithVariantsItemElement({
             data: {
                 data: itemData,
                 defaultOptions: this.optionsForItemWrapper,
@@ -961,7 +961,7 @@ export class CharUiLineInputDotsListElement {
     }
 }
 
-class CharUiLineInputPointsElement {
+class CharUiLineInputPointsWithVariantsItemElement {
     constructor(input) {
         const {
             data: {
@@ -1135,7 +1135,7 @@ class CharUiLineInputPointsElement {
     }
 }
 
-export class CharUiLineInputPointsListElement {
+export class CharUiLineInputPointsWithVariantsListElement {
     constructor(input) {
         const {
             data: {
@@ -1218,7 +1218,7 @@ export class CharUiLineInputPointsListElement {
     }
 
     createItemWrapper(itemData) {
-        const item = new CharUiLineInputPointsElement({
+        const item = new CharUiLineInputPointsWithVariantsItemElement({
             data: {
                 data: itemData,
                 defaultOptions: this.optionsForItemWrapper,

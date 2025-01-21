@@ -13,7 +13,7 @@ import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { DarkEvent, ValueWrapper } from '../common/utilities.js'
 import { UIText, UIPointsLine, UITextInputType, UITextInput, UITextList, } from '../common/uiElements.js'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsListElement, CharUiLineInputPointsListElement } from '../common/charElements.js'
+import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
@@ -99,7 +99,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputDotsListElement({
+            [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputDotsWithVariantsListElement({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.BACKGROUNDS],
@@ -111,7 +111,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.MERITS]: new CharUiLineInputPointsListElement({
+            [CHAR_PARTS.MERITS]: new CharUiLineInputPointsWithVariantsListElement({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.MERITS],
@@ -123,7 +123,7 @@ class CharacterMtAState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.FLAWS]: new CharUiLineInputPointsListElement({
+            [CHAR_PARTS.FLAWS]: new CharUiLineInputPointsWithVariantsListElement({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.FLAWS],

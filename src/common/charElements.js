@@ -1143,8 +1143,14 @@ export class CharUiLineInputPointsListElement {
 
         this.optionsForItemWrapper = (valueInfo.variants ?? []).flatMap(variant =>
             variant.points.map(cost => ({
-                text: variant.translation,
-                attrubutes: { value: JSON.stringify({ text: variant.translation, cost }) },
+                text: `${variant.translation} (${variant.type}, ${cost} оч)`,
+                attrubutes: {
+                    value: JSON.stringify({
+                        text: variant.translation,
+                        type: variant.type,
+                        cost,
+                    })
+                },
             })));
 
         this.items = [];

@@ -1354,7 +1354,7 @@ export class CharUiBlockPointsElement {
                 type: UITextInputType.Number,
                 min: this.pointsInputValidations?.min ?? 0,
                 size: undefined,
-                styles: 'width: 50px',
+                styles: 'width: 100px',
             },
             isEditable: this.isEditable,
             updateEvent,

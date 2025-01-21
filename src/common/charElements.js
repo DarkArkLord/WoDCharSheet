@@ -749,7 +749,7 @@ class CharUiLineInputDotsElement {
     validate() {
         const errors = this.dots.validate() ?? [];
 
-        this.setPointsHighlight(errors.length > 0);
+        this.setDotsHighlight(errors.length > 0);
 
         const text = this.text.getValue().trim();
         if (text.length < 1) {
@@ -766,19 +766,19 @@ class CharUiLineInputDotsElement {
         return errors;
     }
 
-    setPointsHighlight(isVisible) {
-        if (isVisible) {
-            this.dots.element.classList.add(CSS.BORDER_RED_1);
-        } else {
-            this.dots.element.classList.remove(CSS.BORDER_RED_1);
-        }
-    }
-
     setTextHighlight(isVisible) {
         if (isVisible) {
             this.text.element.classList.add(CSS.BORDER_RED_1);
         } else {
             this.text.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
+    setDotsHighlight(isVisible) {
+        if (isVisible) {
+            this.dots.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.dots.element.classList.remove(CSS.BORDER_RED_1);
         }
     }
 

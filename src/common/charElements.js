@@ -110,6 +110,7 @@ const DEFAULT_COMPARATOR = (a, b) => b - a;
 
 const SPECIALTY_FIELD = 'specialty'
 const TEXT_FIELD = 'text';
+const TYPE_FIELD = 'type';
 const POINTS_FIELD = 'points';
 
 class CharUiDotsElement {
@@ -997,6 +998,15 @@ class CharUiLineInputPointsElement {
             updateEvent,
         });
 
+        this.type = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: TYPE_FIELD,
+            },
+            isEditable: this.isEditable,
+            updateEvent,
+        });
+
         this.points = new CharUiTextOrInputElement({
             data: {
                 data,
@@ -1019,6 +1029,7 @@ class CharUiLineInputPointsElement {
                 eventInput.target.selectedIndex = 0;
 
                 instance.text.setValue(value.text);
+                instance.type.setValue(value.type);
                 instance.points.setValue(value.cost);
 
                 instance.updateEvent.invoke();
@@ -1028,6 +1039,7 @@ class CharUiLineInputPointsElement {
 
     update() {
         this.text.update();
+        this.type.update();
         this.points.update();
 
         // const hasPrevValue = this.dots.wrapper.hasPrevValue();
@@ -1050,6 +1062,18 @@ class CharUiLineInputPointsElement {
             this.setTextHighlight(true);
         } else {
             this.setTextHighlight(false);
+        }
+
+        const type = this.type.getValue();
+        if (text.length < 1) {
+            errors.push({
+                ...this.validationsInfo,
+                text: `Необходимо заполнит тип`,
+            });
+
+            this.setTypeHighlight(true);
+        } else {
+            this.setTypeHighlight(false);
         }
 
         const points = this.points.getValue();
@@ -1081,6 +1105,15 @@ class CharUiLineInputPointsElement {
             this.text.element.classList.remove(CSS.BORDER_RED_1);
         }
     }
+
+    setTypeHighlight(isVisible) {
+        if (isVisible) {
+            this.type.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.type.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
 
     setPointsHighlight(isVisible) {
         if (isVisible) {
@@ -1128,7 +1161,7 @@ export class CharUiLineInputPointsListElement {
         this.data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? [];
 
         // Elements
-        const COLS_IN_ROW = 4;
+        const COLS_IN_ROW = 5;
 
         this.headerText = valueInfo.translation;
         this.header = new UIText(this.headerText, {});
@@ -1220,6 +1253,7 @@ export class CharUiLineInputPointsListElement {
                 HTMLTags.TableRow, {},
                 render(HTMLTags.TableData, {}, item.removeButton.element),
                 render(HTMLTags.TableData, {}, item.text.element),
+                render(HTMLTags.TableData, {}, item.type.element),
                 render(HTMLTags.TableData, {}, item.points.element),
                 render(HTMLTags.TableData, {}, item.variants.element),
             ));

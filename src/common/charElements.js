@@ -1121,9 +1121,9 @@ class CharUiLineInputPointsWithVariantsItemElement {
         this.type.update();
         this.points.update();
 
-        // const hasPrevValue = this.dots.wrapper.hasPrevValue();
-        // const hasNextValue = this.dots.wrapper.hasNextValue();
-        // this.removeButton.setActive(!hasPrevValue && !hasNextValue);
+        const hasPrevValue = this.points.wrapper.hasPrevValue();
+        const hasNextValue = this.points.wrapper.hasNextValue();
+        this.removeButton.setActive(!hasPrevValue && !hasNextValue);
 
         this.validationsInfo.commonValue = this.text.getValue();
     }

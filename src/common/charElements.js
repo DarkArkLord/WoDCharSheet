@@ -14,7 +14,7 @@ const CSS = Object.freeze({
     DROPDOWN_AS_BUTTON: 'dropdown-as-button',
 });
 
-class DotsValueWrapper extends ValueWrapper {
+class ValueByStateWrapper extends ValueWrapper {
     constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
         super(data, field, defaultValue);
 
@@ -138,7 +138,7 @@ class CharUiDotsElement {
         this.validationsInfo = dataForValidations;
 
         this.data = data;
-        this.wrapper = new DotsValueWrapper(
+        this.wrapper = new ValueByStateWrapper(
             this.data,
             this.validations?.state,
             this.dotsInputValidations?.min,

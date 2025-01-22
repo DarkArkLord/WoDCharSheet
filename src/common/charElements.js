@@ -1011,19 +1011,24 @@ class CharUiPointsByStateElement {
         });
         this.nextValueText = new UIText(EMPTY_STRING, {});
 
-        this.element = render(HTMLTags.Table, {},
-            render(HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.prevValueText.element),
-                render(HTMLTags.TableData, {}, this.points.element),
-                render(HTMLTags.TableData, {}, this.nextValueText.element),
-            ),
-        );
+        this.totalText = new UIText(EMPTY_STRING, {});
+
+        this.element = this.isEditable
+            ? render(HTMLTags.Table, {},
+                render(HTMLTags.TableRow, {},
+                    render(HTMLTags.TableData, {}, this.prevValueText.element),
+                    render(HTMLTags.TableData, {}, this.points.element),
+                    render(HTMLTags.TableData, {}, this.nextValueText.element),
+                ),
+            )
+            : this.totalText.element;
     }
 
     update() {
         this.prevValueText.setText(`${this, this.wrapper.getPrevValue()} /`);
         this.points.update();
         this.nextValueText.setText(`/ ${this, this.wrapper.getNextValue()}`);
+        this.totalText.setText(this.wrapper.getTotalValue(0));
     }
 
     getValue() {

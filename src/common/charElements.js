@@ -961,6 +961,82 @@ export class CharUiLineInputDotsWithVariantsListElement {
     }
 }
 
+class CharUiPointsByStateElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                inputStyle,
+            },
+            validations: {
+                validations,
+                partValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const instance = this;
+
+        this.updateEvent = updateEvent;
+
+        this.info = valueInfo;
+
+        this.validations = validations;
+        this.partValidations = partValidations;
+        this.pointsInputValidations = partValidations?.pointsInput;
+        this.isEditable = validations?.editable && partValidations?.editable;
+
+        this.data = data;
+        this.wrapper = new ValueByStateWrapper(
+            this.data,
+            this.validations?.state,
+            this.pointsInputValidations?.min ?? 0,
+            this.validations?.prev,
+            this.validations?.next,
+        );
+
+        this.prevValueText = new UIText(EMPTY_STRING, {});
+        this.points = new CharUiTextOrInputElement({
+            data: {
+                data: this.data,
+                fieldName: this.validations?.state,
+                defaultValue: this.pointsInputValidations?.min ?? 0,
+            },
+            inputConfig: {
+                type: UITextInputType.Number,
+                min: this.pointsInputValidations?.min ?? 0,
+                size: undefined,
+                styles: inputStyle,
+            },
+            isEditable: this.isEditable,
+            updateEvent,
+        });
+        this.nextValueText = new UIText(EMPTY_STRING, {});
+
+        this.element = render(HTMLTags.Table, {},
+            render(HTMLTags.TableRow, {},
+                render(HTMLTags.TableData, {}, this.prevValueText.element),
+                render(HTMLTags.TableData, {}, this.points.element),
+                render(HTMLTags.TableData, {}, this.nextValueText.element),
+            ),
+        );
+    }
+
+    update() {
+        this.prevValueText.setText(`${this, this.wrapper.getPrevValue()} /`);
+        this.points.update();
+        this.nextValueText.setText(`${this, this.wrapper.getNextValue()} /`);
+    }
+
+    getValue() {
+        return this.points.getValue();
+    }
+
+    setValue(value) {
+        this.points.setValue(value);
+    }
+}
+
 class CharUiLineInputPointsWithVariantsItemElement {
     constructor(input) {
         const {

@@ -979,8 +979,6 @@ class CharUiPointsByStateElement {
 
         this.updateEvent = updateEvent;
 
-        this.info = valueInfo;
-
         this.validations = validations;
         this.partValidations = partValidations;
         this.pointsInputValidations = partValidations?.pointsInput;
@@ -1025,7 +1023,7 @@ class CharUiPointsByStateElement {
     update() {
         this.prevValueText.setText(`${this, this.wrapper.getPrevValue()} /`);
         this.points.update();
-        this.nextValueText.setText(`${this, this.wrapper.getNextValue()} /`);
+        this.nextValueText.setText(`/ ${this, this.wrapper.getNextValue()}`);
     }
 
     getValue() {
@@ -1087,19 +1085,15 @@ class CharUiLineInputPointsWithVariantsItemElement {
             updateEvent,
         });
 
-        this.points = new CharUiTextOrInputElement({
+        this.points = new CharUiPointsByStateElement({
             data: {
                 data,
-                fieldName: POINTS_FIELD,
-                defaultValue: 0,
+                inputStyle: 'width: 50px',
             },
-            inputConfig: {
-                type: UITextInputType.Number,
-                min: 0,
-                size: undefined,
-                styles: 'width: 50px',
+            validations: {
+                validations,
+                partValidations,
             },
-            isEditable: this.isEditable,
             updateEvent,
         });
 

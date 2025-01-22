@@ -629,6 +629,7 @@ class CharUiTextOrInputElement {
                 min: inputMin = undefined,
                 max: inputMax = undefined,
                 size: inputSize = DEFAULT_INPUT_SIZE,
+                valueMapper = x => x,
             } = {},
             isEditable = false,
             updateEvent,
@@ -648,7 +649,8 @@ class CharUiTextOrInputElement {
         if (this.isEditable) {
             this.input.setOnChangedEvent(() => {
                 const text = instance.input.getValue();
-                instance.textWrapper.setValue(text);
+                const result = valueMapper(text);
+                instance.textWrapper.setValue(result);
                 instance.updateEvent.invoke();
             });
         }
@@ -1003,6 +1005,7 @@ class CharUiPointsByStateElement {
                 min: this.pointsInputValidations?.min ?? 0,
                 size: undefined,
                 styles: inputStyle,
+                valueMapper: x => +x,
             },
             isEditable: this.isEditable,
             updateEvent,
@@ -1428,6 +1431,7 @@ export class CharUiBlockPointsElement {
                 min: this.pointsInputValidations?.min ?? 0,
                 size: undefined,
                 styles: 'width: 100px',
+                valueMapper: x => +x,
             },
             isEditable: this.isEditable,
             updateEvent,

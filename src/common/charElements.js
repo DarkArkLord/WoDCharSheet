@@ -754,7 +754,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
         this.setDotsHighlight(errors.length > 0);
 
         const text = this.text.getValue().trim();
-        if (text.length < 1) {
+        if (this.isEditable && text.length < 1) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнит текст`,
@@ -975,8 +975,6 @@ class CharUiPointsByStateElement {
             updateEvent,
         } = input;
 
-        const instance = this;
-
         this.updateEvent = updateEvent;
 
         this.validations = validations;
@@ -1134,7 +1132,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
         const errors = [];
 
         const text = this.text.getValue();
-        if (text.length < 1) {
+        if (this.isEditable && text.length < 1) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнит текст`,
@@ -1146,7 +1144,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
         }
 
         const type = this.type.getValue();
-        if (type.length < 1) {
+        if (this.isEditable && type.length < 1) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнит тип`,
@@ -1158,14 +1156,14 @@ class CharUiLineInputPointsWithVariantsItemElement {
         }
 
         const points = this.points.getValue();
-        if (points === undefined || points === EMPTY_STRING) {
+        if (this.isEditable && (points === undefined || points === EMPTY_STRING)) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо заполнить стоимость`,
             });
 
             this.setPointsHighlight(true);
-        } else if (Number.isNaN(+points)) {
+        } else if (this.isEditable && Number.isNaN(+points)) {
             errors.push({
                 ...this.validationsInfo,
                 text: `Необходимо стоимость должна быть число`,

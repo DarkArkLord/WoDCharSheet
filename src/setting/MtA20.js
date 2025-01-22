@@ -362,6 +362,10 @@ export const CHAR_VALIDATIONS = Object.freeze({
         },
         [CHAR_PARTS.MERITS]: {
             editable: true,
+            pointsInput: {
+                negativePrice: false,
+                min: 0,
+            },
         },
         [CHAR_PARTS.FLAWS]: {
             editable: true,
@@ -370,6 +374,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
             },
             pointsInput: {
                 negativePrice: true,
+                min: 0,
             },
         },
     },

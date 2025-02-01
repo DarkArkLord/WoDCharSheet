@@ -13,10 +13,18 @@ export const UITextInputType = Object.freeze({
 });
 
 export class UITextInput {
-    constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined, size = undefined, inputStyle = undefined) {
+    protected input: HTMLInputElement;
+    public element: HTMLElement;
+
+    protected isVisible: boolean;
+    protected isActive: boolean;
+
+    protected onChangedFunc: Function;
+
+    constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min: number = undefined, max: number = undefined, size: number = undefined, inputStyle: string = undefined) {
         const instance = this;
 
-        this.input = render(HTMLTags.Input, { type, min, max, size, style: inputStyle });
+        this.input = render(HTMLTags.Input, { type, min, max, size, style: inputStyle }) as HTMLInputElement;
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.input);
 
         this.isVisible = true;
@@ -31,19 +39,19 @@ export class UITextInput {
     }
 
     getValue() {
-        return this.input.value;
+        return this.input.value; // valueAsNumber
     }
 
-    setValue(text) {
+    setValue(text: string) {
         this.input.value = text;
     }
 
-    setReadOnly(isReadOnly) {
+    setReadOnly(isReadOnly: boolean) {
         this.input.readOnly = isReadOnly;
         this.input.disabled = isReadOnly;
     }
 
-    setVisible(isVisible) {
+    setVisible(isVisible: boolean) {
         this.isVisible = isVisible;
         if (isVisible) {
             this.element.classList.remove(CSS.HIDDEN);
@@ -52,27 +60,31 @@ export class UITextInput {
         }
     }
 
-    setActive(isActive) {
+    setActive(isActive: boolean) {
         this.isActive = isActive;
     }
 
-    setOnChangedEvent(func) {
+    setOnChangedEvent(func: Function) {
         this.onChangedFunc = func;
     }
 }
 
 export class UIText {
-    constructor(text, wrapAttrubutes) {
+    public element: HTMLElement;
+
+    protected isVisible: boolean;
+
+    constructor(text: string, wrapAttrubutes: any) {
         this.element = render(HTMLTags.Div, wrapAttrubutes, text);
 
         this.isVisible = true;
     }
 
-    setText(text) {
+    setText(text: string) {
         this.element.innerHTML = text;
     }
 
-    setVisible(isVisible) {
+    setVisible(isVisible: boolean) {
         this.isVisible = isVisible;
         if (isVisible) {
             this.element.classList.remove(CSS.HIDDEN);
@@ -83,11 +95,13 @@ export class UIText {
 }
 
 export class UIIcon {
-    constructor(baseImage) {
-        this.element = render(HTMLTags.Img, { src: baseImage });
+    public element: HTMLImageElement;
+
+    constructor(baseImage: string) {
+        this.element = render(HTMLTags.Img, { src: baseImage }) as HTMLImageElement;
     }
 
-    setImage(image) {
+    setImage(image: string) {
         this.element.src = image;
     }
 }
@@ -111,7 +125,15 @@ export class UIPoint extends UIIcon {
 }
 
 export class UIButton extends UIIcon {
-    constructor(enableImage, disableImage) {
+    protected enableImage: string;
+    protected disableImage: string;
+
+    protected isVisible: boolean;
+    protected isActive: boolean;
+
+    protected onClickFunc: Function;
+
+    constructor(enableImage: string, disableImage: string) {
         super(enableImage);
 
         this.enableImage = enableImage;
@@ -129,12 +151,12 @@ export class UIButton extends UIIcon {
         }
     }
 
-    setActive(isActive) {
+    setActive(isActive: boolean) {
         this.isActive = isActive;
         this.setImage(isActive ? this.enableImage : this.disableImage);
     }
 
-    setVisible(isVisible) {
+    setVisible(isVisible: boolean) {
         this.isVisible = isVisible;
         if (isVisible) {
             this.element.classList.remove(CSS.HIDDEN);
@@ -143,13 +165,21 @@ export class UIButton extends UIIcon {
         }
     }
 
-    setOnClickEvent(func) {
+    setOnClickEvent(func: Function) {
         this.onClickFunc = func;
     }
 }
 
 export class UIPointsLine {
-    constructor(pointsCount, showButtons, wrapAttrubutes = {}) {
+    protected pointsCount: number;
+
+    protected subButton: UIButton;
+    protected points: Array<UIPoint>;
+    protected addButton: UIButton;
+
+    public element: HTMLElement;
+
+    constructor(pointsCount: number, showButtons: boolean, wrapAttrubutes: any = {}) {
         this.pointsCount = pointsCount;
 
         this.subButton = new UIButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
@@ -168,7 +198,7 @@ export class UIPointsLine {
         );
     }
 
-    setValue(disabled, active) {
+    setValue(disabled: number, active: number) {
         for (const point of this.points) {
             point.setEmpty();
         }
@@ -184,12 +214,15 @@ export class UIPointsLine {
 }
 
 export class UITextList {
+    protected listElement: HTMLElement;
+    public element: HTMLElement;
+
     constructor(wrapAttrubutes = {}) {
         this.listElement = render(HTMLTags.UnorderedList, {});
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.listElement);
     }
 
-    addItem(text, itemAttrubutes = {}) {
+    addItem(text: string, itemAttrubutes: any = {}) {
         const item = render(HTMLTags.ListItem, itemAttrubutes, text);
         this.listElement.append(item);
     }
@@ -200,6 +233,13 @@ export class UITextList {
 }
 
 export class UIDropdown {
+    public element: HTMLElement;
+
+    protected isVisible: boolean;
+    protected isActive: boolean;
+
+    protected onChangeEvent: Function;
+
     constructor(selectAttrubutes = {}, { addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] } = {}) {
         const instance = this;
 
@@ -225,23 +265,23 @@ export class UIDropdown {
     }
 
     clear() {
-        this.selectElement.innerHTML = '';
+        this.element.innerHTML = '';
     }
 
-    addOption(text, optionAttrubutes = {}) {
+    addOption(text: string, optionAttrubutes = {}) {
         const optionElement = render(HTMLTags.Option, optionAttrubutes, text);
         this.element.append(optionElement);
     }
 
-    setOnChangeEvent(func) {
+    setOnChangeEvent(func: Function) {
         this.onChangeEvent = func;
     }
 
-    setActive(isActive) {
+    setActive(isActive: boolean) {
         this.isActive = isActive;
     }
 
-    setVisible(isVisible) {
+    setVisible(isVisible: boolean) {
         this.isVisible = isVisible;
         if (isVisible) {
             this.element.classList.remove(CSS.HIDDEN);

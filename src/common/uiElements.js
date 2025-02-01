@@ -1,4 +1,4 @@
-import { HTMLTags, render } from './render.js'
+import { HTMLTags, render } from './render.ts'
 import { SVGIcons } from './svg.ts'
 
 const EMPTY_STRING = '';

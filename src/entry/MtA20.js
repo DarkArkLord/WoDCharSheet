@@ -9,7 +9,7 @@ document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
 import { configureTabsAndButtons } from '../common/tabs.ts'
 
-import { HTMLTags, render } from '../common/render.js'
+import { HTMLTags, render } from '../common/render.ts'
 import { DarkEvent, ValueWrapper } from '../common/utilities.ts'
 import { UIText, UITextList, } from '../common/uiElements.js'
 import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'

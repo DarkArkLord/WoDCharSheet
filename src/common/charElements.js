@@ -1,5 +1,5 @@
 import { SVGIcons } from './svg.ts'
-import { HTMLTags, render } from './render.js'
+import { HTMLTags, render } from './render.ts'
 import { DarkEvent, ValueWrapper } from './utilities.ts'
 import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements.js'
 

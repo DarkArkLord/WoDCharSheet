@@ -12,7 +12,7 @@ export const HTMLTags = {
     Option: 'option',
 };
 
-export function render(tag, attributes, ...childs) {
+export function render(tag: any, attributes: any, ...childs: any) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }
@@ -35,7 +35,7 @@ export function render(tag, attributes, ...childs) {
             } else {
                 parent.appendChild(
                     typeof child == 'number' || typeof child == 'string'
-                        ? document.createTextNode(child)
+                        ? document.createTextNode(child.toString())
                         : child
                 );
             }

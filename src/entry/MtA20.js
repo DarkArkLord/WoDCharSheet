@@ -1,4 +1,4 @@
-import '../common/styles.js'
+import '../common/styles.ts'
 
 const CHAR_SHEET_NAME = 'Dark MtA 20th Char Sheet'
 const CHAR_SHEET_VERSION = 'v0.7';

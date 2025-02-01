@@ -1,47 +1,4 @@
-// --- --- База --- ---
-const SVGTags = {
-    SVG: 'svg',
-    Group: 'g',
-    Circle: 'circle',
-    Line: 'line',
-    Rect: 'rect',
-}
-
-const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
-
-function renderSVG(tag: any, attributes: any, ...childs: any) {
-    if (tag instanceof Function) {
-        return tag(attributes, ...childs);
-    }
-
-    const element = document.createElementNS(SVG_NAMESPACE, tag);
-
-    if (attributes) {
-        for (const name in attributes) {
-            const value = attributes[name];
-            // element.setAttributeNS(null, name, value);
-            element.setAttribute(name, value);
-        }
-    }
-
-    for (const child of childs) {
-        (function addChild(parent: any, child: any) {
-            if (Array.isArray(child)) {
-                for (const innerChild of child) {
-                    addChild(parent, innerChild);
-                }
-            } else {
-                parent.appendChild(
-                    typeof child == 'number' || typeof child == 'string'
-                        ? document.createTextNode(child.toString())
-                        : child
-                );
-            }
-        })(element, child);
-    }
-
-    return element;
-}
+import { SVGTags, renderSVG, SVG_NAMESPACE } from './render'
 
 // --- --- Константы --- ---
 const SVG_ITEM_SIZE = 16;
@@ -58,7 +15,7 @@ const SVG_COLOR_GREEN = '#0F0';
 const SVG_COLOR_RED = '#F00';
 
 // --- --- Функции иконок --- ---
-function renderPoint(strikeColor: any, fillColor: any) {
+function renderPoint(strikeColor: string, fillColor: string) {
     return renderSVG(
         SVGTags.SVG,
         {
@@ -80,7 +37,7 @@ function renderPoint(strikeColor: any, fillColor: any) {
     );
 }
 
-function renderAddButton(fillColor: any) {
+function renderAddButton(fillColor: string) {
     return renderSVG(
         SVGTags.SVG,
         {
@@ -122,7 +79,7 @@ function renderAddButton(fillColor: any) {
     );
 }
 
-function renderSubButton(fillColor: any) {
+function renderSubButton(fillColor: string) {
     return renderSVG(
         SVGTags.SVG,
         {

@@ -7,7 +7,7 @@ const CHAR_SHEET_TITLE = `${CHAR_SHEET_NAME} ${CHAR_SHEET_VERSION}`;
 document.title = CHAR_SHEET_TITLE;
 document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
-import { configureTabsAndButtons } from '../common/tabs.js'
+import { configureTabsAndButtons } from '../common/tabs.ts'
 
 import { HTMLTags, render } from '../common/render.js'
 import { DarkEvent, ValueWrapper } from '../common/utilities.ts'

@@ -1,4 +1,4 @@
-export function configureTabsAndButtons(input) {
+export function configureTabsAndButtons(input: any) {
     const {
         tabs,
         activeTabIndex,

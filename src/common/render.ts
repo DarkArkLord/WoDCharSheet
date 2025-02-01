@@ -19,7 +19,7 @@ export const HTMLTags = Object.freeze({
     Option: 'option',
 });
 
-export function render(tag: Render.TTag, attributes?: any, ...childs: Render.TChilds) {
+export function render(tag: Render.TTag, attributes?: any, ...childs: Render.TChilds): HTMLElement {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }

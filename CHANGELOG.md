@@ -48,3 +48,4 @@
 ## [Unreleased]
 
 - Добавлен CHANGELOG.md
+- Обновлен README

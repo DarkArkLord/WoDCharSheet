@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.ts'
 import { HTMLTags, render } from './render.js'
-import { DarkEvent, ValueWrapper } from './utilities.js'
+import { DarkEvent, ValueWrapper } from './utilities.ts'
 import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements.js'
 
 const CSS = Object.freeze({

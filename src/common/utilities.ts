@@ -1,21 +1,26 @@
 export class DarkEvent {
+    handlers: Function[];
+
     constructor() {
         this.handlers = [];
     }
 
-    addHandler(handler) {
+    addHandler(handler: Function): void {
         this.handlers.push(handler);
     }
 
-    invoke() {
+    invoke(): void {
         for (const handler of this.handlers) {
             handler();
         }
     }
 }
 
-export class ValueWrapper {
-    constructor(data, field, defaultValue) {
+export class ValueWrapper<ValueType> {
+    data: any;
+    field: string;
+
+    constructor(data: any, field: string, defaultValue?: ValueType) {
         this.data = data;
         this.field = field;
 
@@ -24,11 +29,11 @@ export class ValueWrapper {
         }
     }
 
-    getValue(defaultValue) {
+    getValue(defaultValue?: ValueType): ValueType {
         return this.data[this.field] ?? defaultValue;
     }
 
-    setValue(value) {
+    setValue(value: ValueType): void {
         this.data[this.field] = value;
     }
 }

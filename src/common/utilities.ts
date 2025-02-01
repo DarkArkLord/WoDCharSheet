@@ -1,4 +1,9 @@
-export class DarkEvent {
+declare interface IEvent {
+    addHandler(handler: Function): void;
+    invoke(): void;
+}
+
+export class DarkEvent implements IEvent {
     handlers: Function[];
 
     constructor() {
@@ -16,7 +21,12 @@ export class DarkEvent {
     }
 }
 
-export class ValueWrapper<ValueType> {
+declare interface IValueWrapper<ValueType> {
+    getValue(defaultValue?: ValueType): ValueType;
+    setValue(value: ValueType): void;
+}
+
+export class ValueWrapper<ValueType> implements IValueWrapper<ValueType> {
     data: any;
     field: string;
 

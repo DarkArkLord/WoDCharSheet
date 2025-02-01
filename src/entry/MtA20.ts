@@ -1,4 +1,4 @@
-import '../common/styles.ts'
+import '../common/styles'
 
 const CHAR_SHEET_NAME = 'Dark MtA 20th Char Sheet'
 const CHAR_SHEET_VERSION = 'v0.7';
@@ -7,14 +7,14 @@ const CHAR_SHEET_TITLE = `${CHAR_SHEET_NAME} ${CHAR_SHEET_VERSION}`;
 document.title = CHAR_SHEET_TITLE;
 document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
-import { configureTabsAndButtons } from '../common/tabs.ts'
+import { configureTabsAndButtons } from '../common/tabs'
 
-import { HTMLTags, render } from '../common/render.ts'
-import { DarkEvent, ValueWrapper } from '../common/utilities.ts'
-import { UIText, UITextList, } from '../common/uiElements.ts'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.ts'
+import { HTMLTags, render } from '../common/render'
+import { DarkEvent, ValueWrapper } from '../common/utilities'
+import { UIText, UITextList, } from '../common/uiElements'
+import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements'
 
-import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
+import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20'
 
 const CSS = Object.freeze({
     TAB_BUTTON: 'tab-button',

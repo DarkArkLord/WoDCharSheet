@@ -1,7 +1,7 @@
-import { SVGIcons } from './svg.ts'
-import { HTMLTags, render } from './render.ts'
-import { DarkEvent, ValueWrapper } from './utilities.ts'
-import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements.ts'
+import { SVGIcons } from './svg'
+import { HTMLTags, render } from './render'
+import { DarkEvent, ValueWrapper } from './utilities'
+import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements'
 
 const CSS = Object.freeze({
     TABLE: 'table',

@@ -12,7 +12,7 @@ import { configureTabsAndButtons } from '../common/tabs.ts'
 import { HTMLTags, render } from '../common/render.ts'
 import { DarkEvent, ValueWrapper } from '../common/utilities.ts'
 import { UIText, UITextList, } from '../common/uiElements.ts'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
+import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.ts'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 

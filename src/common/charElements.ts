@@ -14,8 +14,11 @@ const CSS = Object.freeze({
     DROPDOWN_AS_BUTTON: 'dropdown-as-button',
 });
 
-class ValueByStateWrapper extends ValueWrapper {
-    constructor(data, field, defaultValue, prevFileds = [], nextFileds = []) {
+class ValueByStateWrapper extends ValueWrapper<number> {
+    private prevFileds: string[];
+    private nextFileds: string[];
+
+    constructor(data: any, field: string, defaultValue?: number, prevFileds: string[] = [], nextFileds: string[] = []) {
         super(data, field, defaultValue);
 
         this.prevFileds = prevFileds;
@@ -62,13 +65,18 @@ class ValueByStateWrapper extends ValueWrapper {
         return false;
     }
 
-    getTotalValue(defaultValue) {
+    getTotalValue(defaultValue: number) {
         return this.getPrevValue() + this.getValue(defaultValue) + this.getNextValue();
     }
 }
 
 class DotsValuePriceWrapper {
-    constructor(dotsValueWrapper, priceFunc) {
+    private dotsValueWrapper: ValueByStateWrapper;
+    private priceFunc: Function;
+    private isDirty: boolean;
+    private price: number;
+
+    constructor(dotsValueWrapper: ValueByStateWrapper, priceFunc: Function) {
         this.dotsValueWrapper = dotsValueWrapper;
         this.priceFunc = priceFunc;
         this.isDirty = true;
@@ -106,7 +114,7 @@ const DEFAULT_DOTS_COUNT = 5;
 const DEFAULT_INPUT_SIZE = 10;
 const EMPTY_STRING = '';
 
-const DEFAULT_COMPARATOR = (a, b) => b - a;
+const DEFAULT_COMPARATOR = (a: number, b: number) => b - a;
 
 const SPECIALTY_FIELD = 'specialty'
 const TEXT_FIELD = 'text';

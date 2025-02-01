@@ -1,7 +1,7 @@
 declare namespace Render {
     type TChild = HTMLElement | SVGElement | string;
     type TChildToAdd = TChild | Array<TChild | TChildToAdd>;
-    type TChilds = Array<TChild>;
+    type TChilds = Array<TChild | TChilds>;
     type TTag = string | Function
 }
 

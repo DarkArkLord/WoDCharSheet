@@ -49,3 +49,4 @@
 
 - Добавлен CHANGELOG.md
 - Обновлен README.md
+- Проект переписан на TypeScript

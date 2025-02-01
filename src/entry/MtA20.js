@@ -9,7 +9,6 @@ document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
 import { configureTabsAndButtons } from '../common/tabs.js'
 
-import { SVGIcons } from '../common/svg.js'
 import { HTMLTags, render } from '../common/render.js'
 import { DarkEvent, ValueWrapper } from '../common/utilities.js'
 import { UIText, UITextList, } from '../common/uiElements.js'

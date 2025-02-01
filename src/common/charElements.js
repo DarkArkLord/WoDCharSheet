@@ -1,4 +1,4 @@
-import { SVGIcons } from './svg.js'
+import { SVGIcons } from './svg.ts'
 import { HTMLTags, render } from './render.js'
 import { DarkEvent, ValueWrapper } from './utilities.js'
 import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements.js'

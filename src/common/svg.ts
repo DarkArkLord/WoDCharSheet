@@ -9,7 +9,7 @@ const SVGTags = {
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
-function renderSVG(tag, attributes, ...childs) {
+function renderSVG(tag: any, attributes: any, ...childs: any) {
     if (tag instanceof Function) {
         return tag(attributes, ...childs);
     }
@@ -25,7 +25,7 @@ function renderSVG(tag, attributes, ...childs) {
     }
 
     for (const child of childs) {
-        (function addChild(parent, child) {
+        (function addChild(parent: any, child: any) {
             if (Array.isArray(child)) {
                 for (const innerChild of child) {
                     addChild(parent, innerChild);
@@ -33,7 +33,7 @@ function renderSVG(tag, attributes, ...childs) {
             } else {
                 parent.appendChild(
                     typeof child == 'number' || typeof child == 'string'
-                        ? document.createTextNode(child)
+                        ? document.createTextNode(child.toString())
                         : child
                 );
             }
@@ -58,7 +58,7 @@ const SVG_COLOR_GREEN = '#0F0';
 const SVG_COLOR_RED = '#F00';
 
 // --- --- Функции иконок --- ---
-function renderPoint(strikeColor, fillColor) {
+function renderPoint(strikeColor: any, fillColor: any) {
     return renderSVG(
         SVGTags.SVG,
         {
@@ -80,7 +80,7 @@ function renderPoint(strikeColor, fillColor) {
     );
 }
 
-function renderAddButton(fillColor) {
+function renderAddButton(fillColor: any) {
     return renderSVG(
         SVGTags.SVG,
         {
@@ -122,7 +122,7 @@ function renderAddButton(fillColor) {
     );
 }
 
-function renderSubButton(fillColor) {
+function renderSubButton(fillColor: any) {
     return renderSVG(
         SVGTags.SVG,
         {
@@ -216,7 +216,7 @@ const SVG_DROPDOWN_BUTTON = Object.freeze(renderSVG(
     ),
 ));
 
-function SVGtoData(svg) {
+function SVGtoData(svg: any) {
     // return `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svg.outerHTML)))}`;
     return `data:image/svg+xml;base64,${window.btoa(svg.outerHTML)}`;
 }
@@ -235,6 +235,7 @@ export const SVGIcons = Object.freeze({
 
 // Грязный хак с изменением стилей
 // Не надо так делать, но я не придумал чего-то получше
+// @ts-expect-error
 const BUTTON_OF_DROPDOWN_STYLE = [...document.styleSheets].map(x => [...x.rules]).flat().find(x => x.selectorText === '.dropdown-as-button').style;
 BUTTON_OF_DROPDOWN_STYLE.background = `url("${SVGtoData(SVG_DROPDOWN_BUTTON)}")`;
 BUTTON_OF_DROPDOWN_STYLE.width = `${SVG_ITEM_SIZE}px`;

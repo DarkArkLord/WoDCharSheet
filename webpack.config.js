@@ -17,6 +17,9 @@ module.exports = {
         filename: '[name].js',
         path: environment.paths.output,
     },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js"],
+    },
     module: {
         rules: [
             {

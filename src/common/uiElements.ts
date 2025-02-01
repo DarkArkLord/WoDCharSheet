@@ -1,5 +1,5 @@
-import { HTMLTags, render } from './render.ts'
-import { SVGIcons } from './svg.ts'
+import { HTMLTags, render } from './render'
+import { SVGIcons } from './svg'
 
 const EMPTY_STRING = '';
 

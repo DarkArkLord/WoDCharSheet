@@ -1,4 +1,17 @@
-export function configureTabsAndButtons(input: any) {
+declare namespace TabsAndButtons {
+    type TabData = {
+        button: HTMLElement;
+        content: HTMLElement;
+    };
+
+    type ConfigInput = {
+        tabs: Array<TabData>;
+        activeTabIndex: number;
+        activeStyleClass: string;
+    };
+}
+
+export function configureTabsAndButtons(input: TabsAndButtons.ConfigInput) {
     const {
         tabs,
         activeTabIndex,

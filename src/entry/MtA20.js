@@ -360,7 +360,7 @@ class ConfigTab {
     }
 }
 
-const characterData = {};
+const characterData = { version: CHAR_SHEET_VERSION };
 const characterUi = new CharacterMtA(characterData);
 
 const tabs = editStatesForTabsOrder.map(editState => ({

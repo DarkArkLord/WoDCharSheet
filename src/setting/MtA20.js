@@ -84,7 +84,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                 id: 'Talents', translation: 'Таланты',
                 values: [
                     { id: 'Alertness', translation: 'Внимательность', },
-                    { id: 'Art', translation: 'Искусство', },
+                    { id: 'Art', translation: 'Искусство', specialtyEditableFrom: 1, },
                     { id: 'Athletics', translation: 'Атлетика', },
                     { id: 'Awareness', translation: 'Шестое чувство', },
                     { id: 'Brawl', translation: 'Драка', },
@@ -99,7 +99,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             {
                 id: 'Skills', translation: 'Навыки',
                 values: [
-                    { id: 'Crafts', translation: 'Ремесло', },
+                    { id: 'Crafts', translation: 'Ремесло', specialtyEditableFrom: 1, },
                     { id: 'Drive', translation: 'Вождение', },
                     { id: 'Etiquette', translation: 'Этикет', },
                     { id: 'Firearms', translation: 'Стрельба', },

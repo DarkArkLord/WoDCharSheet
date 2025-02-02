@@ -330,9 +330,11 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
 
         this.priceText.setText(`(${this.getPrice()})`);
 
-        const specialtyEditableFrom = this.info?.specialtyEditableFrom
-            ?? this.partValidations?.specialtyEditableFrom;
-        if (specialtyEditableFrom) {
+        const configSpecialtyEditableFrom = this.partValidations?.specialtyEditableFrom;
+        if (!!configSpecialtyEditableFrom) {
+            const specialtyEditableFrom = this.info?.specialtyEditableFrom
+                ?? configSpecialtyEditableFrom;
+
             this.specialty.setVisible(true);
             this.specialty.setReadOnly(prevValue + value < specialtyEditableFrom);
 

@@ -225,7 +225,7 @@ export class UIDropdown {
     }
 
     clear() {
-        this.selectElement.innerHTML = '';
+        this.element.innerHTML = '';
     }
 
     addOption(text, optionAttrubutes = {}) {

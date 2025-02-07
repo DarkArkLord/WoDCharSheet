@@ -1,47 +1,4 @@
-// --- --- База --- ---
-const SVGTags = {
-    SVG: 'svg',
-    Group: 'g',
-    Circle: 'circle',
-    Line: 'line',
-    Rect: 'rect',
-}
-
-const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
-
-function renderSVG(tag, attributes, ...childs) {
-    if (tag instanceof Function) {
-        return tag(attributes, ...childs);
-    }
-
-    const element = document.createElementNS(SVG_NAMESPACE, tag);
-
-    if (attributes) {
-        for (const name in attributes) {
-            const value = attributes[name];
-            // element.setAttributeNS(null, name, value);
-            element.setAttribute(name, value);
-        }
-    }
-
-    for (const child of childs) {
-        (function addChild(parent, child) {
-            if (Array.isArray(child)) {
-                for (const innerChild of child) {
-                    addChild(parent, innerChild);
-                }
-            } else {
-                parent.appendChild(
-                    typeof child == 'number' || typeof child == 'string'
-                        ? document.createTextNode(child)
-                        : child
-                );
-            }
-        })(element, child);
-    }
-
-    return element;
-}
+import { SVGTags, SVG_NAMESPACE, renderSVG } from './render.js'
 
 // --- --- Константы --- ---
 const SVG_ITEM_SIZE = 16;

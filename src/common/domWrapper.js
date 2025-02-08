@@ -11,6 +11,7 @@ export const ATTRIBUTES = Object.freeze({
     DISABLED: 'disabled',
     INNER_HTML: 'innerHTML',
     VALUE: 'value',
+    SRC: 'src',
     TYPE: 'type',
     MIN: 'min',
     MAX: 'max',
@@ -135,6 +136,34 @@ export class DElementBuilder {
 
     static init(tag, attributes = {}) {
         return new DElementBuilder(tag, attributes);
+    }
+
+    static initDiv(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.Div, attributes);
+    }
+
+    static initInput(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.Input, attributes);
+    }
+
+    static initImg(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.Img, attributes);
+    }
+
+    static initUnorderedList(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.UnorderedList, attributes);
+    }
+
+    static initListItem(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.ListItem, attributes);
+    }
+
+    static initSelect(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.Select, attributes);
+    }
+
+    static initOption(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.Option, attributes);
     }
 
     setTag(tag) {

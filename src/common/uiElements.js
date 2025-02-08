@@ -115,3 +115,22 @@ export class UIPointsLine {
         }
     }
 }
+
+export class UIText {
+    constructor(text, wrapAttrubutes = {}) {
+        this.private = { element: DElementBuilder.initDiv(wrapAttrubutes).create(), };
+        this.private.element.setText(text);
+    }
+
+    getElement() {
+        return this.private.element.getElement();
+    }
+
+    setText(text) {
+        this.private.element.setText(text);
+    }
+
+    setVisible(isVisible) {
+        this.private.element.setVisible(isVisible);
+    }
+}

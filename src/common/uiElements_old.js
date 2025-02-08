@@ -62,7 +62,7 @@ export class UITextInput {
 }
 
 export class UIText {
-    constructor(text, wrapAttrubutes) {
+    constructor(text, wrapAttrubutes) { // +
         this.element = render(HTMLTags.Div, wrapAttrubutes, text);
 
         this.isVisible = true;

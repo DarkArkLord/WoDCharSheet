@@ -206,16 +206,9 @@ const InputType = Object.freeze({
     Number: 'number',
 });
 
-export class UITextInput {
-    constructor(size = undefined) {
-        const inputBuilder = DElementBuilder.initInput()
-            .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
-
-        if (size) {
-            inputBuilder.setAttribute(ATTRIBUTES.SIZE, size);
-        }
-
-        const input = inputBuilder.create();
+class UIBaseInput {
+    constructor(inputBuilder) {
+        const input = DElementBuilder.use(inputBuilder).create();
         const container = DElementBuilder.initDiv()
             .appendChilds(input).create();
 
@@ -248,5 +241,42 @@ export class UITextInput {
 
     setOnInputEvent(handler) {
         this.private.input.setEventHandler(EVENTS.INPUT, handler);
+    }
+}
+
+export class UITextInput extends UIBaseInput {
+    constructor(size = undefined) {
+        const inputBuilder = DElementBuilder.initInput()
+            .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
+
+        if (size) {
+            inputBuilder.setAttribute(ATTRIBUTES.SIZE, size);
+        }
+
+        super(inputBuilder);
+    }
+}
+
+export class UINumberInput extends UIBaseInput {
+    constructor(min = undefined, max = undefined, inputStyle = undefined) {
+        const inputBuilder = DElementBuilder.initInput()
+            .setAttribute(ATTRIBUTES.TYPE, InputType.Number);
+
+        if (min) {
+            inputBuilder.setAttribute(ATTRIBUTES.MIN, min);
+        }
+
+        if (max) {
+            inputBuilder.setAttribute(ATTRIBUTES.MAX, max);
+        }
+
+        if (inputStyle) {
+            inputBuilder.setAttribute(ATTRIBUTES.STYLE, inputStyle);
+        }
+
+        inputBuilder.setMapper(ACTIONS.GET, value => +value);
+        inputBuilder.setMapper(ACTIONS.SET, value => +value);
+
+        super(inputBuilder);
     }
 }

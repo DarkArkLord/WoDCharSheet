@@ -139,6 +139,18 @@ export class DElementBuilder {
         return new DElementBuilder(tag, attributes);
     }
 
+    static use(other) {
+        const builder = new DElementBuilder();
+
+        builder.tag = other.tag;
+        builder.attributes = other.attributes;
+        builder.events = other.events;
+        builder.mappers = other.mappers;
+        builder.childs = other.childs;
+
+        return builder;
+    }
+
     static initDiv(attributes = {}) {
         return DElementBuilder.init(HTMLTags.Div, attributes);
     }

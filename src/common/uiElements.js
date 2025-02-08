@@ -21,7 +21,7 @@ export class UIIcon {
     }
 }
 
-export class UIPoint extends UIIcon {
+export class UIIconPoint extends UIIcon {
     constructor() {
         super(SVGIcons.POINT_EMPTY);
     }
@@ -39,7 +39,7 @@ export class UIPoint extends UIIcon {
     }
 }
 
-export class UIButton extends UIIcon {
+export class UIIconButton extends UIIcon {
     constructor(enableImage, disableImage) {
         super(enableImage);
 

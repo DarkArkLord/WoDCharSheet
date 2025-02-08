@@ -82,7 +82,7 @@ export class UIText {
     }
 }
 
-export class UIIcon {
+export class UIIcon { // +
     constructor(baseImage) {
         this.element = render(HTMLTags.Img, { src: baseImage });
     }
@@ -92,7 +92,7 @@ export class UIIcon {
     }
 }
 
-export class UIPoint extends UIIcon {
+export class UIPoint extends UIIcon { // +
     constructor() {
         super(SVGIcons.POINT_EMPTY);
     }
@@ -110,7 +110,7 @@ export class UIPoint extends UIIcon {
     }
 }
 
-export class UIButton extends UIIcon {
+export class UIButton extends UIIcon { // +
     constructor(enableImage, disableImage) {
         super(enableImage);
 

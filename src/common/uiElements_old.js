@@ -183,7 +183,7 @@ export class UIPointsLine { // +
     }
 }
 
-export class UITextList {
+export class UITextList { // +
     constructor(wrapAttrubutes = {}) {
         this.listElement = render(HTMLTags.UnorderedList, {});
         this.element = render(HTMLTags.Div, wrapAttrubutes, this.listElement);

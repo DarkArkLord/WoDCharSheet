@@ -134,3 +134,27 @@ export class UIText {
         this.private.element.setVisible(isVisible);
     }
 }
+
+export class UITextList {
+    constructor() {
+        const list = DElementBuilder.initUnorderedList().create();
+        const container = DElementBuilder.initDiv()
+            .appendChilds(list).create();
+
+        this.private = { list, container, };
+    }
+
+    getElement() {
+        return this.private.container.getElement();
+    }
+
+    addItem(text, itemAttrubutes = {}) {
+        const item = DElementBuilder.initListItem(itemAttrubutes)
+            .appendChilds(text).create();
+        this.private.list.appendChilds(item);
+    }
+
+    clear() {
+        this.private.list.setText(EMPTY_STRING);
+    }
+}

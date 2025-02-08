@@ -5,7 +5,7 @@ const EMPTY_STRING = '';
 
 export class UIIcon {
     constructor(baseImage) {
-        this.private = {
+        this._ = {
             element: DElementBuilder.initImg()
                 .setAttribute(ATTRIBUTES.SRC, baseImage)
                 .create(),
@@ -13,11 +13,11 @@ export class UIIcon {
     }
 
     getElement() {
-        return this.private.element.getElement();
+        return this._.element.getElement();
     }
 
     setImage(image) {
-        this.private.element.setAttribute(ATTRIBUTES.SRC, image);
+        this._.element.setAttribute(ATTRIBUTES.SRC, image);
     }
 }
 
@@ -43,20 +43,20 @@ export class UIButton extends UIIcon {
     constructor(enableImage, disableImage) {
         super(enableImage);
 
-        this.enableImage = enableImage;
-        this.disableImage = disableImage;
+        this._.enableImage = enableImage;
+        this._.disableImage = disableImage;
     }
 
     setActive(isActive) {
-        this.private.element.setActive(isActive);
-        this.setImage(isActive ? this.enableImage : this.disableImage);
+        this._.element.setActive(isActive);
+        this.setImage(isActive ? this._.enableImage : this._.disableImage);
     }
 
     setVisible(isVisible) {
-        this.private.element.setVisible(isVisible);
+        this._.element.setVisible(isVisible);
     }
 
     setOnClickEvent(func) {
-        this.private.element.setEventHandler(EVENTS.CLICK, func);
+        this._.element.setEventHandler(EVENTS.CLICK, func);
     }
 }

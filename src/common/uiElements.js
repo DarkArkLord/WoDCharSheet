@@ -200,3 +200,53 @@ export class UIDropdown {
         this.private.element.setVisible(isVisible);
     }
 }
+
+const InputType = Object.freeze({
+    Text: 'text',
+    Number: 'number',
+});
+
+export class UITextInput {
+    constructor(size = undefined) {
+        const inputBuilder = DElementBuilder.initInput()
+            .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
+
+        if (size) {
+            inputBuilder.setAttribute(ATTRIBUTES.SIZE, size);
+        }
+
+        const input = inputBuilder.create();
+        const container = DElementBuilder.initDiv()
+            .appendChilds(input).create();
+
+        this.private = { input, container, };
+    }
+
+    getElement() {
+        return this.private.container.getElement();
+    }
+
+    getValue() {
+        return this.private.input.getValue();
+    }
+
+    setValue(value) {
+        return this.private.input.setValue(value);
+    }
+
+    setReadOnly(isReadOnly) {
+        this.private.input.setReadOnly(isReadOnly);
+    }
+
+    setVisible(isVisible) {
+        this.private.container.setVisible(isVisible);
+    }
+
+    setActive(isActive) {
+        this.private.input.setActive(isActive);
+    }
+
+    setOnInputEvent(handler) {
+        this.private.input.setEventHandler(EVENTS.INPUT, handler);
+    }
+}

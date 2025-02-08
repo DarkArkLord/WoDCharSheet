@@ -12,7 +12,7 @@ export const UITextInputType = Object.freeze({
     Number: 'number',
 });
 
-export class UITextInput {
+export class UITextInput { // +
     constructor(wrapAttrubutes = {}, type = UITextInputType.Text, min = undefined, max = undefined, size = undefined, inputStyle = undefined) {
         const instance = this;
 
@@ -61,8 +61,8 @@ export class UITextInput {
     }
 }
 
-export class UIText {
-    constructor(text, wrapAttrubutes) { // +
+export class UIText { // +
+    constructor(text, wrapAttrubutes) {
         this.element = render(HTMLTags.Div, wrapAttrubutes, text);
 
         this.isVisible = true;

@@ -1,7 +1,7 @@
 import { SVGIcons } from './svg.js'
 import { HTMLTags, render } from './render.js'
 import { DarkEvent, ValueWrapper } from './utilities.js'
-import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements.js'
+import { UITextInputType, UITextInput, UIText, UIIcon, UIPointsLine, UIButton, UIDropdown } from './uiElements_old.js'
 
 const CSS = Object.freeze({
     TABLE: 'table',

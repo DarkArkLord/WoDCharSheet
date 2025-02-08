@@ -11,6 +11,11 @@ export const ATTRIBUTES = Object.freeze({
     DISABLED: 'disabled',
     INNER_HTML: 'innerHTML',
     VALUE: 'value',
+    TYPE: 'type',
+    MIN: 'min',
+    MAX: 'max',
+    SIZE: 'size',
+    STYLE: 'style',
 });
 
 export const EVENTS = Object.freeze({
@@ -43,26 +48,28 @@ class DarkHtmlWrapper {
         this.element[attr] = value;
     }
 
-    appendChild(child) {
-        if (child instanceof DarkHtmlWrapper) {
-            child = child.element;
-        } else if (child instanceof DarkHtmlElement) {
-            child = child.getElement();
-        } else if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
-            child = document.createTextNode(child);
-        }
+    appendChilds(...childs) {
+        for (let child of childs) {
+            if (child instanceof DarkHtmlWrapper) {
+                child = child.element;
+            } else if (child instanceof DarkHtmlElement) {
+                child = child.getElement();
+            } else if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
+                child = document.createTextNode(child);
+            }
 
-        this.element.appendChild(child);
+            this.element.appendChild(child);
+        }
     }
 }
 
 export class DarkHtmlElement {
-    constructor(tag, attr, ...childs) {
+    constructor(tag, { attributes = {}, isActive = true, events = {}, mappers = {} } = {}, ...childs) {
         this.private = {
-            wrapper: new DarkHtmlWrapper(tag, attr, ...childs),
-            isActive: true,
-            events: {},
-            mappers: {},
+            wrapper: new DarkHtmlWrapper(tag, attributes, ...childs),
+            isActive,
+            events,
+            mappers,
         };
     }
 
@@ -70,17 +77,26 @@ export class DarkHtmlElement {
         return this.private.wrapper.element;
     }
 
+    addClass(className) {
+        this.private.wrapper.addClass(className);
+    }
+    removeClass(className) {
+        this.private.wrapper.removeClass(className);
+    }
     setVisible(isVisible) {
         if (isVisible) {
-            this.private.wrapper.removeClass(CSS.HIDDEN);
+            this.removeClass(CSS.HIDDEN);
         } else {
-            this.private.wrapper.addClass(CSS.HIDDEN);
+            this.addClass(CSS.HIDDEN);
         }
     }
 
+    setAttribute(attr, value) {
+        this.private.wrapper.setAttribute(attr, value);
+    }
     setReadOnly(isReadOnly) {
-        this.private.wrapper.setAttribute(ATTRIBUTES.READ_ONLY, isReadOnly);
-        this.private.wrapper.setAttribute(ATTRIBUTES.DISABLED, isReadOnly);
+        this.setAttribute(ATTRIBUTES.READ_ONLY, isReadOnly);
+        this.setAttribute(ATTRIBUTES.DISABLED, isReadOnly);
     }
 
     setActive(isActive) {
@@ -91,8 +107,8 @@ export class DarkHtmlElement {
         const instance = this.private;
         instance.events[eventName] = eventHandler;
 
-        if (!instance.wrapper.getAttribute(eventName)) {
-            instance.wrapper.setAttribute(eventName, function (input) {
+        if (!this.getAttribute(eventName)) {
+            this.setAttribute(eventName, function (input) {
                 const handler = instance.events[eventName];
                 if (instance.isActive && handler) {
                     handler(input);
@@ -102,14 +118,14 @@ export class DarkHtmlElement {
     }
 
     getText() {
-        return this.private.wrapper.getAttribute(ATTRIBUTES.INNER_HTML);
+        return this.getAttribute(ATTRIBUTES.INNER_HTML);
     }
     setText(text) {
-        this.private.wrapper.setAttribute(ATTRIBUTES.INNER_HTML, text);
+        this.setAttribute(ATTRIBUTES.INNER_HTML, text);
     }
 
     getValue() {
-        const value = this.private.wrapper.getAttribute(ATTRIBUTES.VALUE);
+        const value = this.getAttribute(ATTRIBUTES.VALUE);
         const mapper = this.private.mappers[ACTIONS.GET];
         return mapper ? mapper(value) : value;
     }
@@ -118,13 +134,62 @@ export class DarkHtmlElement {
         if (mapper) {
             text = mapper(text);
         }
-        this.private.wrapper.setAttribute(ATTRIBUTES.VALUE, text);
+        this.setAttribute(ATTRIBUTES.VALUE, text);
     }
     setValueMapper(action, mapper) {
         this.private.mappers[action] = mapper;
     }
 
-    appendChild(child) {
-        this.private.wrapper.appendChild(child);
+    appendChilds(...childs) {
+        this.private.wrapper.appendChilds(...childs);
+    }
+}
+
+export class DElementBuilder {
+    constructor(tag, attributes) {
+        this.tag = tag;
+        this.attributes = attributes ?? {};
+        this.events = {};
+        this.mappers = {};
+        this.childs = [];
+    }
+
+    static init(tag, attributes = {}) {
+        return new DElementBuilder(tag, attributes);
+    }
+
+    setTag(tag) {
+        this.tag = tag;
+        return this;
+    }
+
+    setAttribute(attribute, value) {
+        this.attributes[attribute] = value;
+        return this;
+    }
+
+    setEvent(eventName, handler) {
+        this.events[eventName] = handler;
+        return this;
+    }
+
+    setMapper(action, mapper) {
+        this.mappers[action] = mapper;
+        return this;
+    }
+
+    appendChilds(...childs) {
+        this.childs.push(...childs);
+        return this;
+    }
+
+    create() {
+        const result = new DarkHtmlElement(this.tag, {
+            attributes: this.attributes,
+            events: this.events,
+            mappers: this.mappers,
+        });
+        result.appendChilds(this.childs);
+        return result;
     }
 }

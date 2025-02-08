@@ -9,12 +9,19 @@ const CSS = Object.freeze({
 const ATTRIBUTES = Object.freeze({
     READ_ONLY: 'readOnly',
     DISABLED: 'disabled',
+    INNER_HTML: 'innerHTML',
+    VALUE: 'value',
 });
 
 const EVENTS = Object.freeze({
     CHANGE: 'onchange',
     INPUT: 'oninput',
     CLICK: 'onclick',
+});
+
+const ACTIONS = Object.freeze({
+    GET: 'get',
+    SET: 'set',
 });
 
 class DarkHtmlWrapper {
@@ -55,6 +62,7 @@ class DarkHtmlElement {
             wrapper: new DarkHtmlWrapper(tag, attr, ...childs),
             isActive: true,
             events: {},
+            mappers: {},
         };
     }
 
@@ -91,5 +99,28 @@ class DarkHtmlElement {
                 }
             });
         }
+    }
+
+    getText() {
+        return this.private.wrapper.getAttribute(ATTRIBUTES.INNER_HTML);
+    }
+    setText(text) {
+        this.private.wrapper.setAttribute(ATTRIBUTES.INNER_HTML, text);
+    }
+
+    getValue() {
+        const value = this.private.wrapper.getAttribute(ATTRIBUTES.VALUE);
+        const mapper = this.private.mappers[ACTIONS.GET];
+        return mapper ? mapper(value) : value;
+    }
+    setValue(text) {
+        const mapper = this.private.mappers[ACTIONS.SET];
+        if (mapper) {
+            text = mapper(text);
+        }
+        this.private.wrapper.setAttribute(ATTRIBUTES.VALUE, text);
+    }
+    setValueMapper(action, mapper) {
+        this.private.mappers[action] = mapper;
     }
 }

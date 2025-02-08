@@ -6,20 +6,20 @@ const CSS = Object.freeze({
     HIDDEN: 'hidden',
 });
 
-const ATTRIBUTES = Object.freeze({
+export const ATTRIBUTES = Object.freeze({
     READ_ONLY: 'readOnly',
     DISABLED: 'disabled',
     INNER_HTML: 'innerHTML',
     VALUE: 'value',
 });
 
-const EVENTS = Object.freeze({
+export const EVENTS = Object.freeze({
     CHANGE: 'onchange',
     INPUT: 'oninput',
     CLICK: 'onclick',
 });
 
-const ACTIONS = Object.freeze({
+export const ACTIONS = Object.freeze({
     GET: 'get',
     SET: 'set',
 });
@@ -56,7 +56,7 @@ class DarkHtmlWrapper {
     }
 }
 
-class DarkHtmlElement {
+export class DarkHtmlElement {
     constructor(tag, attr, ...childs) {
         this.private = {
             wrapper: new DarkHtmlWrapper(tag, attr, ...childs),
@@ -122,5 +122,9 @@ class DarkHtmlElement {
     }
     setValueMapper(action, mapper) {
         this.private.mappers[action] = mapper;
+    }
+
+    appendChild(child) {
+        this.private.wrapper.appendChild(child);
     }
 }

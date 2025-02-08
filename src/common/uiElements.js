@@ -3,6 +3,10 @@ import { SVGIcons } from './svg.js'
 
 const EMPTY_STRING = '';
 
+const CSS = Object.freeze({
+    NOWRAP: 'nowrap',
+});
+
 export class UIIcon {
     constructor(baseImage) {
         this.private = {
@@ -58,5 +62,56 @@ export class UIIconButton extends UIIcon {
 
     setOnClickEvent(func) {
         this.private.element.setEventHandler(EVENTS.CLICK, func);
+    }
+}
+
+export class UIPointsLine {
+    constructor(pointsCount, showButtons) {
+        const subButton = new UIIconButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        const points = Array.from(Array(pointsCount)).map(_ => new UIIconPoint());
+        const addButton = new UIIconButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+
+        subButton.setVisible(showButtons);
+        addButton.setVisible(showButtons);
+
+        this.private = {
+            pointsCount,
+            subButton,
+            points,
+            addButton,
+            container: DElementBuilder.initDiv()
+                .setAttribute(ATTRIBUTES.CLASS, CSS.NOWRAP)
+                .appendChilds(
+                    subButton.getElement(),
+                    points.map(p => p.getElement()),
+                    addButton.getElement(),
+                ).create(),
+        };
+    }
+
+    getElement() {
+        return this.private.container.getElement();
+    }
+
+    getSubButton() {
+        return this.private.subButton;
+    }
+
+    getAddButton() {
+        return this.private.addButton;
+    }
+
+    setValue(disabled, active) {
+        for (const point of this.private.points) {
+            point.setEmpty();
+        }
+
+        for (let i = 0; i < disabled; i++) {
+            this.private.points[i]?.setDisable();
+        }
+
+        for (let i = 0; i < active; i++) {
+            this.private.points[disabled + i]?.setActive();
+        }
     }
 }

@@ -148,7 +148,7 @@ export class UIButton extends UIIcon { // +
     }
 }
 
-export class UIPointsLine {
+export class UIPointsLine { // +
     constructor(pointsCount, showButtons, wrapAttrubutes = {}) {
         this.pointsCount = pointsCount;
 

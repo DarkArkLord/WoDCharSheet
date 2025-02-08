@@ -17,6 +17,7 @@ export const ATTRIBUTES = Object.freeze({
     MAX: 'max',
     SIZE: 'size',
     STYLE: 'style',
+    CLASS: 'class',
 });
 
 export const EVENTS = Object.freeze({

@@ -29,44 +29,10 @@ export const ACTIONS = Object.freeze({
     SET: 'set',
 });
 
-class DarkHtmlWrapper {
-    constructor(tag, attr, ...childs) {
-        this.element = render(tag, attr, ...childs);
-    }
-
-    addClass(className) {
-        this.element.classList.add(className);
-    }
-    removeClass(className) {
-        this.element.classList.remove(className);
-    }
-
-    getAttribute(attr) {
-        return this.element[attr];
-    }
-    setAttribute(attr, value) {
-        this.element[attr] = value;
-    }
-
-    appendChilds(...childs) {
-        for (let child of childs) {
-            if (child instanceof DarkHtmlWrapper) {
-                child = child.element;
-            } else if (child instanceof DarkHtmlElement) {
-                child = child.getElement();
-            } else if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
-                child = document.createTextNode(child);
-            }
-
-            this.element.appendChild(child);
-        }
-    }
-}
-
 export class DarkHtmlElement {
     constructor(tag, { attributes = {}, isActive = true, events = {}, mappers = {} } = {}, ...childs) {
         this.private = {
-            wrapper: new DarkHtmlWrapper(tag, attributes, ...childs),
+            element: render(tag, attributes, ...childs),
             isActive,
             events,
             mappers,
@@ -74,14 +40,14 @@ export class DarkHtmlElement {
     }
 
     getElement() {
-        return this.private.wrapper.element;
+        return this.private.element;
     }
 
     addClass(className) {
-        this.private.wrapper.addClass(className);
+        this.private.element.classList.add(className);
     }
     removeClass(className) {
-        this.private.wrapper.removeClass(className);
+        this.private.element.classList.remove(className);
     }
     setVisible(isVisible) {
         if (isVisible) {
@@ -91,8 +57,11 @@ export class DarkHtmlElement {
         }
     }
 
+    getAttribute(attr) {
+        return this.private.element[attr];
+    }
     setAttribute(attr, value) {
-        this.private.wrapper.setAttribute(attr, value);
+        this.private.element[attr] = value;
     }
     setReadOnly(isReadOnly) {
         this.setAttribute(ATTRIBUTES.READ_ONLY, isReadOnly);
@@ -141,7 +110,17 @@ export class DarkHtmlElement {
     }
 
     appendChilds(...childs) {
-        this.private.wrapper.appendChilds(...childs);
+        for (const child of childs) {
+            let temp = child;
+
+            if (child instanceof DarkHtmlElement) {
+                temp = child.getElement();
+            } else if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
+                temp = document.createTextNode(child);
+            }
+
+            this.private.element.appendChild(temp);
+        }
     }
 }
 

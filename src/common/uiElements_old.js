@@ -199,7 +199,7 @@ export class UITextList { // +
     }
 }
 
-export class UIDropdown {
+export class UIDropdown { // +
     constructor(selectAttrubutes = {}, { addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] } = {}) {
         const instance = this;
 

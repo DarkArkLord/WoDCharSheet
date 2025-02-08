@@ -158,3 +158,45 @@ export class UITextList {
         this.private.list.setText(EMPTY_STRING);
     }
 }
+
+export class UIDropdown {
+    constructor({ selectAttrubutes = {}, addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] } = {}) {
+        const element = DElementBuilder.initSelect(selectAttrubutes).create();
+
+        this.private = { element };
+
+        if (addEmptyOption) {
+            this.addOption(EMPTY_STRING, emptyOptionAttrubutes);
+        }
+
+        for (const option of defaultOptions) {
+            this.addOption(option.text, option.attrubutes);
+        }
+    }
+
+    getElement() {
+        return this.private.element.getElement();
+    }
+
+    clear() {
+        this.private.element.setText(EMPTY_STRING);
+    }
+
+    addOption(text, optionAttrubutes = {}) {
+        const optionElement = DElementBuilder.initOption(optionAttrubutes)
+            .appendChilds(text).create();
+        this.private.element.appendChilds(optionElement);
+    }
+
+    setOnChangeEvent(handler) {
+        this.private.element.setEventHandler(EVENTS.CHANGE, handler);
+    }
+
+    setActive(isActive) {
+        this.private.element.setActive(isActive);
+    }
+
+    setVisible(isVisible) {
+        this.private.element.setVisible(isVisible);
+    }
+}

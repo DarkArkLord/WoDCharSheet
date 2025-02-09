@@ -206,6 +206,8 @@ const InputType = Object.freeze({
     Number: 'number',
 });
 
+const SIMPLE_TO_NUMBER_MAPPER = value => +value;
+
 class UIBaseInput {
     constructor(inputBuilder) {
         const input = DElementBuilder.use(inputBuilder).create();
@@ -274,9 +276,80 @@ export class UINumberInput extends UIBaseInput {
             inputBuilder.setAttribute(ATTRIBUTES.STYLE, inputStyle);
         }
 
-        inputBuilder.setMapper(ACTIONS.GET, value => +value);
-        inputBuilder.setMapper(ACTIONS.SET, value => +value);
+        inputBuilder.setMapper(ACTIONS.GET, SIMPLE_TO_NUMBER_MAPPER);
+        inputBuilder.setMapper(ACTIONS.SET, SIMPLE_TO_NUMBER_MAPPER);
 
         super(inputBuilder);
+    }
+}
+
+export class UITextOrTextInput extends UIBaseInput {
+    constructor(isInput, inputConfig = {}) {
+        if (isInput) {
+            const inputBuilder = DElementBuilder.initInput()
+                .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
+
+            const { size } = inputConfig;
+
+            if (size) {
+                inputBuilder.setAttribute(ATTRIBUTES.SIZE, size);
+            }
+
+            super(inputBuilder);
+        } else {
+            const inputBuilder = DElementBuilder.initDiv();
+
+            super(inputBuilder);
+
+            this.getValue = function () {
+                return this.private.input.getText();
+            };
+
+            this.setValue(value) = function (value) {
+                return this.private.input.setText(value);
+            };
+        }
+    }
+}
+
+export class UITextOrNumberInput extends UIBaseInput {
+    constructor(isInput, inputConfig = {}) {
+        if (isInput) {
+            const inputBuilder = DElementBuilder.initInput()
+                .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
+
+            const { min, max, inputStyle } = inputConfig;
+
+            if (min) {
+                inputBuilder.setAttribute(ATTRIBUTES.MIN, min);
+            }
+
+            if (max) {
+                inputBuilder.setAttribute(ATTRIBUTES.MAX, max);
+            }
+
+            if (inputStyle) {
+                inputBuilder.setAttribute(ATTRIBUTES.STYLE, inputStyle);
+            }
+
+            inputBuilder.setMapper(ACTIONS.GET, SIMPLE_TO_NUMBER_MAPPER);
+            inputBuilder.setMapper(ACTIONS.SET, SIMPLE_TO_NUMBER_MAPPER);
+
+            super(inputBuilder);
+        } else {
+            const inputBuilder = DElementBuilder.initDiv();
+
+            super(inputBuilder);
+
+            this.getValue = function () {
+                const value = this.private.input.getText();
+                return SIMPLE_TO_NUMBER_MAPPER(value);
+            };
+
+            this.setValue(value) = function (value) {
+                const mappedValue = SIMPLE_TO_NUMBER_MAPPER(value);
+                return this.private.input.setText(mappedValue);
+            };
+        }
     }
 }

@@ -179,6 +179,18 @@ export class DElementBuilder {
         return DElementBuilder.init(HTMLTags.Option, attributes);
     }
 
+    static initTable(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.Table, attributes);
+    }
+
+    static initTableRow(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.TableRow, attributes);
+    }
+
+    static initTableData(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.TableData, attributes);
+    }
+
     setTag(tag) {
         this.tag = tag;
         return this;

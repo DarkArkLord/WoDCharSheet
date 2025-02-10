@@ -113,7 +113,7 @@ const TEXT_FIELD = 'text';
 const TYPE_FIELD = 'type';
 const POINTS_FIELD = 'points';
 
-class CharUiDotsElement {
+class CharUiDotsElement { // +
     constructor(input) {
         const {
             data,

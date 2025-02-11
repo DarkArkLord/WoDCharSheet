@@ -119,91 +119,112 @@ class CharUiDotsElement {
             updateEvent,
         } = input;
 
-        const instance = this;
+        const dotsInputValidations = partValidations?.dotsInput;
+        const dotsCount = dotsInputValidations?.dotsCount ?? DEFAULT_DOTS_COUNT;
+        const isEditable = validations?.editable && partValidations?.editable;
 
-        this.updateEvent = updateEvent;
-
-        this.validations = validations;
-        this.partValidations = partValidations;
-        this.dotsInputValidations = partValidations?.dotsInput;
-        this.dotsCount = this.dotsInputValidations?.dotsCount ?? DEFAULT_DOTS_COUNT;
-        this.isEditable = validations?.editable && partValidations?.editable;
-
-        this.validationsInfo = dataForValidations;
-
-        this.data = data;
-        this.wrapper = new ValueByStateWrapper(
-            this.data,
-            this.validations?.state,
-            this.dotsInputValidations?.min,
-            this.validations?.prev,
-            this.validations?.next,
+        const wrapper = new ValueByStateWrapper(
+            data,
+            validations?.state,
+            dotsInputValidations?.min,
+            validations?.prev,
+            validations?.next,
         );
-        this.priceWrapper = new DotsValuePriceWrapper(this.wrapper, this.dotsInputValidations?.price);
+        const priceWrapper = new DotsValuePriceWrapper(wrapper, dotsInputValidations?.price);
 
         // Elements
-        this.dots = new UIPointsLine(this.dotsCount, this.isEditable);
-        this.subButton = this.dots.getSubButton();
-        this.addButton = this.dots.getAddButton();
+        const dots = new UIPointsLine(dotsCount, isEditable);
+        const subButton = dots.getSubButton();
+        const addButton = dots.getAddButton();
 
-        if (this.isEditable) {
-            this.subButton.setOnClickEvent(() => {
-                const value = instance.wrapper.getValue();
-                instance.wrapper.setValue(value - 1);
+        if (isEditable) {
+            subButton.setOnClickEvent(() => {
+                const value = wrapper.getValue();
+                wrapper.setValue(value - 1);
 
-                instance.priceWrapper.setDirty();
+                priceWrapper.setDirty();
 
-                instance.updateEvent.invoke();
+                updateEvent.invoke();
             });
 
-            this.addButton.setOnClickEvent(() => {
-                const value = instance.wrapper.getValue();
-                instance.wrapper.setValue(value + 1);
+            addButton.setOnClickEvent(() => {
+                const value = wrapper.getValue();
+                wrapper.setValue(value + 1);
 
-                instance.priceWrapper.setDirty();
+                priceWrapper.setDirty();
 
-                instance.updateEvent.invoke();
+                updateEvent.invoke();
             });
         }
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: dataForValidations,
+                main: validations,
+                part: partValidations,
+                dots: dotsInputValidations,
+                dotsCount,
+            },
+            data: {
+                data,
+                wrapper,
+                priceWrapper,
+            },
+            elements: {
+                dots,
+                subButton,
+                addButton,
+            },
+        };
     }
 
     getElement() {
-        return this.dots.getElement();
+        return this.private.elements.dots.getElement();
     }
 
     update() {
-        if (this.isEditable) {
-            const prevValue = this.wrapper.getPrevValue();
-            const value = this.wrapper.getValue(0);
-            const hasNextValue = this.wrapper.hasNextValue();
+        const wrapper = this.private.data.wrapper;
+        const elements = this.private.elements;
 
-            this.dots.setValue(prevValue, value);
+        if (this.private.isEditable) {
+            const prevValue = wrapper.getPrevValue();
+            const value = wrapper.getValue(0);
+            const hasNextValue = wrapper.hasNextValue();
 
-            const enableSubButton = this.dotsInputValidations?.min === undefined ? true : value > this.dotsInputValidations?.min;
-            this.subButton.setActive(enableSubButton && !hasNextValue);
-            const enableAddButton = (this.dotsInputValidations?.max === undefined ? true : value < this.dotsInputValidations?.max)
-                && prevValue + value < this.dotsCount;
-            this.addButton.setActive(enableAddButton && !hasNextValue);
+            elements.dots.setValue(prevValue, value);
+
+            const validations = this.private.validations;
+
+            const enableSubButton = validations.dots?.min === undefined ? true : value > validations.dots?.min;
+            elements.subButton.setActive(enableSubButton && !hasNextValue);
+
+            const enableAddButton = (validations.dots?.max === undefined ? true : value < validations.dots?.max)
+                && prevValue + value < validations.dotsCount;
+            elements.addButton.setActive(enableAddButton && !hasNextValue);
         } else {
-            const totalValue = this.wrapper.getTotalValue(0);
-            this.dots.setValue(0, totalValue);
+            const totalValue = wrapper.getTotalValue(0);
+            elements.dots.setValue(0, totalValue);
         }
     }
 
     validate() {
         const errors = [];
 
-        const totalValue = this.wrapper.getPrevValue() + this.wrapper.getValue(0);
-        if (totalValue < this.dotsInputValidations?.totalMin) {
+        const wrapper = this.private.data.wrapper;
+        const validations = this.private.validations.dots;
+        const totalValue = wrapper.getPrevValue() + wrapper.getValue(0);
+        if (totalValue < validations?.totalMin) {
             errors.push({
-                ...this.validationsInfo,
-                text: `Не может быть меньше ${this.dotsInputValidations?.totalMin} (сейчас ${totalValue})`,
+                ...this.private.validations.info,
+                text: `Не может быть меньше ${validations?.totalMin} (сейчас ${totalValue})`,
             });
         }
-        if (totalValue > this.dotsInputValidations?.totalMax) {
+        if (totalValue > validations?.totalMax) {
             errors.push({
-                ...this.validationsInfo,
-                text: `Не может быть больше ${this.dotsInputValidations?.totalMax} (сейчас ${totalValue})`,
+                ...this.private.validations.info,
+                text: `Не может быть больше ${validations?.totalMax} (сейчас ${totalValue})`,
             });
         }
 
@@ -211,6 +232,6 @@ class CharUiDotsElement {
     }
 
     getPrice() {
-        return this.priceWrapper.getPrice();
+        return this.private.data.priceWrapper.getPrice();
     }
 }

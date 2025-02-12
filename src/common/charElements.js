@@ -301,13 +301,16 @@ class CharUiTextWithDotsElement {
     }
 
     setHighlight(isVisible) {
-        // Fix
+        const elements = this.private.elements;
+        const text = elements.text.getElement();
+        const dots = elements.dots.getElement();
+
         if (isVisible) {
-            this.text.element.classList.add(CSS.BORDER_RED_1);
-            this.dots.element.classList.add(CSS.BORDER_RED_1);
+            text.addClass(CSS.BORDER_RED_1);
+            dots.addClass(CSS.BORDER_RED_1);
         } else {
-            this.text.element.classList.remove(CSS.BORDER_RED_1);
-            this.dots.element.classList.remove(CSS.BORDER_RED_1);
+            text.removeClass(CSS.BORDER_RED_1);
+            dots.removeClass(CSS.BORDER_RED_1);
         }
     }
 

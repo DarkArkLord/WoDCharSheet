@@ -17,7 +17,7 @@ export class UIIcon {
     }
 
     getElement() {
-        return this.private.element.getElement();
+        return this.private.element;
     }
 
     setImage(image) {
@@ -90,7 +90,7 @@ export class UIPointsLine {
     }
 
     getElement() {
-        return this.private.container.getElement();
+        return this.private.container;
     }
 
     getSubButton() {
@@ -123,7 +123,7 @@ export class UIText {
     }
 
     getElement() {
-        return this.private.element.getElement();
+        return this.private.element;
     }
 
     setText(text) {
@@ -145,7 +145,7 @@ export class UITextList {
     }
 
     getElement() {
-        return this.private.container.getElement();
+        return this.private.container;
     }
 
     addItem(text, itemAttrubutes = {}) {
@@ -175,7 +175,7 @@ export class UIDropdown {
     }
 
     getElement() {
-        return this.private.element.getElement();
+        return this.private.element;
     }
 
     clear() {
@@ -218,7 +218,7 @@ class UIBaseInput {
     }
 
     getElement() {
-        return this.private.container.getElement();
+        return this.private.container;
     }
 
     getValue() {

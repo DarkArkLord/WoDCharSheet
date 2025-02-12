@@ -288,6 +288,13 @@ class CharUiTextWithDotsElement {
         };
     }
 
+    getTextElement() {
+        return this.private.elements.text.getElement();
+    }
+    getDotsElement() {
+        return this.private.elements.dots.getElement();
+    }
+
     update() {
         this.private.elements.dots.update();
     }

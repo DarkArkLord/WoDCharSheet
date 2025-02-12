@@ -308,9 +308,8 @@ class CharUiTextWithDotsElement {
     }
 
     setHighlight(isVisible) {
-        const elements = this.private.elements;
-        const text = elements.text.getElement();
-        const dots = elements.dots.getElement();
+        const text = this.getTextElement();
+        const dots = this.getDotsElement();
 
         if (isVisible) {
             text.addClass(CSS.BORDER_RED_1);

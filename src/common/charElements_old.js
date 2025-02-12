@@ -285,7 +285,7 @@ class CharUiTextWithDotsElement { // +
     }
 }
 
-class CharUiLineDotsElement extends CharUiTextWithDotsElement {
+class CharUiLineDotsElement extends CharUiTextWithDotsElement { // +
     constructor(input) {
         super(input);
 

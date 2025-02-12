@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UIPointsLine, UIText } from './uiElements.js'
+import { UIPointsLine, UIText, UITextInput } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -278,8 +278,10 @@ class CharUiTextWithDotsElement {
                 part: partValidations,
             },
             data: {
-                data,
                 info: valueInfo,
+                data,
+                dotsWrapper: dots.private.data.wrapper,
+                priceWrapper: dots.private.data.priceWrapper,
             },
             elements: {
                 text,
@@ -322,5 +324,111 @@ class CharUiTextWithDotsElement {
 
     getPrice() {
         return this.private.elements.dots.getPrice();
+    }
+}
+
+class CharUiLineDotsElement extends CharUiTextWithDotsElement {
+    constructor(input) {
+        super(input);
+        const oldPrivate = this.private;
+
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = oldPrivate.isEditable;
+        const data = oldPrivate.data.data;
+
+        const specialtyWrapper = new ValueWrapper(data, SPECIALTY_FIELD, EMPTY_STRING);
+
+        // Elements
+        const specialty = new UITextInput(DEFAULT_INPUT_SIZE);
+
+        if (isEditable) {
+            specialty.setOnChangedEvent(() => {
+                const specialty = specialty.getValue();
+                specialtyWrapper.setValue(specialty);
+
+                // instance.update();
+                updateEvent.invoke();
+            });
+        }
+
+        const priceText = new UIText(EMPTY_STRING, {});
+        priceText.setVisible(isEditable);
+
+        this.private = {
+            updateEvent: oldPrivate.updateEvent,
+            isEditable: oldPrivate.isEditable,
+            validations: {
+                ...oldPrivate.validations,
+            },
+            data: {
+                ...oldPrivate.data,
+                specialtyWrapper,
+            },
+            elements: {
+                ...oldPrivate.elements,
+                specialty,
+                priceText,
+            }
+        }
+    }
+
+    getSpecialtyElement() {
+        return this.private.elements.specialty.getElement();
+    }
+
+    getPriceTextElement() {
+        return this.private.elements.priceText.getElement();
+    }
+
+    update() {
+        const data = this.private.data;
+        const elements = this.private.elements;
+        const validations = this.private.validations;
+
+        const prevValue = data.dotsWrapper.getPrevValue()
+        const value = data.dotsWrapper.getValue(0)
+        const totalValue = data.dotsWrapper.getTotalValue(0);
+
+        elements.priceText.setText(`(${this.getPrice()})`);
+
+        const configSpecialtyEditableFrom = validations.part?.specialtyEditableFrom;
+        if (!!configSpecialtyEditableFrom) {
+            const specialtyEditableFrom = data.info?.specialtyEditableFrom
+                ?? configSpecialtyEditableFrom;
+
+            elements.specialty.setVisible(true);
+            elements.specialty.setReadOnly(prevValue + value < specialtyEditableFrom);
+
+            if (totalValue >= specialtyEditableFrom) {
+                elements.specialty.setValue(data.specialtyWrapper.getValue(EMPTY_STRING));
+            } else {
+                data.specialtyWrapper.setValue(EMPTY_STRING);
+                elements.specialty.setValue(EMPTY_STRING);
+            }
+
+            elements.text.setText(this.info.translation);
+        } else {
+            elements.specialty.setVisible(false);
+
+            const crudeText = data.specialtyWrapper.getValue().trim();
+            const text = crudeText.length > 0
+                ? `${this.info.translation} (${crudeText})`
+                : this.info.translation
+            elements.text.setText(text);
+        }
+
+        super.update();
     }
 }

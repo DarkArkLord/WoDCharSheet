@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UIPointsLine } from './uiElements.js'
+import { UIPointsLine, UIText } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -233,5 +233,85 @@ class CharUiDotsElement {
 
     getPrice() {
         return this.private.data.priceWrapper.getPrice();
+    }
+}
+
+class CharUiTextWithDotsElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+
+        const validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        const data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
+
+        // Elements
+        const text = new UIText(valueInfo.translation, {});
+        const dots = new CharUiDotsElement({
+            data,
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: validationsInfo,
+            },
+            updateEvent,
+        });
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                data,
+                info: valueInfo,
+            },
+            elements: {
+                text,
+                dots,
+            }
+        };
+    }
+
+    update() {
+        this.private.elements.dots.update();
+    }
+
+    validate() {
+        const errors = this.private.elements.dots.validate() ?? [];
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        // Fix
+        if (isVisible) {
+            this.text.element.classList.add(CSS.BORDER_RED_1);
+            this.dots.element.classList.add(CSS.BORDER_RED_1);
+        } else {
+            this.text.element.classList.remove(CSS.BORDER_RED_1);
+            this.dots.element.classList.remove(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return this.private.elements.dots.getPrice();
     }
 }

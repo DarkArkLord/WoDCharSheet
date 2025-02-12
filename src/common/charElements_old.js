@@ -217,7 +217,7 @@ class CharUiDotsElement { // +
     }
 }
 
-class CharUiTextWithDotsElement {
+class CharUiTextWithDotsElement { // +
     constructor(input) {
         const {
             data: {

@@ -455,7 +455,7 @@ class CharUiLineDotsSectionElement {
         const sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
         const header = new UIText(sectionTitle, {});
 
-        const items = sectionInfo?.values?.map(valueInfo => new CharUiLineDotsElement({
+        const items = Array.from(sectionInfo?.values ?? []).map(valueInfo => new CharUiLineDotsElement({
             data: {
                 keeper,
                 valueInfo,
@@ -466,7 +466,7 @@ class CharUiLineDotsSectionElement {
                 dataForValidations: validationsInfo,
             },
             updateEvent,
-        })) ?? [];
+        }));
 
         const container = DElementBuilder.initTable()
             .appendChilds(
@@ -475,10 +475,10 @@ class CharUiLineDotsSectionElement {
                         DElementBuilder.initTableData()
                             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
                             .setAttribute(ATTRIBUTES.COLSPAN, 4)
-                            .appendChilds(this.header.getElement())
+                            .appendChilds(header.getElement())
                             .create()
                     ).create(),
-                this.items.map(item => DElementBuilder.initTableRow()
+                items.map(item => DElementBuilder.initTableRow()
                     .appendChilds(
                         DElementBuilder.initTableData()
                             .appendChilds(item.getTextElement())

@@ -360,7 +360,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement { // +
     }
 }
 
-class CharUiLineDotsSectionElement {
+class CharUiLineDotsSectionElement { // +
     constructor(input) {
         const {
             data: {

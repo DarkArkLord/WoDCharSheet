@@ -432,3 +432,118 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
         super.update();
     }
 }
+
+class CharUiLineDotsSectionElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                sectionInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+
+        const validationsInfo = { ...dataForValidations, section: sectionInfo.translation, };
+
+        const sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
+        const header = new UIText(sectionTitle, {});
+
+        const items = sectionInfo?.values?.map(valueInfo => new CharUiLineDotsElement({
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: validationsInfo,
+            },
+            updateEvent,
+        })) ?? [];
+
+        const container = DElementBuilder.initTable()
+            .appendChilds(
+                DElementBuilder.initTableRow()
+                    .appendChilds(
+                        DElementBuilder.initTableData()
+                            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+                            .setAttribute(ATTRIBUTES.COLSPAN, 4)
+                            .appendChilds(this.header.getElement())
+                            .create()
+                    ).create(),
+                this.items.map(item => DElementBuilder.initTableRow()
+                    .appendChilds(
+                        DElementBuilder.initTableData()
+                            .appendChilds(item.getTextElement())
+                            .create(),
+                        DElementBuilder.initTableData()
+                            .appendChilds(item.getSpecialtyElement())
+                            .create(),
+                        DElementBuilder.initTableData()
+                            .appendChilds(item.getDotsElement())
+                            .create(),
+                        DElementBuilder.initTableData()
+                            .appendChilds(item.getPriceTextElement())
+                            .create(),
+                    ).create()),
+            ).create();
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                info: sectionInfo,
+                sectionTitle,
+            },
+            elements: {
+                header,
+                items,
+                container,
+            }
+        };
+    }
+
+    update() {
+        const private = this.private;
+        for (const item of private.elements.items) {
+            item.update();
+        }
+
+        if (private.isEditable) {
+            private.elements.header.setText(`${private.data.sectionTitle} (${this.getPrice()})`);
+        }
+    }
+
+    validate() {
+        const errors = this.private.elements.items.flatMap(item => item.validate() ?? []) ?? [];
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        const container = this.private.elements.container;
+        if (isVisible) {
+            container.addClass(CSS.BORDER_RED_1);
+        } else {
+            container.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return this.private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
+}

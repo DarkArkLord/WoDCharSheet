@@ -18,6 +18,7 @@ export const ATTRIBUTES = Object.freeze({
     SIZE: 'size',
     STYLE: 'style',
     CLASS: 'class',
+    COLSPAN: 'colspan',
 });
 
 export const EVENTS = Object.freeze({

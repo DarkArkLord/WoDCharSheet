@@ -539,3 +539,137 @@ class CharUiLineDotsSectionElement {
         return this.private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
+
+export class CharUiLineDotsSectionsPartElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                partInfo,
+            },
+            validations: {
+                validations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const partValidations = validations?.[partInfo.id];
+        const isEditable = validations?.editable && partValidations?.editable;
+
+        const validationsInfo = { ...dataForValidations, part: partInfo.translation, };
+
+        const data = keeper[partInfo.id] = keeper[partInfo.id] ?? {};
+
+        const partTitle = partInfo.translation ?? EMPTY_STRING;
+        const header = new UIText(partTitle, {});
+
+        const sections = Array.from(partInfo.sections ?? []).map(section => new CharUiLineDotsSectionElement({
+            data: {
+                keeper: data,
+                sectionInfo: section,
+            },
+            validations: {
+                validations,
+                partValidations: partValidations,
+                dataForValidations: validationsInfo,
+            },
+            updateEvent,
+        })) ?? [];
+
+        const containerBuilder = DTableBuilder.init();
+
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .setAttribute(ATTRIBUTES.COLSPAN, partInfo.sections.length)
+            .appendChilds(header.getElement());
+
+        const sectionsRow = containerBuilder.addRow();
+        for (const section of sections) {
+            sectionsRow.addData().appendChilds(section.getElement());
+        }
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                info: partInfo,
+                data,
+                partTitle,
+            },
+            elements: {
+                header,
+                sections,
+                container: containerBuilder.create(),
+            }
+        };
+    }
+
+    getElement() {
+        return this.private.elements.container;
+    }
+
+    update() {
+        const private = this.private;
+        for (const section of private.elements.sections) {
+            section.update();
+        }
+
+        if (private.isEditable) {
+            private.elements.header.setText(`${this.private.data.partTitle} (${this.getPrice()})`);
+        }
+    }
+
+    validate() {
+        const sections = this.private.elements.sections;
+        const validations = this.private.validations
+        const errors = sections.flatMap(item => item.validate() ?? []) ?? [];
+
+        if (validations.part?.sectionPoints) {
+            const validPoints = validations.part.sectionPoints.slice().sort(DEFAULT_COMPARATOR);
+            const currentPoints = sections.map(section => section.getPrice()).sort(DEFAULT_COMPARATOR);
+
+            if (JSON.stringify(validPoints) !== JSON.stringify(currentPoints)) {
+                const validPointsStr = validPoints.join('/');
+                const currentPointsStr = currentPoints.join('/');
+                errors.push({
+                    ...validations.info,
+                    text: `Между секциями должно быть распределено ${validPointsStr} точек (сейчас ${currentPointsStr})`,
+                });
+            }
+        }
+
+        if (validations.part?.freePoints !== undefined) {
+            const price = this.getPrice();
+
+            if (price !== validations.part.freePoints) {
+                errors.push({
+                    ...validations.info,
+                    text: `Должно быть распределено ${validations.part.freePoints} точек (сейчас ${price})`,
+                });
+            }
+        }
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        const container = this.private.elements.container;
+        if (isVisible) {
+            container.addClass(CSS.BORDER_RED_1);
+        } else {
+            container.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return this.private.elements.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
+}

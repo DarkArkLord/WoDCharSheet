@@ -451,7 +451,7 @@ class CharUiLineDotsSectionElement { // +
     }
 }
 
-export class CharUiLineDotsSectionsPartElement {
+export class CharUiLineDotsSectionsPartElement { // +
     constructor(input) {
         const {
             data: {

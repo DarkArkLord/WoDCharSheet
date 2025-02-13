@@ -213,18 +213,18 @@ class CharUiDotsElement {
         const errors = [];
 
         const wrapper = this.private.data.wrapper;
-        const validations = this.private.validations.dots;
+        const validations = this.private.validations;
         const totalValue = wrapper.getPrevValue() + wrapper.getValue(0);
-        if (totalValue < validations?.totalMin) {
+        if (totalValue < validations.dots?.totalMin) {
             errors.push({
-                ...this.private.validations.info,
-                text: `Не может быть меньше ${validations?.totalMin} (сейчас ${totalValue})`,
+                ...validations.info,
+                text: `Не может быть меньше ${validations.dots?.totalMin} (сейчас ${totalValue})`,
             });
         }
-        if (totalValue > validations?.totalMax) {
+        if (totalValue > validations.dots?.totalMax) {
             errors.push({
-                ...this.private.validations.info,
-                text: `Не может быть больше ${validations?.totalMax} (сейчас ${totalValue})`,
+                ...validations.info,
+                text: `Не может быть больше ${validations.dots?.totalMax} (сейчас ${totalValue})`,
             });
         }
 

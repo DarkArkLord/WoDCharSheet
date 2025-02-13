@@ -515,6 +515,10 @@ class CharUiLineDotsSectionElement {
         };
     }
 
+    getElement() {
+        return this.private.elements.container.getElement();
+    }
+
     update() {
         const private = this.private;
         for (const item of private.elements.items) {

@@ -504,7 +504,7 @@ class CharUiLineDotsSectionElement {
     }
 
     getElement() {
-        return this.private.elements.container.getElement();
+        return this.private.elements.container;
     }
 
     update() {

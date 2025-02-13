@@ -227,3 +227,59 @@ export class DElementBuilder {
         return result;
     }
 }
+
+class DTableRowBuilder {
+    constructor(attributes = {}) {
+        this.row = DElementBuilder.initTableRow(attributes);
+        this.childs = [];
+    }
+
+    addData(attributes = {}) {
+        const data = DElementBuilder.initTableData(attributes);
+        this.childs.push(data);
+        return data;
+    }
+
+    getBuilder() {
+        return this.row;
+    }
+
+    create() {
+        for (const child of this.childs) {
+            this.row.appendChilds(child.create());
+        }
+
+        return this.row.create();
+    }
+}
+
+export class DTableBuilder {
+    constructor(attributes = {}) {
+        this.table = DElementBuilder.initTable(attributes);
+        this.childs = [];
+    }
+
+    static init(attributes = {}) {
+        return new DTableBuilder(attributes);
+    }
+
+    addRow(attributes = {}) {
+        const row = new DTableRowBuilder(attributes);
+        this.childs.push(row);
+        return row;
+    }
+
+    getBuilder() {
+        return this.row;
+    }
+
+    create() {
+        const table = this.table.create();
+
+        for (const child of this.childs) {
+            table.appendChilds(child.create());
+        }
+
+        return table;
+    }
+}

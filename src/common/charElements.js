@@ -1,7 +1,7 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
 import { UIPointsLine, UIText, UITextInput } from './uiElements.js'
-import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS } from './domWrapper.js'
+import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
     TEXT_ALIGN_CENTER: 'text-align-center',
@@ -388,7 +388,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
         return this.private.elements.specialty.getElement();
     }
 
-    getPriceTextElement() {
+    getPriceElement() {
         return this.private.elements.priceText.getElement();
     }
 
@@ -468,32 +468,20 @@ class CharUiLineDotsSectionElement {
             updateEvent,
         }));
 
-        const container = DElementBuilder.initTable()
-            .appendChilds(
-                DElementBuilder.initTableRow()
-                    .appendChilds(
-                        DElementBuilder.initTableData()
-                            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-                            .setAttribute(ATTRIBUTES.COLSPAN, 4)
-                            .appendChilds(header.getElement())
-                            .create()
-                    ).create(),
-                items.map(item => DElementBuilder.initTableRow()
-                    .appendChilds(
-                        DElementBuilder.initTableData()
-                            .appendChilds(item.getTextElement())
-                            .create(),
-                        DElementBuilder.initTableData()
-                            .appendChilds(item.getSpecialtyElement())
-                            .create(),
-                        DElementBuilder.initTableData()
-                            .appendChilds(item.getDotsElement())
-                            .create(),
-                        DElementBuilder.initTableData()
-                            .appendChilds(item.getPriceTextElement())
-                            .create(),
-                    ).create()),
-            ).create();
+        const containerBuilder = DTableBuilder.init();
+
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .setAttribute(ATTRIBUTES.COLSPAN, 4)
+            .appendChilds(header.getElement());
+
+        for (const item of items) {
+            const row = containerBuilder.addRow();
+            row.addData().appendChilds(item.getTextElement());
+            row.addData().appendChilds(item.getSpecialtyElement());
+            row.addData().appendChilds(item.getDotsElement());
+            row.addData().appendChilds(item.getPriceElement());
+        }
 
         this.private = {
             updateEvent,
@@ -510,7 +498,7 @@ class CharUiLineDotsSectionElement {
             elements: {
                 header,
                 items,
-                container,
+                container: containerBuilder.create(),
             }
         };
     }

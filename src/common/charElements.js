@@ -418,14 +418,14 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
                 elements.specialty.setValue(EMPTY_STRING);
             }
 
-            elements.text.setText(this.info.translation);
+            elements.text.setText(data.info.translation);
         } else {
             elements.specialty.setVisible(false);
 
             const crudeText = data.specialtyWrapper.getValue().trim();
             const text = crudeText.length > 0
-                ? `${this.info.translation} (${crudeText})`
-                : this.info.translation
+                ? `${data.info.translation} (${crudeText})`
+                : data.info.translation
             elements.text.setText(text);
         }
 

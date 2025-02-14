@@ -381,7 +381,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
                 specialty,
                 priceText,
             }
-        }
+        };
     }
 
     getSpecialtyElement() {
@@ -671,5 +671,73 @@ export class CharUiLineDotsSectionsPartElement {
 
     getPrice() {
         return this.private.elements.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
+}
+
+export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
+    constructor(input) {
+        super(input);
+        const oldPrivate = this.private;
+
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const containerBuilder = DTableBuilder.init();
+
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(this.getTextElement());
+
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(this.getDotsElement());
+
+        this.private = {
+            updateEvent: oldPrivate.updateEvent,
+            isEditable: oldPrivate.isEditable,
+            validations: {
+                ...oldPrivate.validations,
+            },
+            data: {
+                ...oldPrivate.data,
+                specialtyWrapper,
+            },
+            elements: {
+                ...oldPrivate.elements,
+                container: containerBuilder.create(),
+            }
+        };
+    }
+
+    getElement() {
+        return this.private.elements.container;
+    }
+
+    update() {
+        const private = this.private;
+        if (private.isEditable) {
+            private.elements.text.setText(`${private.data.info.translation} (${this.getPrice()})`)
+        }
+
+        super.update();
+    }
+
+    setHighlight(isVisible) {
+        const container = this.private.elements.container;
+        if (isVisible) {
+            container.addClass(CSS.BORDER_RED_1);
+        } else {
+            container.removeClass(CSS.BORDER_RED_1);
+        }
     }
 }

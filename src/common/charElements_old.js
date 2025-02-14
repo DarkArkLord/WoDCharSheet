@@ -566,7 +566,7 @@ export class CharUiLineDotsSectionsPartElement { // +
     }
 }
 
-export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
+export class CharUiBlockDotsElement extends CharUiTextWithDotsElement { // +
     constructor(input) {
         super(input);
 

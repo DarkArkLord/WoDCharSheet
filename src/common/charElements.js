@@ -742,78 +742,22 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
     }
 }
 
-class CharUiTextOrInputElement {
-    constructor(input) {
+class BaseTextOrInputElement {
+    constructor(input, ElementConstructor = UITextOrTextInput) {
         const {
             data: {
                 data,
                 fieldName,
-                defaultValue = EMPTY_STRING,
+                defaultValue,
             } = {},
-            inputConfig: {
-                size = DEFAULT_INPUT_SIZE,
-            } = {},
+            inputConfig = {},
             isEditable = false,
             updateEvent,
         } = input;
 
         const wrapper = new ValueWrapper(data, fieldName, defaultValue);
 
-        const element = new UITextOrTextInput(isEditable, { size });
-        if (isEditable) {
-            element.setOnInputEvent(() => {
-                const text = element.getValue();
-                wrapper.setValue(text);
-                updateEvent.invoke();
-            });
-        }
-
-        this.private = {
-            updateEvent,
-            isEditable,
-            wrapper,
-            element,
-        };
-    }
-
-    getElement() {
-        return this.private.element.getElement();
-    }
-
-    getValue() {
-        return this.private.wrapper.getValue();
-    }
-
-    setValue(text) {
-        this.private.wrapper.setValue(text);
-        this.private.element.setValue(text);
-    }
-
-    update() {
-        this.setValue(this.getValue());
-    }
-}
-
-class CharUiTextOrNumberInputElement {
-    constructor(input) {
-        const {
-            data: {
-                data,
-                fieldName,
-                defaultValue = 0,
-            } = {},
-            inputConfig: {
-                min,
-                max,
-                inputStyle,
-            } = {},
-            isEditable = false,
-            updateEvent,
-        } = input;
-
-        const wrapper = new ValueWrapper(data, fieldName, defaultValue);
-
-        const element = new UITextOrNumberInput(isEditable, { min, max, inputStyle });
+        const element = new ElementConstructor(isEditable, inputConfig);
         if (isEditable) {
             element.setOnInputEvent(() => {
                 const value = element.getValue();
@@ -845,5 +789,55 @@ class CharUiTextOrNumberInputElement {
 
     update() {
         this.setValue(this.getValue());
+    }
+}
+
+class CharUiTextOrInputElement extends BaseTextOrInputElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue = EMPTY_STRING,
+            } = {},
+            inputConfig: {
+                size = DEFAULT_INPUT_SIZE,
+            } = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        super({
+            data: { data, fieldName, defaultValue, },
+            inputConfig: { size, },
+            isEditable,
+            updateEvent,
+        }, UITextOrTextInput);
+    }
+}
+
+class CharUiTextOrNumberInputElement extends BaseTextOrInputElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue = 0,
+            } = {},
+            inputConfig: {
+                min,
+                max,
+                inputStyle,
+            } = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        super({
+            data: { data, fieldName, defaultValue, },
+            inputConfig: { min, max, inputStyle },
+            isEditable,
+            updateEvent,
+        }, UITextOrNumberInput);
     }
 }

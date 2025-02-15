@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UIPointsLine, UIText, UITextInput } from './uiElements.js'
+import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -739,5 +739,111 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
         } else {
             container.removeClass(CSS.BORDER_RED_1);
         }
+    }
+}
+
+class CharUiTextOrInputElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue = EMPTY_STRING,
+            } = {},
+            inputConfig: {
+                size = DEFAULT_INPUT_SIZE,
+            } = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        const wrapper = new ValueWrapper(data, fieldName, defaultValue);
+
+        const element = new UITextOrTextInput(isEditable, { size });
+        if (isEditable) {
+            element.setOnInputEvent(() => {
+                const text = element.getValue();
+                wrapper.setValue(text);
+                updateEvent.invoke();
+            });
+        }
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            wrapper,
+            element,
+        };
+    }
+
+    getElement() {
+        return this.private.element.getElement();
+    }
+
+    getValue() {
+        return this.private.wrapper.getValue();
+    }
+
+    setValue(text) {
+        this.private.wrapper.setValue(text);
+        this.private.element.setValue(text);
+    }
+
+    update() {
+        this.setValue(this.getValue());
+    }
+}
+
+class CharUiTextOrNumberInputElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue = 0,
+            } = {},
+            inputConfig: {
+                min,
+                max,
+                inputStyle,
+            } = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        const wrapper = new ValueWrapper(data, fieldName, defaultValue);
+
+        const element = new UITextOrNumberInput(isEditable, { min, max, inputStyle });
+        if (isEditable) {
+            element.setOnInputEvent(() => {
+                const value = element.getValue();
+                wrapper.setValue(value);
+                updateEvent.invoke();
+            });
+        }
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            wrapper,
+            element,
+        };
+    }
+
+    getElement() {
+        return this.private.element.getElement();
+    }
+
+    getValue() {
+        return this.private.wrapper.getValue();
+    }
+
+    setValue(text) {
+        this.private.wrapper.setValue(text);
+        this.private.element.setValue(text);
+    }
+
+    update() {
+        this.setValue(this.getValue());
     }
 }

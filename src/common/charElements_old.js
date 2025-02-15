@@ -614,7 +614,7 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement { // +
     }
 }
 
-class CharUiTextOrInputElement {
+class CharUiTextOrInputElement { // +
     constructor(input) {
         const {
             data: {

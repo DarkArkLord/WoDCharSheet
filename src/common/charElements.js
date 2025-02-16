@@ -1,7 +1,7 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
 import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput, UIDropdown, UIIconButton } from './uiElements.js'
-import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder } from './domWrapper.js'
+import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
     TEXT_ALIGN_CENTER: 'text-align-center',
@@ -917,6 +917,10 @@ class CharUiLineInputDotsWithVariantsItemElement {
         };
     }
 
+    getRemoveButton() {
+        return this.private.elements.removeButton;
+    }
+
     getRemoveButtonElement() {
         return this.private.elements.removeButton.getElement();
     }
@@ -995,5 +999,199 @@ class CharUiLineInputDotsWithVariantsItemElement {
 
     getPrice() {
         return this.private.elements.dots.getPrice();
+    }
+}
+
+export class CharUiLineInputDotsWithVariantsListElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        this.info = valueInfo;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+        const validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+        const data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? [];
+
+        // Elements
+        const COLS_IN_ROW = 5;
+
+        const header = new UIText(valueInfo.translation, {});
+        const headerRow = DElementBuilder.initTableRow()
+            .appendChilds(
+                DElementBuilder.initTableData()
+                    .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+                    .setAttribute(ATTRIBUTES.COLSPAN, COLS_IN_ROW)
+                    .appendChilds(header.getElement())
+                    .create()
+            ).create();
+
+        const dropDownOptions = Array.from(valueInfo.variants ?? []).map(variant => ({
+            text: variant.translation,
+            attrubutes: {},
+        }));
+
+        const items = [];
+
+        const addButton = new UIIconButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        addButton.setVisible(isEditable);
+        if (isEditable) {
+            addButton.setOnClickEvent(() => {
+                data.push({});
+                updateEvent.invoke();
+            });
+        }
+
+        const addButtonRow = DElementBuilder.initTableRow()
+            .appendChilds(
+                DElementBuilder.initTableData()
+                    .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+                    .setAttribute(ATTRIBUTES.COLSPAN, COLS_IN_ROW)
+                    .appendChilds(addButton.getElement())
+                    .create()
+            ).create();
+
+        const container = DElementBuilder.initTable().create();
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                data,
+                valueInfo,
+                dropDownOptions,
+            },
+            elements: {
+                header,
+                headerRow,
+                items,
+                addButton,
+                addButtonRow,
+                container,
+            },
+        };
+
+        this.refreshItems();
+    }
+
+    createItemWrapper(itemData) {
+        const private = this.private;
+
+        const item = new CharUiLineInputDotsWithVariantsItemElement({
+            data: {
+                data: itemData,
+                defaultOptions: private.data.dropDownOptions,
+            },
+            validations: {
+                validations: private.validations.main,
+                partValidations: private.validations.part,
+                dataForValidations: private.validations.info,
+            },
+            updateEvent: private.updateEvent,
+        });
+
+        const listData = private.data.data;
+        item.getRemoveButton().setOnClickEvent(() => {
+            const dataIndex = listData.findIndex(value => value === itemData);
+            if (dataIndex >= 0) {
+                listData.splice(dataIndex, 1);
+                private.updateEvent.invoke();
+            }
+        });
+
+        return item;
+    }
+
+    refreshItems() {
+        const private = this.private;
+        const items = private.elements.items = [];
+
+        const container = private.elements.container;
+        container.setText(EMPTY_STRING);
+
+        container.appendChilds(private.elements.headerRow);
+
+        for (const itemData of this.data) {
+            const item = this.createItemWrapper(itemData);
+
+            items.push(item);
+
+            const rowBuilder = DTableRowBuilder.init();
+
+            rowBuilder.addData().appendChilds(item.getRemoveButtonElement());
+            rowBuilder.addData().appendChilds(item.getTextElement());
+            rowBuilder.addData().appendChilds(item.getDotsElement());
+            rowBuilder.addData().appendChilds(item.getVariantsElement());
+            rowBuilder.addData().appendChilds(item.getPriceElement());
+
+            container.appendChilds(rowBuilder.create());
+        }
+
+        if (private.isEditable) {
+            container.appendChilds(private.elements.addButtonRow);
+        }
+    }
+
+    update() {
+        const private = this.private;
+        if (private.elements.items.length !== private.data.data.length) {
+            this.refreshItems();
+        }
+
+        for (const item of private.elements.items) {
+            item.update();
+        }
+
+        if (private.isEditable) {
+            private.elements.header.setText(`${private.data.valueInfo.translation} (${this.getPrice()})`);
+        }
+    }
+
+    validate() {
+        const private = this.private;
+        const errors = private.elements.items.flatMap(item => item.validate() ?? []) ?? [];
+
+        if (private.validations.part?.freePoints !== undefined) {
+            const price = this.getPrice();
+
+            if (price !== private.validations.part.freePoints) {
+                errors.push({
+                    ...this.validationsInfo,
+                    text: `Должно быть распределено ${private.validations.part.freePoints} точек (сейчас ${price})`,
+                });
+            }
+        }
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        const container = this.private.elements.container;
+        if (isVisible) {
+            container.addClass(CSS.BORDER_RED_1);
+        } else {
+            container.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return this.private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }

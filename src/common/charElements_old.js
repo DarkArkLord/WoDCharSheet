@@ -794,7 +794,7 @@ class CharUiLineInputDotsWithVariantsItemElement { // +
     }
 }
 
-export class CharUiLineInputDotsWithVariantsListElement {
+export class CharUiLineInputDotsWithVariantsListElement { // +
     constructor(input) {
         const {
             data: {

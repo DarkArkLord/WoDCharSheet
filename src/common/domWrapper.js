@@ -228,10 +228,14 @@ export class DElementBuilder {
     }
 }
 
-class DTableRowBuilder {
+export class DTableRowBuilder {
     constructor(attributes = {}) {
         this.row = DElementBuilder.initTableRow(attributes);
         this.childs = [];
+    }
+
+    static init(attributes = {}) {
+        return new DTableRowBuilder(attributes);
     }
 
     addData(attributes = {}) {
@@ -264,7 +268,7 @@ export class DTableBuilder {
     }
 
     addRow(attributes = {}) {
-        const row = new DTableRowBuilder(attributes);
+        const row = DTableRowBuilder.init(attributes);
         this.childs.push(row);
         return row;
     }

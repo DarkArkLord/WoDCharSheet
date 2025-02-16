@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput } from './uiElements.js'
+import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput, UIDropdown, UIIconButton } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -839,5 +839,161 @@ class CharUiTextOrNumberInputElement extends BaseTextOrInputElement {
             isEditable,
             updateEvent,
         }, UITextOrNumberInput);
+    }
+}
+
+class CharUiLineInputDotsWithVariantsItemElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                defaultOptions,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+        const validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
+
+        // Elements
+        const removeButton = new UIIconButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        removeButton.setVisible(isEditable);
+
+        const text = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: TEXT_FIELD,
+            },
+            isEditable,
+            updateEvent,
+        });
+
+        const variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
+        variants.setVisible(isEditable);
+        if (isEditable) {
+            variants.setOnChangeEvent(eventInput => {
+                const value = eventInput.target.value;
+                eventInput.target.selectedIndex = 0;
+
+                text.setValue(value);
+                updateEvent.invoke();
+            });
+        }
+
+        const dots = new CharUiDotsElement({
+            data,
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: validationsInfo,
+            },
+            updateEvent,
+        });
+
+        const price = new UIText(EMPTY_STRING, {});
+        price.setVisible(isEditable);
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data,
+            elements: {
+                removeButton,
+                text,
+                variants,
+                dots,
+                price,
+            },
+        };
+    }
+
+    getRemoveButtonElement() {
+        return this.private.elements.removeButton.getElement();
+    }
+
+    getTextElement() {
+        return this.private.elements.text.getElement();
+    }
+
+    getVariantsElement() {
+        return this.private.elements.variants.getElement();
+    }
+
+    getDotsElement() {
+        return this.private.elements.dots.getElement();
+    }
+
+    getPriceElement() {
+        return this.private.elements.price.getElement();
+    }
+
+    update() {
+        const elements = this.private.elements;
+
+        elements.text.update();
+        elements.dots.update();
+
+        elements.price.setText(`(${this.getPrice()})`);
+
+        const dotsWrapper = elements.dots.private.data.wrapper;
+        const hasPrevValue = dotsWrapper.hasPrevValue();
+        const hasNextValue = dotsWrapper.hasNextValue();
+        elements.removeButton.setActive(!hasPrevValue && !hasNextValue);
+
+        const validationsInfo = this.private.validations.info;
+        validationsInfo.commonValue = elements.text.getValue();
+    }
+
+    validate() {
+        const elements = this.private.elements;
+        const errors = elements.dots.validate() ?? [];
+
+        this.setDotsHighlight(errors.length > 0);
+
+        const text = elements.text.getValue().trim();
+        if (this.private.isEditable && text.length < 1) {
+            errors.push({
+                ...this.private.validations.info,
+                text: `Необходимо заполнит текст`,
+            });
+
+            this.setTextHighlight(true);
+        } else {
+            this.setTextHighlight(false);
+        }
+
+        return errors;
+    }
+
+    setTextHighlight(isVisible) {
+        const element = this.private.elements.text;
+        if (isVisible) {
+            element.getElement().addClass(CSS.BORDER_RED_1);
+        } else {
+            element.getElement().removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    setDotsHighlight(isVisible) {
+        const element = this.private.elements.dots;
+        if (isVisible) {
+            element.getElement().addClass(CSS.BORDER_RED_1);
+        } else {
+            element.getElement().removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return this.private.elements.dots.getPrice();
     }
 }

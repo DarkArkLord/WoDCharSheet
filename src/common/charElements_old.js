@@ -676,7 +676,7 @@ class CharUiTextOrInputElement { // +
     }
 }
 
-class CharUiLineInputDotsWithVariantsItemElement {
+class CharUiLineInputDotsWithVariantsItemElement { // +
     constructor(input) {
         const {
             data: {

@@ -1710,3 +1710,81 @@ export class CharUiLineInputPointsWithVariantsListElement {
         return private.validations.points?.negativePrice ? -price : price;
     }
 }
+
+export class CharUiBlockPointsElement {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const pointsInputValidations = partValidations?.pointsInput;
+        const isEditable = validations?.editable && partValidations?.editable;
+
+        const validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        // Elements
+        const text = new UIText(valueInfo.translation, {});
+        const points = new CharUiTextOrNumberInputElement({
+            data: {
+                data: keeper,
+                fieldName: valueInfo.id,
+                defaultValue: pointsInputValidations?.min ?? 0,
+            },
+            inputConfig: {
+                min: pointsInputValidations?.min ?? 0,
+                inputStyle: 'width: 100px',
+            },
+            isEditable,
+            updateEvent,
+        });
+
+        const containerBuilder = DTableBuilder.init();
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(text.getElement());
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(points.getElement());
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+                points: pointsInputValidations,
+            },
+            data: {
+                data,
+                info: valueInfo,
+            },
+            elements: {
+                text,
+                points,
+                container: containerBuilder.create(),
+            },
+        };
+    }
+
+    update() {
+        this.private.elements.points.update();
+    }
+
+    validate() {
+        return [];
+    }
+
+    getPrice() {
+        return 0;
+    }
+}

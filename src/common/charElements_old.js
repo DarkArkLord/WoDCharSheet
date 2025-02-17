@@ -1393,7 +1393,7 @@ export class CharUiLineInputPointsWithVariantsListElement { // +
     }
 }
 
-export class CharUiBlockPointsElement {
+export class CharUiBlockPointsElement { // +
     constructor(input) {
         const {
             data: {

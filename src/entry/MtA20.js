@@ -317,10 +317,8 @@ class CharacterMtAState {
 }
 
 class CharacterMtA {
-    constructor(keeper) {
+    constructor(keeper, updateEvent) {
         const instance = this;
-
-        const updateEvent = new DarkEvent();
         updateEvent.addHandler(() => instance.update());
 
         const states = {};
@@ -333,6 +331,7 @@ class CharacterMtA {
         }
 
         this.private = {
+            data: keeper,
             updateEvent,
             states,
         };
@@ -370,7 +369,10 @@ class CharacterMtA {
 }
 
 class ConfigTab {
-    constructor(data) {
+    constructor(data, updateEvent) {
+        const instance = this;
+        updateEvent.addHandler(() => instance.update());
+
         const charTextElement = DElementBuilder.initTextArea()
             .setAttribute(ATTRIBUTES.COLS, 45)
             .setAttribute(ATTRIBUTES.ROWS, 45)
@@ -390,14 +392,13 @@ class ConfigTab {
 
         this.private = {
             data,
+            updateEvent,
             elements: {
                 charTextElement,
                 tabButton,
                 tabContent,
             },
         };
-
-        this.update();
     }
 
     getTabButton() {
@@ -414,19 +415,20 @@ class ConfigTab {
     }
 }
 
+const updateEvent = new DarkEvent();
+
 const characterData = { version: CHAR_SHEET_VERSION };
-const characterUi = new CharacterMtA(characterData);
+const characterUi = new CharacterMtA(characterData, updateEvent);
 
 const tabs = characterUi.getTabsInfo();
 
-const config = new ConfigTab(characterData);
-characterUi.updateEvent.addHandler(() => config.update());
+const config = new ConfigTab(characterData, updateEvent);
 tabs.push({
     button: config.getTabButton(),
     content: config.getTabContent(),
 });
 
-characterUi.updateEvent.invoke();
+updateEvent.invoke();
 
 document.body.append(
     render(

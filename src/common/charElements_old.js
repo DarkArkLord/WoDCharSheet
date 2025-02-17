@@ -1214,7 +1214,7 @@ class CharUiLineInputPointsWithVariantsItemElement { // +
     }
 }
 
-export class CharUiLineInputPointsWithVariantsListElement {
+export class CharUiLineInputPointsWithVariantsListElement { // +
     constructor(input) {
         const {
             data: {

@@ -966,7 +966,7 @@ export class CharUiLineInputDotsWithVariantsListElement { // +
     }
 }
 
-class CharUiPointsByStateElement {
+class CharUiPointsByStateElement { // +
     constructor(input) {
         const {
             data: {

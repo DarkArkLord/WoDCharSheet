@@ -1195,3 +1195,103 @@ export class CharUiLineInputDotsWithVariantsListElement {
         return this.private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
+
+class CharUiPointsByStateElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                inputStyle,
+            },
+            validations: {
+                validations,
+                partValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const pointsInputValidations = partValidations?.pointsInput;
+        const isEditable = validations?.editable && partValidations?.editable;
+
+        const wrapper = new ValueByStateWrapper(
+            data,
+            validations?.state,
+            pointsInputValidations?.min ?? 0,
+            validations?.prev,
+            validations?.next,
+        );
+
+        const prevValueText = new UIText(EMPTY_STRING, {});
+        const points = new CharUiTextOrNumberInputElement({
+            data: {
+                data,
+                fieldName: validations?.state,
+                defaultValue: pointsInputValidations?.min ?? 0,
+            },
+            inputConfig: {
+                min: pointsInputValidations?.min ?? 0,
+                inputStyle,
+            },
+            isEditable,
+            updateEvent,
+        });
+        const nextValueText = new UIText(EMPTY_STRING, {});
+
+        const containerBuilder = DTableBuilder.init();
+        const rowBuilder = containerBuilder.addRow();
+        rowBuilder.addData().appendChilds(prevValueText.getElement());
+        rowBuilder.addData().appendChilds(points.getElement());
+        rowBuilder.addData().appendChilds(nextValueText.getElement());
+
+        const totalText = new UIText(EMPTY_STRING, {});
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                data,
+                wrapper,
+            },
+            elements: {
+                prevValueText,
+                points,
+                nextValueText,
+                container: containerBuilder.create(),
+                totalText,
+            },
+        };
+    }
+
+    getElement() {
+        const elements = this.private.elements;
+
+        if (this.private.isEditable) {
+            return elements.container;
+        }
+
+        return elements.totalText.getElement();
+    }
+
+    update() {
+        const elements = this.private.elements;
+        const wrapper = this.private.data.wrapper;
+
+        elements.prevValueText.setText(`${wrapper.getPrevValue()} /`);
+        elements.points.update();
+        elements.nextValueText.setText(`/ ${wrapper.getNextValue()}`);
+        elements.totalText.setText(wrapper.getTotalValue(0));
+    }
+
+    getValue() {
+        return this.private.elements.points.getValue();
+    }
+
+    setValue(value) {
+        this.private.elements.points.setValue(value);
+    }
+}

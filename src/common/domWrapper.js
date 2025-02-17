@@ -19,6 +19,8 @@ export const ATTRIBUTES = Object.freeze({
     STYLE: 'style',
     CLASS: 'class',
     COLSPAN: 'colspan',
+    COLS: 'cols',
+    ROWS: 'rows',
 });
 
 export const EVENTS = Object.freeze({
@@ -158,6 +160,10 @@ export class DElementBuilder {
 
     static initInput(attributes = {}) {
         return DElementBuilder.init(HTMLTags.Input, attributes);
+    }
+
+    static initTextArea(attributes = {}) {
+        return DElementBuilder.init(HTMLTags.TextArea, attributes);
     }
 
     static initImg(attributes = {}) {

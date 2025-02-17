@@ -371,26 +371,41 @@ class CharacterMtA {
 
 class ConfigTab {
     constructor(data) {
-        this.data = data;
+        const charTextElement = DElementBuilder.initTextArea()
+            .setAttribute(ATTRIBUTES.COLS, 45)
+            .setAttribute(ATTRIBUTES.ROWS, 45)
+            .setAttribute(ATTRIBUTES.READ_ONLY, true)
+            .setAttribute(ATTRIBUTES.DISABLED, true)
+            .create();
 
-        this.charTextElement = render(
-            HTMLTags.TextArea,
-            { cols: 45, rows: 45, readonly: true, disabled: true, },
-        );
+        const tabContent = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_CONTENT)
+            .appendChilds(charTextElement)
+            .create();
 
-        this.tabButton = render(
-            HTMLTags.Div,
-            { class: CSS.TAB_BUTTON },
-            CHAR_SETTINGS_TRANSLATION,
-        );
+        const tabButton = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTON)
+            .appendChilds(CHAR_SETTINGS_TRANSLATION)
+            .create();
 
-        this.tabContent = render(
-            HTMLTags.Div,
-            { class: CSS.TAB_CONTENT },
-            this.charTextElement,
-        );
+        this.private = {
+            data,
+            elements: {
+                charTextElement,
+                tabButton,
+                tabContent,
+            },
+        };
 
         this.update();
+    }
+
+    getTabButton() {
+        return this.private.elements.tabButton;
+    }
+
+    getTabContent() {
+        return this.private.elements.tabContent;
     }
 
     update() {
@@ -406,8 +421,8 @@ const tabs = characterUi.getTabsInfo();
 const config = new ConfigTab(characterData);
 characterUi.updateEvent.addHandler(() => config.update());
 tabs.push({
-    button: config.tabButton,
-    content: config.tabContent,
+    button: config.getTabButton(),
+    content: config.getTabContent(),
 });
 
 characterUi.updateEvent.invoke();

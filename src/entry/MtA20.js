@@ -320,21 +320,34 @@ class CharacterMtA {
     constructor(keeper) {
         const instance = this;
 
-        const updateEvent = this.updateEvent = new DarkEvent();
+        const updateEvent = new DarkEvent();
         updateEvent.addHandler(() => instance.update());
 
-        this.states = {};
+        const states = {};
         for (const state of editStatesForTabsOrder) {
-            this.states[state] = new CharacterMtAState({
+            states[state] = new CharacterMtAState({
                 keeper,
                 validations: CHAR_VALIDATIONS[state],
                 updateEvent,
             });
         }
+
+        this.private = {
+            updateEvent,
+            states,
+        };
+    }
+
+    getTabsInfo() {
+        const states = this.private.states;
+        return editStatesForTabsOrder.map(editState => ({
+            button: states[editState].getTabButton(),
+            content: states[editState].getTabContent(),
+        }));
     }
 
     update() {
-        const states = Object.values(this.states);
+        const states = Object.values(this.private.states);
 
         for (const state of states) {
             state.update();
@@ -346,10 +359,11 @@ class CharacterMtA {
         ].filter(x => x).join(': ')) ?? [];
 
         for (const state of states) {
-            state.errorsList.clear();
+            const errorsList = state.getErrorsList();
+            errorsList.clear();
 
             for (const error of errorTexts) {
-                state.errorsList.addItem(error, { class: CSS.BORDER_RED_1 });
+                errorsList.addItem(error, { class: CSS.BORDER_RED_1 });
             }
         }
     }
@@ -387,10 +401,7 @@ class ConfigTab {
 const characterData = { version: CHAR_SHEET_VERSION };
 const characterUi = new CharacterMtA(characterData);
 
-const tabs = editStatesForTabsOrder.map(editState => ({
-    button: characterUi.states[editState].tabButton,
-    content: characterUi.states[editState].tabContent,
-}));
+const tabs = characterUi.getTabsInfo();
 
 const config = new ConfigTab(characterData);
 characterUi.updateEvent.addHandler(() => config.update());

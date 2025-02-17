@@ -1,3 +1,27 @@
+import { DarkHtmlElement, EVENTS } from '../common/domWrapper.js'
+
+export function configureDarkTabsAndButtons(input) {
+    const {
+        tabs = [],
+        activeTabIndex,
+        activeStyleClass,
+    } = input;
+
+    for (const curTab of tabs) {
+        curTab.button.setEventHandler(EVENTS.CLICK, function () {
+            for (const tab of tabs) {
+                tab.button.removeClass(activeStyleClass);
+                tab.content.removeClass(activeStyleClass);
+            }
+
+            curTab.button.addClass(activeStyleClass);
+            curTab.content.addClass(activeStyleClass);
+        });
+    }
+
+    tabs?.[activeTabIndex]?.button?.private?.events?.[EVENTS.CLICK]?.();
+}
+
 export function configureTabsAndButtons(input) {
     const {
         tabs,

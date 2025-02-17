@@ -7,7 +7,7 @@ const CHAR_SHEET_TITLE = `${CHAR_SHEET_NAME} ${CHAR_SHEET_VERSION}`;
 document.title = CHAR_SHEET_TITLE;
 document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
-import { configureTabsAndButtons } from '../common/tabs.js'
+import { configureDarkTabsAndButtons } from '../common/tabs.js'
 
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
 import { DarkEvent, } from '../common/utilities.js'
@@ -441,7 +441,7 @@ document.body.append(
         .create().getElement(),
 );
 
-configureTabsAndButtons({
+configureDarkTabsAndButtons({
     tabs: tabs,
     activeTabIndex: 0,
     activeStyleClass: 'active',

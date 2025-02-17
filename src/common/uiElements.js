@@ -305,7 +305,7 @@ export class UITextOrTextInput extends UIBaseInput {
                 return this.private.input.getText();
             };
 
-            this.setValue(value) = function (value) {
+            this.setValue = function (value) {
                 return this.private.input.setText(value);
             };
         }
@@ -346,7 +346,7 @@ export class UITextOrNumberInput extends UIBaseInput {
                 return SIMPLE_TO_NUMBER_MAPPER(value);
             };
 
-            this.setValue(value) = function (value) {
+            this.setValue = function (value) {
                 const mappedValue = SIMPLE_TO_NUMBER_MAPPER(value);
                 return this.private.input.setText(mappedValue);
             };

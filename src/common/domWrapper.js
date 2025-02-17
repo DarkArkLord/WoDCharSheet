@@ -274,7 +274,7 @@ export class DTableBuilder {
     }
 
     getBuilder() {
-        return this.row;
+        return this.table;
     }
 
     create() {

@@ -9,11 +9,10 @@ document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
 import { configureTabsAndButtons } from '../common/tabs.js'
 
-import { SVGIcons } from '../common/svg.js'
-import { HTMLTags, render } from '../common/render.js'
-import { DarkEvent, ValueWrapper } from '../common/utilities.js'
-import { UIText, UITextList, } from '../common/uiElements_old.js'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements_old.js'
+import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
+import { DarkEvent, } from '../common/utilities.js'
+import { UIText, UITextList, } from '../common/uiElements.js'
+import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
 
@@ -36,22 +35,57 @@ class CharacterMtAState {
             updateEvent,
         } = input;
 
-        this.updateEvent = updateEvent;
+        const validationsInfo = { state: validations.stateTranslation };
+        const parts = CharacterMtAState.createPartsElements({ keeper, validations, updateEvent, validationsInfo });
+        const characterUi = CharacterMtAState.createCharacterUi(parts);
 
-        this.validations = validations;
-        this.validationsInfo = { state: validations.stateTranslation };
+        const errorsList = new UITextList();
+        const errorsElement = CharacterMtAState.createErrorsElement(errorsList);
 
-        this.data = keeper;
+        const tabContent = CharacterMtAState.createTabContent(characterUi, errorsElement);
 
-        this.parts = {
+        const tabContainer = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_CONTENT)
+            .appendChilds(tabContent)
+            .create();
+
+        const tabButtonText = new UIText(validations.stateTranslation, {});
+        const tabButtonContainer = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTON)
+            .appendChilds(tabButtonText.getElement())
+            .create();
+
+        this.private = {
+            updateEvent,
+            data: keeper,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+            },
+            elements: {
+                parts,
+                characterUi,
+                errorsList,
+                errorsElement,
+                tabContent,
+                tabContainer,
+                tabButtonText,
+                tabButtonContainer,
+            },
+        };
+    }
+
+    static createPartsElements(input) {
+        const { keeper, validations, updateEvent, validationsInfo } = input;
+        return {
             [CHAR_PARTS.ATTRIBUTES]: new CharUiLineDotsSectionsPartElement({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
                 },
                 validations: {
-                    validations: this.validations,
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -61,8 +95,8 @@ class CharacterMtAState {
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
                 },
                 validations: {
-                    validations: this.validations,
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -72,8 +106,8 @@ class CharacterMtAState {
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.SPHERES],
                 },
                 validations: {
-                    validations: this.validations,
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -83,9 +117,9 @@ class CharacterMtAState {
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ARETE],
                 },
                 validations: {
-                    validations: this.validations,
-                    partValidations: this.validations[CHAR_PARTS.ARETE],
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    partValidations: validations[CHAR_PARTS.ARETE],
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -95,9 +129,9 @@ class CharacterMtAState {
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.WILLPOWER],
                 },
                 validations: {
-                    validations: this.validations,
-                    partValidations: this.validations[CHAR_PARTS.WILLPOWER],
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    partValidations: validations[CHAR_PARTS.WILLPOWER],
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -107,9 +141,9 @@ class CharacterMtAState {
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.EXPERIENCE],
                 },
                 validations: {
-                    validations: this.validations,
-                    partValidations: this.validations[CHAR_PARTS.EXPERIENCE],
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    partValidations: validations[CHAR_PARTS.EXPERIENCE],
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -119,9 +153,9 @@ class CharacterMtAState {
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.BACKGROUNDS],
                 },
                 validations: {
-                    validations: this.validations,
-                    partValidations: this.validations[CHAR_PARTS.BACKGROUNDS],
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    partValidations: validations[CHAR_PARTS.BACKGROUNDS],
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -131,9 +165,9 @@ class CharacterMtAState {
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.MERITS],
                 },
                 validations: {
-                    validations: this.validations,
-                    partValidations: this.validations[CHAR_PARTS.MERITS],
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    partValidations: validations[CHAR_PARTS.MERITS],
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
@@ -143,132 +177,122 @@ class CharacterMtAState {
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.FLAWS],
                 },
                 validations: {
-                    validations: this.validations,
-                    partValidations: this.validations[CHAR_PARTS.FLAWS],
-                    dataForValidations: this.validationsInfo,
+                    validations: validations,
+                    partValidations: validations[CHAR_PARTS.FLAWS],
+                    dataForValidations: validationsInfo,
                 },
                 updateEvent: updateEvent,
             }),
         };
+    }
 
-        const charElement = render(
-            HTMLTags.Table, {},
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ATTRIBUTES].element),
-            ),
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ABILITIES].element),
-            ),
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.SPHERES].element),
-            ),
-            render(
-                HTMLTags.TableRow, {},
-                render(
-                    HTMLTags.TableData, {},
-                    render(
-                        HTMLTags.Table, {},
-                        render(
-                            HTMLTags.TableRow, {},
-                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.ARETE].element),
-                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.WILLPOWER].element),
-                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.EXPERIENCE].element),
-                        ),
-                    ),
-                ),
-            ),
-            render(
-                HTMLTags.TableRow, {},
-                render(
-                    HTMLTags.TableData, {},
-                    render(
-                        HTMLTags.Table, {},
-                        render(
-                            HTMLTags.TableRow, {},
-                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.BACKGROUNDS].element),
-                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.MERITS].element),
-                            render(HTMLTags.TableData, {}, this.parts[CHAR_PARTS.FLAWS].element),
-                        ),
-                    ),
-                ),
-            ),
-        );
+    static createCharacterUi(parts) {
+        const resultBuilder = DTableBuilder.init();
 
-        this.errorsList = new UITextList();
-        const errorsElement = render(
-            HTMLTags.Table, { class: CSS.BORDER_BLACK_1 },
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, { class: CSS.TEXT_ALIGN_CENTER }, 'Ошибки'),
-            ),
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, this.errorsList.element),
-            ),
-        );
+        resultBuilder.addRow().addData()
+            .appendChilds(parts[CHAR_PARTS.ATTRIBUTES].getElement());
+        resultBuilder.addRow().addData()
+            .appendChilds(parts[CHAR_PARTS.ABILITIES].getElement());
+        resultBuilder.addRow().addData()
+            .appendChilds(parts[CHAR_PARTS.SPHERES].getElement());
 
-        this.element = render(
-            HTMLTags.Table, {},
-            render(
-                HTMLTags.TableRow, {},
-                render(HTMLTags.TableData, {}, charElement),
-                render(HTMLTags.TableData, { class: CSS.VERTICAL_ALIGN_TOP }, errorsElement),
-            ),
-        );
+        const aweBuilder = DTableBuilder.init();
+        const aweRowBuilder = aweBuilder.addRow();
+        aweRowBuilder.addData().appendChilds(parts[CHAR_PARTS.ARETE].getElement());
+        aweRowBuilder.addData().appendChilds(parts[CHAR_PARTS.WILLPOWER].getElement());
+        aweRowBuilder.addData().appendChilds(parts[CHAR_PARTS.EXPERIENCE].getElement());
 
-        this.tabButtonText = new UIText(validations.stateTranslation, {});
-        this.tabButton = render(
-            HTMLTags.Div,
-            { class: CSS.TAB_BUTTON },
-            this.tabButtonText.element,
-        );
+        resultBuilder.addRow().addData()
+            .appendChilds(aweBuilder.create());
 
-        this.tabContent = render(
-            HTMLTags.Div,
-            { class: CSS.TAB_CONTENT },
-            this.element,
-        );
+        const bmlBuilder = DTableBuilder.init();
+        const bmlRowBuilder = bmlBuilder.addRow();
+        bmlRowBuilder.addData().appendChilds(parts[CHAR_PARTS.BACKGROUNDS].getElement());
+        bmlRowBuilder.addData().appendChilds(parts[CHAR_PARTS.MERITS].getElement());
+        bmlRowBuilder.addData().appendChilds(parts[CHAR_PARTS.FLAWS].getElement());
+
+        resultBuilder.addRow().addData()
+            .appendChilds(bmlBuilder.create());
+
+        return resultBuilder.create();
+    }
+
+    static createErrorsElement(errorsList) {
+        const errorsElementBuilder = DTableBuilder.init();
+        errorsElementBuilder.getBuilder()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.BORDER_BLACK_1);
+
+        errorsElementBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds('Ошибки');
+        errorsElementBuilder.addRow().addData()
+            .appendChilds(errorsList.getElement());
+
+        return errorsElementBuilder.create();
+    }
+
+    static createTabContent(characterUi, errorsElement) {
+        const tabContentBuilder = DTableBuilder.init();
+        const tabContentRowBuilder = tabContentBuilder.addRow();
+        tabContentRowBuilder.addData()
+            .appendChilds(characterUi);
+        tabContentRowBuilder.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.VERTICAL_ALIGN_TOP)
+            .appendChilds(errorsElement);
+
+        return tabContentBuilder.create();
+    }
+
+    getErrorsList() {
+        return this.private.elements.errorsList;
+    }
+
+    getTabButton() {
+        return this.private.elements.tabButtonContainer;
+    }
+
+    getTabContent() {
+        return this.private.elements.tabContainer;
     }
 
     update() {
-        for (const part of Object.values(this.parts)) {
+        const elements = this.private.elements;
+        for (const part of Object.values(elements.parts)) {
             part.update();
         }
 
-        this.tabButtonText.setText(`${this.validations.stateTranslation} (${this.getPrice()})`);
+        elements.tabButtonText.setText(`${this.private.validations.main.stateTranslation} (${this.getPrice()})`);
     }
 
     validate() {
-        const errors = Object.values(this.parts).flatMap(part => part.validate() ?? []) ?? [];
+        const elements = this.private.elements;
+        const validations = this.private.validations.main;
+        const errors = Object.values(elements.parts).flatMap(part => part.validate() ?? []) ?? [];
 
-        if (this.validations?.freePoints) {
+        if (validations?.freePoints) {
             const price = this.getPrice();
 
-            if (price !== this.validations.freePoints) {
+            if (price !== validations.freePoints) {
                 errors.push({
-                    ...this.validationsInfo,
-                    text: `Должно быть распределено ${this.validations.freePoints} точек (сейчас ${price})`,
+                    ...this.private.validations.info,
+                    text: `Должно быть распределено ${validations.freePoints} точек (сейчас ${price})`,
                 });
             }
         }
 
-        if (this.validations?.freePointsField) {
-            const freePointsCount = this.data[this.validations?.freePointsField];
+        if (validations?.freePointsField) {
+            const freePointsCount = this.private.data[validations.freePointsField];
 
             if (freePointsCount === undefined || freePointsCount === '' || Number.isNaN(freePointsCount)) {
                 errors.push({
-                    ...this.validationsInfo,
-                    text: `Поле "${CHAR_SETTINGS_TRANSLATION[this.validations?.freePointsField]?.translation}" должно быть заполнено числом`,
+                    ...this.private.validations.info,
+                    text: `Поле "${CHAR_SETTINGS_TRANSLATION[validations.freePointsField]?.translation}" должно быть заполнено числом`,
                 });
             } else {
                 const price = this.getPrice();
-
                 if (price > freePointsCount) {
                     errors.push({
-                        ...this.validationsInfo,
+                        ...this.private.validations.info,
                         text: `Не может быть распределено больше ${freePointsCount} очков (сейчас ${price})`,
                     });
                 }
@@ -277,18 +301,18 @@ class CharacterMtAState {
 
         // Highlight Border
         if (errors.length > 0) {
-            this.tabButton.classList.add(CSS.BORDER_RED_1);
-            this.tabContent.classList.add(CSS.BORDER_RED_1);
+            elements.tabButtonContainer.addClass(CSS.BORDER_RED_1);
+            elements.tabContainer.addClass(CSS.BORDER_RED_1);
         } else {
-            this.tabButton.classList.remove(CSS.BORDER_RED_1);
-            this.tabContent.classList.remove(CSS.BORDER_RED_1);
+            elements.tabButtonContainer.removeClass(CSS.BORDER_RED_1);
+            elements.tabContainer.removeClass(CSS.BORDER_RED_1);
         }
 
         return errors;
     }
 
     getPrice() {
-        return Object.values(this.parts).reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return Object.values(this.private.elements.parts).reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
 

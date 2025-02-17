@@ -23,6 +23,7 @@ const CSS = Object.freeze({
     VERTICAL_ALIGN_TOP: 'vertical-align-top',
     BORDER_BLACK_1: 'border-black-1',
     BORDER_RED_1: 'border-red-1',
+    TAB_BUTTONS_CONTAINER: 'tab-buttons-container',
 });
 
 const editStatesForTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
@@ -431,16 +432,13 @@ tabs.push({
 updateEvent.invoke();
 
 document.body.append(
-    render(
-        HTMLTags.Div,
-        { class: 'tab-buttons-container' },
-        tabs.map(x => x.button),
-    ),
-    render(
-        HTMLTags.Div,
-        {},
-        tabs.map(x => x.content),
-    ),
+    DElementBuilder.initDiv()
+        .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTONS_CONTAINER)
+        .appendChilds(tabs.map(x => x.button))
+        .create().getElement(),
+    DElementBuilder.initDiv()
+        .appendChilds(tabs.map(x => x.content))
+        .create().getElement(),
 );
 
 configureTabsAndButtons({

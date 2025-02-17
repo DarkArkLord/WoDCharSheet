@@ -1044,7 +1044,7 @@ class CharUiPointsByStateElement { // +
     }
 }
 
-class CharUiLineInputPointsWithVariantsItemElement {
+class CharUiLineInputPointsWithVariantsItemElement { // +
     constructor(input) {
         const {
             data: {

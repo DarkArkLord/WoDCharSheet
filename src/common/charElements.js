@@ -1249,7 +1249,6 @@ class CharUiPointsByStateElement {
             updateEvent,
             isEditable,
             validations: {
-                info: validationsInfo,
                 main: validations,
                 part: partValidations,
             },
@@ -1293,5 +1292,197 @@ class CharUiPointsByStateElement {
 
     setValue(value) {
         this.private.elements.points.setValue(value);
+    }
+}
+
+class CharUiLineInputPointsWithVariantsItemElement {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                defaultOptions,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+        const validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
+
+        // Elements
+        const removeButton = new UIIconButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        removeButton.setVisible(this.isEditable);
+
+        const text = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: TEXT_FIELD,
+            },
+            isEditable,
+            updateEvent,
+        });
+
+        const type = new CharUiTextOrInputElement({
+            data: {
+                data,
+                fieldName: TYPE_FIELD,
+            },
+            inputConfig: {
+                size: 4,
+            },
+            isEditable,
+            updateEvent,
+        });
+
+        const points = new CharUiPointsByStateElement({
+            data: {
+                data,
+                inputStyle: 'width: 50px',
+            },
+            validations: {
+                validations,
+                partValidations,
+            },
+            updateEvent,
+        });
+
+        const variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
+        variants.setVisible(isEditable);
+        if (isEditable) {
+            variants.setOnChangeEvent(eventInput => {
+                const value = JSON.parse(eventInput.target.value);
+                eventInput.target.selectedIndex = 0;
+
+                text.setValue(value.text);
+                type.setValue(value.type);
+                points.setValue(value.cost);
+
+                updateEvent.invoke();
+            });
+        }
+
+        this.private = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                data,
+                wrapper,
+            },
+            elements: {
+                removeButton,
+                text,
+                type,
+                points,
+                variants,
+            },
+        };
+    }
+
+    update() {
+        const elements = this.private.elements;
+
+        elements.text.update();
+        elements.type.update();
+        elements.points.update();
+
+        const pointsWrapper = elements.points.private.data.wrapper;
+        const hasPrevValue = pointsWrapper.hasPrevValue();
+        const hasNextValue = pointsWrapper.hasNextValue();
+        elements.removeButton.setActive(!hasPrevValue && !hasNextValue);
+
+        this.private.validations.info.commonValue = elements.text.getValue();
+    }
+
+    validate() {
+        const elements = this.private.elements;
+        const isEditable = this.private.isEditable;
+        const errors = [];
+
+        const text = elements.text.getValue();
+        if (isEditable && text.length < 1) {
+            errors.push({
+                ...this.private.validations.info,
+                text: `Необходимо заполнит текст`,
+            });
+
+            this.setTextHighlight(true);
+        } else {
+            this.setTextHighlight(false);
+        }
+
+        const type = elements.type.getValue();
+        if (isEditable && type.length < 1) {
+            errors.push({
+                ...this.private.validations.info,
+                text: `Необходимо заполнит тип`,
+            });
+
+            this.setTypeHighlight(true);
+        } else {
+            this.setTypeHighlight(false);
+        }
+
+        const points = elements.points.getValue();
+        if (isEditable && (points === undefined || points === EMPTY_STRING)) {
+            errors.push({
+                ...this.private.validations.info,
+                text: `Необходимо заполнить стоимость`,
+            });
+
+            this.setPointsHighlight(true);
+        } else if (isEditable && Number.isNaN(+points)) {
+            errors.push({
+                ...this.private.validations.info,
+                text: `Необходимо стоимость должна быть число`,
+            });
+
+            this.setPointsHighlight(true);
+        } else {
+            this.setPointsHighlight(false);
+        }
+
+        return errors;
+    }
+
+    setTextHighlight(isVisible) {
+        const element = this.private.elements.text.getElement();
+        if (isVisible) {
+            element.addClass(CSS.BORDER_RED_1);
+        } else {
+            element.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    setTypeHighlight(isVisible) {
+        const element = this.private.elements.type.getElement();
+        if (isVisible) {
+            element.addClass(CSS.BORDER_RED_1);
+        } else {
+            element.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+
+    setPointsHighlight(isVisible) {
+        const element = this.private.elements.points.getElement();
+        if (isVisible) {
+            element.addClass(CSS.BORDER_RED_1);
+        } else {
+            element.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        const price = +this.private.elements.points.getValue();
+        return Number.isNaN(price) ? 0 : price;
     }
 }

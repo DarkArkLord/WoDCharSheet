@@ -872,7 +872,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
             updateEvent,
         });
 
-        const variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
+        const variants = new UIDropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
         variants.setVisible(isEditable);
         if (isEditable) {
             variants.setOnChangeEvent(eventInput => {
@@ -1350,8 +1350,8 @@ class CharUiLineInputPointsWithVariantsItemElement {
             },
             updateEvent,
         });
-
-        const variants = new UIDropdown({ class: CSS.DROPDOWN_AS_BUTTON }, { addEmptyOption: true, defaultOptions });
+        debugger;
+        const variants = new UIDropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
         variants.setVisible(isEditable);
         if (isEditable) {
             variants.setOnChangeEvent(eventInput => {
@@ -1374,10 +1374,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
                 main: validations,
                 part: partValidations,
             },
-            data: {
-                data,
-                wrapper,
-            },
+            data,
             elements: {
                 removeButton,
                 text,

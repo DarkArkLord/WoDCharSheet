@@ -355,8 +355,8 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
 
         if (isEditable) {
             specialty.setOnInputEvent(() => {
-                const specialty = specialty.getValue();
-                specialtyWrapper.setValue(specialty);
+                const text = specialty.getValue();
+                specialtyWrapper.setValue(text);
 
                 // instance.update();
                 updateEvent.invoke();

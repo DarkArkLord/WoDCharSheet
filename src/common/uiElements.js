@@ -316,7 +316,7 @@ export class UITextOrNumberInput extends UIBaseInput {
     constructor(isInput, inputConfig = {}) {
         if (isInput) {
             const inputBuilder = DElementBuilder.initInput()
-                .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
+                .setAttribute(ATTRIBUTES.TYPE, InputType.Number);
 
             const { min, max, inputStyle } = inputConfig;
 

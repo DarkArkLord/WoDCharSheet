@@ -354,7 +354,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
         const specialty = new UITextInput(DEFAULT_INPUT_SIZE);
 
         if (isEditable) {
-            specialty.setOnChangedEvent(() => {
+            specialty.setOnInputEvent(() => {
                 const specialty = specialty.getValue();
                 specialtyWrapper.setValue(specialty);
 
@@ -710,7 +710,6 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
             },
             data: {
                 ...oldinner.data,
-                specialtyWrapper,
             },
             elements: {
                 ...oldinner.elements,
@@ -1071,7 +1070,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
             },
             data: {
                 data,
-                valueInfo,
+                info: valueInfo,
                 dropDownOptions,
             },
             elements: {
@@ -1085,6 +1084,10 @@ export class CharUiLineInputDotsWithVariantsListElement {
         };
 
         this.refreshItems();
+    }
+
+    getElement() {
+        return this.inner.elements.container;
     }
 
     createItemWrapper(itemData) {
@@ -1124,7 +1127,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
 
         container.appendChilds(inner.elements.headerRow);
 
-        for (const itemData of this.data) {
+        for (const itemData of this.inner.data.data) {
             const item = this.createItemWrapper(itemData);
 
             items.push(item);
@@ -1156,7 +1159,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
         }
 
         if (inner.isEditable) {
-            inner.elements.header.setText(`${inner.data.valueInfo.translation} (${this.getPrice()})`);
+            inner.elements.header.setText(`${inner.data.info.translation} (${this.getPrice()})`);
         }
     }
 
@@ -1605,6 +1608,10 @@ export class CharUiLineInputPointsWithVariantsListElement {
         this.refreshItems();
     }
 
+    getElement() {
+        return this.inner.elements.container;
+    }
+
     createItemWrapper(itemData) {
         const inner = this.inner;
         const item = new CharUiLineInputPointsWithVariantsItemElement({
@@ -1641,7 +1648,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
 
         container.appendChilds(inner.elements.headerRow);
 
-        for (const itemData of this.data) {
+        for (const itemData of this.inner.data.data) {
             const item = this.createItemWrapper(itemData);
 
             items.push(item);
@@ -1673,7 +1680,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
         }
 
         if (inner.isEditable) {
-            inner.elements.header.setText(`${inner.data.valueInfo.translation} (${this.getPrice()})`);
+            inner.elements.header.setText(`${inner.data.info.translation} (${this.getPrice()})`);
         }
     }
 
@@ -1765,7 +1772,7 @@ export class CharUiBlockPointsElement {
                 points: pointsInputValidations,
             },
             data: {
-                data,
+                data: keeper,
                 info: valueInfo,
             },
             elements: {
@@ -1774,6 +1781,10 @@ export class CharUiBlockPointsElement {
                 container: containerBuilder.create(),
             },
         };
+    }
+
+    getElement() {
+        return this.inner.elements.container;
     }
 
     update() {

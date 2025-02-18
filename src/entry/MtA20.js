@@ -411,7 +411,7 @@ class ConfigTab {
     }
 
     update() {
-        const text = JSON.stringify(this.data, null, 2);
+        const text = JSON.stringify(this.inner.data, null, 2);
         this.inner.elements.charTextElement.setValue(text);
     }
 }

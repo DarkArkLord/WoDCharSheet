@@ -116,15 +116,19 @@ export class DarkHtmlElement {
 
     appendChilds(...childs) {
         for (const child of childs) {
-            let temp = child;
+            if (Array.isArray(child)) {
+                this.appendChilds(...child);
+            } else {
+                let temp = child;
 
-            if (child instanceof DarkHtmlElement) {
-                temp = child.getElement();
-            } else if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
-                temp = document.createTextNode(child);
+                if (child instanceof DarkHtmlElement) {
+                    temp = child.getElement();
+                } else if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
+                    temp = document.createTextNode(child);
+                }
+
+                this.inner.element.appendChild(temp);
             }
-
-            this.inner.element.appendChild(temp);
         }
     }
 }
@@ -229,7 +233,7 @@ export class DElementBuilder {
             events: this.events,
             mappers: this.mappers,
         });
-        result.appendChilds(this.childs);
+        result.appendChilds(...this.childs);
         return result;
     }
 }

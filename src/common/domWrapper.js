@@ -36,7 +36,7 @@ export const ACTIONS = Object.freeze({
 
 export class DarkHtmlElement {
     constructor(tag, { attributes = {}, isActive = true, events = {}, mappers = {} } = {}, ...childs) {
-        this.private = {
+        this.inner = {
             element: render(tag, attributes, ...childs),
             isActive,
             events,
@@ -45,14 +45,14 @@ export class DarkHtmlElement {
     }
 
     getElement() {
-        return this.private.element;
+        return this.inner.element;
     }
 
     addClass(className) {
-        this.private.element.classList.add(className);
+        this.inner.element.classList.add(className);
     }
     removeClass(className) {
-        this.private.element.classList.remove(className);
+        this.inner.element.classList.remove(className);
     }
     setVisible(isVisible) {
         if (isVisible) {
@@ -63,10 +63,10 @@ export class DarkHtmlElement {
     }
 
     getAttribute(attr) {
-        return this.private.element[attr];
+        return this.inner.element[attr];
     }
     setAttribute(attr, value) {
-        this.private.element[attr] = value;
+        this.inner.element[attr] = value;
     }
     setReadOnly(isReadOnly) {
         this.setAttribute(ATTRIBUTES.READ_ONLY, isReadOnly);
@@ -74,11 +74,11 @@ export class DarkHtmlElement {
     }
 
     setActive(isActive) {
-        this.private.isActive = isActive;
+        this.inner.isActive = isActive;
     }
 
     setEventHandler(eventName, eventHandler) {
-        const instance = this.private;
+        const instance = this.inner;
         instance.events[eventName] = eventHandler;
 
         if (!this.getAttribute(eventName)) {
@@ -100,18 +100,18 @@ export class DarkHtmlElement {
 
     getValue() {
         const value = this.getAttribute(ATTRIBUTES.VALUE);
-        const mapper = this.private.mappers[ACTIONS.GET];
+        const mapper = this.inner.mappers[ACTIONS.GET];
         return mapper ? mapper(value) : value;
     }
     setValue(text) {
-        const mapper = this.private.mappers[ACTIONS.SET];
+        const mapper = this.inner.mappers[ACTIONS.SET];
         if (mapper) {
             text = mapper(text);
         }
         this.setAttribute(ATTRIBUTES.VALUE, text);
     }
     setValueMapper(action, mapper) {
-        this.private.mappers[action] = mapper;
+        this.inner.mappers[action] = mapper;
     }
 
     appendChilds(...childs) {
@@ -124,7 +124,7 @@ export class DarkHtmlElement {
                 temp = document.createTextNode(child);
             }
 
-            this.private.element.appendChild(temp);
+            this.inner.element.appendChild(temp);
         }
     }
 }

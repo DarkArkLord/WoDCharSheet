@@ -19,7 +19,7 @@ export function configureDarkTabsAndButtons(input) {
         });
     }
 
-    tabs?.[activeTabIndex]?.button?.private?.events?.[EVENTS.CLICK]?.();
+    tabs?.[activeTabIndex]?.button?.inner?.events?.[EVENTS.CLICK]?.();
 }
 
 export function configureTabsAndButtons(input) {

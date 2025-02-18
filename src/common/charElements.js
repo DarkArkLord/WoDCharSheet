@@ -157,7 +157,7 @@ class CharUiDotsElement {
             });
         }
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -181,21 +181,21 @@ class CharUiDotsElement {
     }
 
     getElement() {
-        return this.private.elements.dots.getElement();
+        return this.inner.elements.dots.getElement();
     }
 
     update() {
-        const wrapper = this.private.data.wrapper;
-        const elements = this.private.elements;
+        const wrapper = this.inner.data.wrapper;
+        const elements = this.inner.elements;
 
-        if (this.private.isEditable) {
+        if (this.inner.isEditable) {
             const prevValue = wrapper.getPrevValue();
             const value = wrapper.getValue(0);
             const hasNextValue = wrapper.hasNextValue();
 
             elements.dots.setValue(prevValue, value);
 
-            const validations = this.private.validations;
+            const validations = this.inner.validations;
 
             const enableSubButton = validations.dots?.min === undefined ? true : value > validations.dots?.min;
             elements.subButton.setActive(enableSubButton && !hasNextValue);
@@ -212,8 +212,8 @@ class CharUiDotsElement {
     validate() {
         const errors = [];
 
-        const wrapper = this.private.data.wrapper;
-        const validations = this.private.validations;
+        const wrapper = this.inner.data.wrapper;
+        const validations = this.inner.validations;
         const totalValue = wrapper.getPrevValue() + wrapper.getValue(0);
         if (totalValue < validations.dots?.totalMin) {
             errors.push({
@@ -232,7 +232,7 @@ class CharUiDotsElement {
     }
 
     getPrice() {
-        return this.private.data.priceWrapper.getPrice();
+        return this.inner.data.priceWrapper.getPrice();
     }
 }
 
@@ -269,7 +269,7 @@ class CharUiTextWithDotsElement {
             updateEvent,
         });
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -280,8 +280,8 @@ class CharUiTextWithDotsElement {
             data: {
                 info: valueInfo,
                 data,
-                dotsWrapper: dots.private.data.wrapper,
-                priceWrapper: dots.private.data.priceWrapper,
+                dotsWrapper: dots.inner.data.wrapper,
+                priceWrapper: dots.inner.data.priceWrapper,
             },
             elements: {
                 text,
@@ -291,18 +291,18 @@ class CharUiTextWithDotsElement {
     }
 
     getTextElement() {
-        return this.private.elements.text.getElement();
+        return this.inner.elements.text.getElement();
     }
     getDotsElement() {
-        return this.private.elements.dots.getElement();
+        return this.inner.elements.dots.getElement();
     }
 
     update() {
-        this.private.elements.dots.update();
+        this.inner.elements.dots.update();
     }
 
     validate() {
-        const errors = this.private.elements.dots.validate() ?? [];
+        const errors = this.inner.elements.dots.validate() ?? [];
 
         this.setHighlight(errors.length > 0);
 
@@ -323,14 +323,14 @@ class CharUiTextWithDotsElement {
     }
 
     getPrice() {
-        return this.private.elements.dots.getPrice();
+        return this.inner.elements.dots.getPrice();
     }
 }
 
 class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     constructor(input) {
         super(input);
-        const oldPrivate = this.private;
+        const oldinner = this.inner;
 
         const {
             data: {
@@ -345,8 +345,8 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
             updateEvent,
         } = input;
 
-        const isEditable = oldPrivate.isEditable;
-        const data = oldPrivate.data.data;
+        const isEditable = oldinner.isEditable;
+        const data = oldinner.data.data;
 
         const specialtyWrapper = new ValueWrapper(data, SPECIALTY_FIELD, EMPTY_STRING);
 
@@ -366,18 +366,18 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
         const priceText = new UIText(EMPTY_STRING, {});
         priceText.setVisible(isEditable);
 
-        this.private = {
-            updateEvent: oldPrivate.updateEvent,
-            isEditable: oldPrivate.isEditable,
+        this.inner = {
+            updateEvent: oldinner.updateEvent,
+            isEditable: oldinner.isEditable,
             validations: {
-                ...oldPrivate.validations,
+                ...oldinner.validations,
             },
             data: {
-                ...oldPrivate.data,
+                ...oldinner.data,
                 specialtyWrapper,
             },
             elements: {
-                ...oldPrivate.elements,
+                ...oldinner.elements,
                 specialty,
                 priceText,
             }
@@ -385,17 +385,17 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     }
 
     getSpecialtyElement() {
-        return this.private.elements.specialty.getElement();
+        return this.inner.elements.specialty.getElement();
     }
 
     getPriceElement() {
-        return this.private.elements.priceText.getElement();
+        return this.inner.elements.priceText.getElement();
     }
 
     update() {
-        const data = this.private.data;
-        const elements = this.private.elements;
-        const validations = this.private.validations;
+        const data = this.inner.data;
+        const elements = this.inner.elements;
+        const validations = this.inner.validations;
 
         const prevValue = data.dotsWrapper.getPrevValue()
         const value = data.dotsWrapper.getValue(0)
@@ -483,7 +483,7 @@ class CharUiLineDotsSectionElement {
             row.addData().appendChilds(item.getPriceElement());
         }
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -504,22 +504,22 @@ class CharUiLineDotsSectionElement {
     }
 
     getElement() {
-        return this.private.elements.container;
+        return this.inner.elements.container;
     }
 
     update() {
-        const private = this.private;
-        for (const item of private.elements.items) {
+        const inner = this.inner;
+        for (const item of inner.elements.items) {
             item.update();
         }
 
-        if (private.isEditable) {
-            private.elements.header.setText(`${private.data.sectionTitle} (${this.getPrice()})`);
+        if (inner.isEditable) {
+            inner.elements.header.setText(`${inner.data.sectionTitle} (${this.getPrice()})`);
         }
     }
 
     validate() {
-        const errors = this.private.elements.items.flatMap(item => item.validate() ?? []) ?? [];
+        const errors = this.inner.elements.items.flatMap(item => item.validate() ?? []) ?? [];
 
         this.setHighlight(errors.length > 0);
 
@@ -527,7 +527,7 @@ class CharUiLineDotsSectionElement {
     }
 
     setHighlight(isVisible) {
-        const container = this.private.elements.container;
+        const container = this.inner.elements.container;
         if (isVisible) {
             container.addClass(CSS.BORDER_RED_1);
         } else {
@@ -536,7 +536,7 @@ class CharUiLineDotsSectionElement {
     }
 
     getPrice() {
-        return this.private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return this.inner.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
 
@@ -589,7 +589,7 @@ export class CharUiLineDotsSectionsPartElement {
             sectionsRow.addData().appendChilds(section.getElement());
         }
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -611,23 +611,23 @@ export class CharUiLineDotsSectionsPartElement {
     }
 
     getElement() {
-        return this.private.elements.container;
+        return this.inner.elements.container;
     }
 
     update() {
-        const private = this.private;
-        for (const section of private.elements.sections) {
+        const inner = this.inner;
+        for (const section of inner.elements.sections) {
             section.update();
         }
 
-        if (private.isEditable) {
-            private.elements.header.setText(`${this.private.data.partTitle} (${this.getPrice()})`);
+        if (inner.isEditable) {
+            inner.elements.header.setText(`${this.inner.data.partTitle} (${this.getPrice()})`);
         }
     }
 
     validate() {
-        const sections = this.private.elements.sections;
-        const validations = this.private.validations
+        const sections = this.inner.elements.sections;
+        const validations = this.inner.validations
         const errors = sections.flatMap(item => item.validate() ?? []) ?? [];
 
         if (validations.part?.sectionPoints) {
@@ -661,7 +661,7 @@ export class CharUiLineDotsSectionsPartElement {
     }
 
     setHighlight(isVisible) {
-        const container = this.private.elements.container;
+        const container = this.inner.elements.container;
         if (isVisible) {
             container.addClass(CSS.BORDER_RED_1);
         } else {
@@ -670,14 +670,14 @@ export class CharUiLineDotsSectionsPartElement {
     }
 
     getPrice() {
-        return this.private.elements.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return this.inner.elements.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
 
 export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
     constructor(input) {
         super(input);
-        const oldPrivate = this.private;
+        const oldinner = this.inner;
 
         const {
             data: {
@@ -702,38 +702,38 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(this.getDotsElement());
 
-        this.private = {
-            updateEvent: oldPrivate.updateEvent,
-            isEditable: oldPrivate.isEditable,
+        this.inner = {
+            updateEvent: oldinner.updateEvent,
+            isEditable: oldinner.isEditable,
             validations: {
-                ...oldPrivate.validations,
+                ...oldinner.validations,
             },
             data: {
-                ...oldPrivate.data,
+                ...oldinner.data,
                 specialtyWrapper,
             },
             elements: {
-                ...oldPrivate.elements,
+                ...oldinner.elements,
                 container: containerBuilder.create(),
             }
         };
     }
 
     getElement() {
-        return this.private.elements.container;
+        return this.inner.elements.container;
     }
 
     update() {
-        const private = this.private;
-        if (private.isEditable) {
-            private.elements.text.setText(`${private.data.info.translation} (${this.getPrice()})`)
+        const inner = this.inner;
+        if (inner.isEditable) {
+            inner.elements.text.setText(`${inner.data.info.translation} (${this.getPrice()})`)
         }
 
         super.update();
     }
 
     setHighlight(isVisible) {
-        const container = this.private.elements.container;
+        const container = this.inner.elements.container;
         if (isVisible) {
             container.addClass(CSS.BORDER_RED_1);
         } else {
@@ -766,7 +766,7 @@ class BaseTextOrInputElement {
             });
         }
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             wrapper,
@@ -775,16 +775,16 @@ class BaseTextOrInputElement {
     }
 
     getElement() {
-        return this.private.element.getElement();
+        return this.inner.element.getElement();
     }
 
     getValue() {
-        return this.private.wrapper.getValue();
+        return this.inner.wrapper.getValue();
     }
 
     setValue(text) {
-        this.private.wrapper.setValue(text);
-        this.private.element.setValue(text);
+        this.inner.wrapper.setValue(text);
+        this.inner.element.setValue(text);
     }
 
     update() {
@@ -898,7 +898,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
         const price = new UIText(EMPTY_STRING, {});
         price.setVisible(isEditable);
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -918,56 +918,56 @@ class CharUiLineInputDotsWithVariantsItemElement {
     }
 
     getRemoveButton() {
-        return this.private.elements.removeButton;
+        return this.inner.elements.removeButton;
     }
 
     getRemoveButtonElement() {
-        return this.private.elements.removeButton.getElement();
+        return this.inner.elements.removeButton.getElement();
     }
 
     getTextElement() {
-        return this.private.elements.text.getElement();
+        return this.inner.elements.text.getElement();
     }
 
     getVariantsElement() {
-        return this.private.elements.variants.getElement();
+        return this.inner.elements.variants.getElement();
     }
 
     getDotsElement() {
-        return this.private.elements.dots.getElement();
+        return this.inner.elements.dots.getElement();
     }
 
     getPriceElement() {
-        return this.private.elements.price.getElement();
+        return this.inner.elements.price.getElement();
     }
 
     update() {
-        const elements = this.private.elements;
+        const elements = this.inner.elements;
 
         elements.text.update();
         elements.dots.update();
 
         elements.price.setText(`(${this.getPrice()})`);
 
-        const dotsWrapper = elements.dots.private.data.wrapper;
+        const dotsWrapper = elements.dots.inner.data.wrapper;
         const hasPrevValue = dotsWrapper.hasPrevValue();
         const hasNextValue = dotsWrapper.hasNextValue();
         elements.removeButton.setActive(!hasPrevValue && !hasNextValue);
 
-        const validationsInfo = this.private.validations.info;
+        const validationsInfo = this.inner.validations.info;
         validationsInfo.commonValue = elements.text.getValue();
     }
 
     validate() {
-        const elements = this.private.elements;
+        const elements = this.inner.elements;
         const errors = elements.dots.validate() ?? [];
 
         this.setDotsHighlight(errors.length > 0);
 
         const text = elements.text.getValue().trim();
-        if (this.private.isEditable && text.length < 1) {
+        if (this.inner.isEditable && text.length < 1) {
             errors.push({
-                ...this.private.validations.info,
+                ...this.inner.validations.info,
                 text: `Необходимо заполнит текст`,
             });
 
@@ -980,7 +980,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
     }
 
     setTextHighlight(isVisible) {
-        const element = this.private.elements.text;
+        const element = this.inner.elements.text;
         if (isVisible) {
             element.getElement().addClass(CSS.BORDER_RED_1);
         } else {
@@ -989,7 +989,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
     }
 
     setDotsHighlight(isVisible) {
-        const element = this.private.elements.dots;
+        const element = this.inner.elements.dots;
         if (isVisible) {
             element.getElement().addClass(CSS.BORDER_RED_1);
         } else {
@@ -998,7 +998,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
     }
 
     getPrice() {
-        return this.private.elements.dots.getPrice();
+        return this.inner.elements.dots.getPrice();
     }
 }
 
@@ -1061,7 +1061,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
 
         const container = DElementBuilder.initTable().create();
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -1088,27 +1088,27 @@ export class CharUiLineInputDotsWithVariantsListElement {
     }
 
     createItemWrapper(itemData) {
-        const private = this.private;
+        const inner = this.inner;
 
         const item = new CharUiLineInputDotsWithVariantsItemElement({
             data: {
                 data: itemData,
-                defaultOptions: private.data.dropDownOptions,
+                defaultOptions: inner.data.dropDownOptions,
             },
             validations: {
-                validations: private.validations.main,
-                partValidations: private.validations.part,
-                dataForValidations: private.validations.info,
+                validations: inner.validations.main,
+                partValidations: inner.validations.part,
+                dataForValidations: inner.validations.info,
             },
-            updateEvent: private.updateEvent,
+            updateEvent: inner.updateEvent,
         });
 
-        const listData = private.data.data;
+        const listData = inner.data.data;
         item.getRemoveButton().setOnClickEvent(() => {
             const dataIndex = listData.findIndex(value => value === itemData);
             if (dataIndex >= 0) {
                 listData.splice(dataIndex, 1);
-                private.updateEvent.invoke();
+                inner.updateEvent.invoke();
             }
         });
 
@@ -1116,13 +1116,13 @@ export class CharUiLineInputDotsWithVariantsListElement {
     }
 
     refreshItems() {
-        const private = this.private;
-        const items = private.elements.items = [];
+        const inner = this.inner;
+        const items = inner.elements.items = [];
 
-        const container = private.elements.container;
+        const container = inner.elements.container;
         container.setText(EMPTY_STRING);
 
-        container.appendChilds(private.elements.headerRow);
+        container.appendChilds(inner.elements.headerRow);
 
         for (const itemData of this.data) {
             const item = this.createItemWrapper(itemData);
@@ -1140,37 +1140,37 @@ export class CharUiLineInputDotsWithVariantsListElement {
             container.appendChilds(rowBuilder.create());
         }
 
-        if (private.isEditable) {
-            container.appendChilds(private.elements.addButtonRow);
+        if (inner.isEditable) {
+            container.appendChilds(inner.elements.addButtonRow);
         }
     }
 
     update() {
-        const private = this.private;
-        if (private.elements.items.length !== private.data.data.length) {
+        const inner = this.inner;
+        if (inner.elements.items.length !== inner.data.data.length) {
             this.refreshItems();
         }
 
-        for (const item of private.elements.items) {
+        for (const item of inner.elements.items) {
             item.update();
         }
 
-        if (private.isEditable) {
-            private.elements.header.setText(`${private.data.valueInfo.translation} (${this.getPrice()})`);
+        if (inner.isEditable) {
+            inner.elements.header.setText(`${inner.data.valueInfo.translation} (${this.getPrice()})`);
         }
     }
 
     validate() {
-        const private = this.private;
-        const errors = private.elements.items.flatMap(item => item.validate() ?? []) ?? [];
+        const inner = this.inner;
+        const errors = inner.elements.items.flatMap(item => item.validate() ?? []) ?? [];
 
-        if (private.validations.part?.freePoints !== undefined) {
+        if (inner.validations.part?.freePoints !== undefined) {
             const price = this.getPrice();
 
-            if (price !== private.validations.part.freePoints) {
+            if (price !== inner.validations.part.freePoints) {
                 errors.push({
                     ...this.validationsInfo,
-                    text: `Должно быть распределено ${private.validations.part.freePoints} точек (сейчас ${price})`,
+                    text: `Должно быть распределено ${inner.validations.part.freePoints} точек (сейчас ${price})`,
                 });
             }
         }
@@ -1181,7 +1181,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
     }
 
     setHighlight(isVisible) {
-        const container = this.private.elements.container;
+        const container = this.inner.elements.container;
         if (isVisible) {
             container.addClass(CSS.BORDER_RED_1);
         } else {
@@ -1190,7 +1190,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
     }
 
     getPrice() {
-        return this.private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return this.inner.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
 
@@ -1243,7 +1243,7 @@ class CharUiPointsByStateElement {
 
         const totalText = new UIText(EMPTY_STRING, {});
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -1265,9 +1265,9 @@ class CharUiPointsByStateElement {
     }
 
     getElement() {
-        const elements = this.private.elements;
+        const elements = this.inner.elements;
 
-        if (this.private.isEditable) {
+        if (this.inner.isEditable) {
             return elements.container;
         }
 
@@ -1275,8 +1275,8 @@ class CharUiPointsByStateElement {
     }
 
     update() {
-        const elements = this.private.elements;
-        const wrapper = this.private.data.wrapper;
+        const elements = this.inner.elements;
+        const wrapper = this.inner.data.wrapper;
 
         elements.prevValueText.setText(`${wrapper.getPrevValue()} /`);
         elements.points.update();
@@ -1285,11 +1285,11 @@ class CharUiPointsByStateElement {
     }
 
     getValue() {
-        return this.private.elements.points.getValue();
+        return this.inner.elements.points.getValue();
     }
 
     setValue(value) {
-        this.private.elements.points.setValue(value);
+        this.inner.elements.points.setValue(value);
     }
 }
 
@@ -1363,7 +1363,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
             });
         }
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -1386,53 +1386,53 @@ class CharUiLineInputPointsWithVariantsItemElement {
     }
 
     getRemoveButton() {
-        return this.private.elements.removeButton;
+        return this.inner.elements.removeButton;
     }
 
     getRemoveButtonElement() {
-        return this.private.elements.removeButton.getElement();
+        return this.inner.elements.removeButton.getElement();
     }
 
     getTextElement() {
-        return this.private.elements.text.getElement();
+        return this.inner.elements.text.getElement();
     }
 
     getTypeElement() {
-        return this.private.elements.type.getElement();
+        return this.inner.elements.type.getElement();
     }
 
     getPointsElement() {
-        return this.private.elements.points.getElement();
+        return this.inner.elements.points.getElement();
     }
 
     getVariantsElement() {
-        return this.private.elements.variants.getElement();
+        return this.inner.elements.variants.getElement();
     }
 
     update() {
-        const elements = this.private.elements;
+        const elements = this.inner.elements;
 
         elements.text.update();
         elements.type.update();
         elements.points.update();
 
-        const pointsWrapper = elements.points.private.data.wrapper;
+        const pointsWrapper = elements.points.inner.data.wrapper;
         const hasPrevValue = pointsWrapper.hasPrevValue();
         const hasNextValue = pointsWrapper.hasNextValue();
         elements.removeButton.setActive(!hasPrevValue && !hasNextValue);
 
-        this.private.validations.info.commonValue = elements.text.getValue();
+        this.inner.validations.info.commonValue = elements.text.getValue();
     }
 
     validate() {
-        const elements = this.private.elements;
-        const isEditable = this.private.isEditable;
+        const elements = this.inner.elements;
+        const isEditable = this.inner.isEditable;
         const errors = [];
 
         const text = elements.text.getValue();
         if (isEditable && text.length < 1) {
             errors.push({
-                ...this.private.validations.info,
+                ...this.inner.validations.info,
                 text: `Необходимо заполнит текст`,
             });
 
@@ -1444,7 +1444,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
         const type = elements.type.getValue();
         if (isEditable && type.length < 1) {
             errors.push({
-                ...this.private.validations.info,
+                ...this.inner.validations.info,
                 text: `Необходимо заполнит тип`,
             });
 
@@ -1456,14 +1456,14 @@ class CharUiLineInputPointsWithVariantsItemElement {
         const points = elements.points.getValue();
         if (isEditable && (points === undefined || points === EMPTY_STRING)) {
             errors.push({
-                ...this.private.validations.info,
+                ...this.inner.validations.info,
                 text: `Необходимо заполнить стоимость`,
             });
 
             this.setPointsHighlight(true);
         } else if (isEditable && Number.isNaN(+points)) {
             errors.push({
-                ...this.private.validations.info,
+                ...this.inner.validations.info,
                 text: `Необходимо стоимость должна быть число`,
             });
 
@@ -1476,7 +1476,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
     }
 
     setTextHighlight(isVisible) {
-        const element = this.private.elements.text.getElement();
+        const element = this.inner.elements.text.getElement();
         if (isVisible) {
             element.addClass(CSS.BORDER_RED_1);
         } else {
@@ -1485,7 +1485,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
     }
 
     setTypeHighlight(isVisible) {
-        const element = this.private.elements.type.getElement();
+        const element = this.inner.elements.type.getElement();
         if (isVisible) {
             element.addClass(CSS.BORDER_RED_1);
         } else {
@@ -1495,7 +1495,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
 
 
     setPointsHighlight(isVisible) {
-        const element = this.private.elements.points.getElement();
+        const element = this.inner.elements.points.getElement();
         if (isVisible) {
             element.addClass(CSS.BORDER_RED_1);
         } else {
@@ -1504,7 +1504,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
     }
 
     getPrice() {
-        const price = +this.private.elements.points.getValue();
+        const price = +this.inner.elements.points.getValue();
         return Number.isNaN(price) ? 0 : price;
     }
 }
@@ -1577,7 +1577,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
 
         const container = DElementBuilder.initTable().create();
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -1606,26 +1606,26 @@ export class CharUiLineInputPointsWithVariantsListElement {
     }
 
     createItemWrapper(itemData) {
-        const private = this.private;
+        const inner = this.inner;
         const item = new CharUiLineInputPointsWithVariantsItemElement({
             data: {
                 data: itemData,
-                defaultOptions: private.data.dropDownOptions,
+                defaultOptions: inner.data.dropDownOptions,
             },
             validations: {
-                validations: private.validations.main,
-                partValidations: private.validations.part,
-                dataForValidations: private.validations.info,
+                validations: inner.validations.main,
+                partValidations: inner.validations.part,
+                dataForValidations: inner.validations.info,
             },
-            updateEvent: private.updateEvent,
+            updateEvent: inner.updateEvent,
         });
 
-        const listData = private.data.data;
+        const listData = inner.data.data;
         item.getRemoveButton().setOnClickEvent(() => {
             const dataIndex = listData.findIndex(value => value === itemData);
             if (dataIndex >= 0) {
                 listData.splice(dataIndex, 1);
-                private.updateEvent.invoke();
+                inner.updateEvent.invoke();
             }
         });
 
@@ -1633,13 +1633,13 @@ export class CharUiLineInputPointsWithVariantsListElement {
     }
 
     refreshItems() {
-        const private = this.private;
-        const items = private.elements.items = [];
+        const inner = this.inner;
+        const items = inner.elements.items = [];
 
-        const container = private.elements.container;
+        const container = inner.elements.container;
         container.setText(EMPTY_STRING);
 
-        container.appendChilds(private.elements.headerRow);
+        container.appendChilds(inner.elements.headerRow);
 
         for (const itemData of this.data) {
             const item = this.createItemWrapper(itemData);
@@ -1657,29 +1657,29 @@ export class CharUiLineInputPointsWithVariantsListElement {
             container.appendChilds(rowBuilder.create());
         }
 
-        if (private.isEditable) {
-            container.appendChilds(private.elements.addButtonRow);
+        if (inner.isEditable) {
+            container.appendChilds(inner.elements.addButtonRow);
         }
     }
 
     update() {
-        const private = this.private;
-        if (private.elements.items.length !== private.data.data.length) {
+        const inner = this.inner;
+        if (inner.elements.items.length !== inner.data.data.length) {
             this.refreshItems();
         }
 
-        for (const item of private.elements.items) {
+        for (const item of inner.elements.items) {
             item.update();
         }
 
-        if (private.isEditable) {
-            private.elements.header.setText(`${private.data.valueInfo.translation} (${this.getPrice()})`);
+        if (inner.isEditable) {
+            inner.elements.header.setText(`${inner.data.valueInfo.translation} (${this.getPrice()})`);
         }
     }
 
     validate() {
-        const items = this.private.elements.items;
-        const validations = this.private.validations;
+        const items = this.inner.elements.items;
+        const validations = this.inner.validations;
         const errors = items.flatMap(item => item.validate() ?? []) ?? [];
 
         const totalPrice = items.reduce((acc, cur) => acc + cur.getPrice(0), 0);
@@ -1696,7 +1696,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
     }
 
     setHighlight(isVisible) {
-        const element = this.private.elements.container;
+        const element = this.inner.elements.container;
         if (isVisible) {
             element.addClass(CSS.BORDER_RED_1);
         } else {
@@ -1705,9 +1705,9 @@ export class CharUiLineInputPointsWithVariantsListElement {
     }
 
     getPrice() {
-        const private = this.private;
-        const price = private.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
-        return private.validations.points?.negativePrice ? -price : price;
+        const inner = this.inner;
+        const price = inner.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return inner.validations.points?.negativePrice ? -price : price;
     }
 }
 
@@ -1755,7 +1755,7 @@ export class CharUiBlockPointsElement {
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(points.getElement());
 
-        this.private = {
+        this.inner = {
             updateEvent,
             isEditable,
             validations: {
@@ -1777,7 +1777,7 @@ export class CharUiBlockPointsElement {
     }
 
     update() {
-        this.private.elements.points.update();
+        this.inner.elements.points.update();
     }
 
     validate() {

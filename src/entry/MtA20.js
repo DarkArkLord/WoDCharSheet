@@ -56,7 +56,7 @@ class CharacterMtAState {
             .appendChilds(tabButtonText.getElement())
             .create();
 
-        this.private = {
+        this.inner = {
             updateEvent,
             data: keeper,
             validations: {
@@ -245,29 +245,29 @@ class CharacterMtAState {
     }
 
     getErrorsList() {
-        return this.private.elements.errorsList;
+        return this.inner.elements.errorsList;
     }
 
     getTabButton() {
-        return this.private.elements.tabButtonContainer;
+        return this.inner.elements.tabButtonContainer;
     }
 
     getTabContent() {
-        return this.private.elements.tabContainer;
+        return this.inner.elements.tabContainer;
     }
 
     update() {
-        const elements = this.private.elements;
+        const elements = this.inner.elements;
         for (const part of Object.values(elements.parts)) {
             part.update();
         }
 
-        elements.tabButtonText.setText(`${this.private.validations.main.stateTranslation} (${this.getPrice()})`);
+        elements.tabButtonText.setText(`${this.inner.validations.main.stateTranslation} (${this.getPrice()})`);
     }
 
     validate() {
-        const elements = this.private.elements;
-        const validations = this.private.validations.main;
+        const elements = this.inner.elements;
+        const validations = this.inner.validations.main;
         const errors = Object.values(elements.parts).flatMap(part => part.validate() ?? []) ?? [];
 
         if (validations?.freePoints) {
@@ -275,25 +275,25 @@ class CharacterMtAState {
 
             if (price !== validations.freePoints) {
                 errors.push({
-                    ...this.private.validations.info,
+                    ...this.inner.validations.info,
                     text: `Должно быть распределено ${validations.freePoints} точек (сейчас ${price})`,
                 });
             }
         }
 
         if (validations?.freePointsField) {
-            const freePointsCount = this.private.data[validations.freePointsField];
+            const freePointsCount = this.inner.data[validations.freePointsField];
 
             if (freePointsCount === undefined || freePointsCount === '' || Number.isNaN(freePointsCount)) {
                 errors.push({
-                    ...this.private.validations.info,
+                    ...this.inner.validations.info,
                     text: `Поле "${CHAR_SETTINGS_TRANSLATION[validations.freePointsField]?.translation}" должно быть заполнено числом`,
                 });
             } else {
                 const price = this.getPrice();
                 if (price > freePointsCount) {
                     errors.push({
-                        ...this.private.validations.info,
+                        ...this.inner.validations.info,
                         text: `Не может быть распределено больше ${freePointsCount} очков (сейчас ${price})`,
                     });
                 }
@@ -313,7 +313,7 @@ class CharacterMtAState {
     }
 
     getPrice() {
-        return Object.values(this.private.elements.parts).reduce((acc, cur) => acc += cur.getPrice(), 0);
+        return Object.values(this.inner.elements.parts).reduce((acc, cur) => acc += cur.getPrice(), 0);
     }
 }
 
@@ -331,7 +331,7 @@ class CharacterMtA {
             });
         }
 
-        this.private = {
+        this.inner = {
             data: keeper,
             updateEvent,
             states,
@@ -339,7 +339,7 @@ class CharacterMtA {
     }
 
     getTabsInfo() {
-        const states = this.private.states;
+        const states = this.inner.states;
         return editStatesForTabsOrder.map(editState => ({
             button: states[editState].getTabButton(),
             content: states[editState].getTabContent(),
@@ -347,7 +347,7 @@ class CharacterMtA {
     }
 
     update() {
-        const states = Object.values(this.private.states);
+        const states = Object.values(this.inner.states);
 
         for (const state of states) {
             state.update();
@@ -391,7 +391,7 @@ class ConfigTab {
             .appendChilds(CHAR_SETTINGS_TRANSLATION)
             .create();
 
-        this.private = {
+        this.inner = {
             data,
             updateEvent,
             elements: {
@@ -403,16 +403,16 @@ class ConfigTab {
     }
 
     getTabButton() {
-        return this.private.elements.tabButton;
+        return this.inner.elements.tabButton;
     }
 
     getTabContent() {
-        return this.private.elements.tabContent;
+        return this.inner.elements.tabContent;
     }
 
     update() {
         const text = JSON.stringify(this.data, null, 2);
-        this.private.elements.charTextElement.setValue(text);
+        this.inner.elements.charTextElement.setValue(text);
     }
 }
 

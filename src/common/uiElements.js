@@ -9,7 +9,7 @@ const CSS = Object.freeze({
 
 export class UIIcon {
     constructor(baseImage) {
-        this.private = {
+        this.inner = {
             element: DElementBuilder.initImg()
                 .setAttribute(ATTRIBUTES.SRC, baseImage)
                 .create(),
@@ -17,11 +17,11 @@ export class UIIcon {
     }
 
     getElement() {
-        return this.private.element;
+        return this.inner.element;
     }
 
     setImage(image) {
-        this.private.element.setAttribute(ATTRIBUTES.SRC, image);
+        this.inner.element.setAttribute(ATTRIBUTES.SRC, image);
     }
 }
 
@@ -47,21 +47,21 @@ export class UIIconButton extends UIIcon {
     constructor(enableImage, disableImage) {
         super(enableImage);
 
-        this.private.enableImage = enableImage;
-        this.private.disableImage = disableImage;
+        this.inner.enableImage = enableImage;
+        this.inner.disableImage = disableImage;
     }
 
     setActive(isActive) {
-        this.private.element.setActive(isActive);
-        this.setImage(isActive ? this.private.enableImage : this.private.disableImage);
+        this.inner.element.setActive(isActive);
+        this.setImage(isActive ? this.inner.enableImage : this.inner.disableImage);
     }
 
     setVisible(isVisible) {
-        this.private.element.setVisible(isVisible);
+        this.inner.element.setVisible(isVisible);
     }
 
     setOnClickEvent(func) {
-        this.private.element.setEventHandler(EVENTS.CLICK, func);
+        this.inner.element.setEventHandler(EVENTS.CLICK, func);
     }
 }
 
@@ -74,7 +74,7 @@ export class UIPointsLine {
         subButton.setVisible(showButtons);
         addButton.setVisible(showButtons);
 
-        this.private = {
+        this.inner = {
             pointsCount,
             subButton,
             points,
@@ -90,48 +90,48 @@ export class UIPointsLine {
     }
 
     getElement() {
-        return this.private.container;
+        return this.inner.container;
     }
 
     getSubButton() {
-        return this.private.subButton;
+        return this.inner.subButton;
     }
 
     getAddButton() {
-        return this.private.addButton;
+        return this.inner.addButton;
     }
 
     setValue(disabled, active) {
-        for (const point of this.private.points) {
+        for (const point of this.inner.points) {
             point.setEmpty();
         }
 
         for (let i = 0; i < disabled; i++) {
-            this.private.points[i]?.setDisable();
+            this.inner.points[i]?.setDisable();
         }
 
         for (let i = 0; i < active; i++) {
-            this.private.points[disabled + i]?.setActive();
+            this.inner.points[disabled + i]?.setActive();
         }
     }
 }
 
 export class UIText {
     constructor(text, wrapAttrubutes = {}) {
-        this.private = { element: DElementBuilder.initDiv(wrapAttrubutes).create(), };
-        this.private.element.setText(text);
+        this.inner = { element: DElementBuilder.initDiv(wrapAttrubutes).create(), };
+        this.inner.element.setText(text);
     }
 
     getElement() {
-        return this.private.element;
+        return this.inner.element;
     }
 
     setText(text) {
-        this.private.element.setText(text);
+        this.inner.element.setText(text);
     }
 
     setVisible(isVisible) {
-        this.private.element.setVisible(isVisible);
+        this.inner.element.setVisible(isVisible);
     }
 }
 
@@ -141,21 +141,21 @@ export class UITextList {
         const container = DElementBuilder.initDiv()
             .appendChilds(list).create();
 
-        this.private = { list, container, };
+        this.inner = { list, container, };
     }
 
     getElement() {
-        return this.private.container;
+        return this.inner.container;
     }
 
     addItem(text, itemAttrubutes = {}) {
         const item = DElementBuilder.initListItem(itemAttrubutes)
             .appendChilds(text).create();
-        this.private.list.appendChilds(item);
+        this.inner.list.appendChilds(item);
     }
 
     clear() {
-        this.private.list.setText(EMPTY_STRING);
+        this.inner.list.setText(EMPTY_STRING);
     }
 }
 
@@ -163,7 +163,7 @@ export class UIDropdown {
     constructor({ selectAttrubutes = {}, addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] } = {}) {
         const element = DElementBuilder.initSelect(selectAttrubutes).create();
 
-        this.private = { element };
+        this.inner = { element };
 
         if (addEmptyOption) {
             this.addOption(EMPTY_STRING, emptyOptionAttrubutes);
@@ -175,29 +175,29 @@ export class UIDropdown {
     }
 
     getElement() {
-        return this.private.element;
+        return this.inner.element;
     }
 
     clear() {
-        this.private.element.setText(EMPTY_STRING);
+        this.inner.element.setText(EMPTY_STRING);
     }
 
     addOption(text, optionAttrubutes = {}) {
         const optionElement = DElementBuilder.initOption(optionAttrubutes)
             .appendChilds(text).create();
-        this.private.element.appendChilds(optionElement);
+        this.inner.element.appendChilds(optionElement);
     }
 
     setOnChangeEvent(handler) {
-        this.private.element.setEventHandler(EVENTS.CHANGE, handler);
+        this.inner.element.setEventHandler(EVENTS.CHANGE, handler);
     }
 
     setActive(isActive) {
-        this.private.element.setActive(isActive);
+        this.inner.element.setActive(isActive);
     }
 
     setVisible(isVisible) {
-        this.private.element.setVisible(isVisible);
+        this.inner.element.setVisible(isVisible);
     }
 }
 
@@ -214,35 +214,35 @@ class UIBaseInput {
         const container = DElementBuilder.initDiv()
             .appendChilds(input).create();
 
-        this.private = { input, container, };
+        this.inner = { input, container, };
     }
 
     getElement() {
-        return this.private.container;
+        return this.inner.container;
     }
 
     getValue() {
-        return this.private.input.getValue();
+        return this.inner.input.getValue();
     }
 
     setValue(value) {
-        return this.private.input.setValue(value);
+        return this.inner.input.setValue(value);
     }
 
     setReadOnly(isReadOnly) {
-        this.private.input.setReadOnly(isReadOnly);
+        this.inner.input.setReadOnly(isReadOnly);
     }
 
     setVisible(isVisible) {
-        this.private.container.setVisible(isVisible);
+        this.inner.container.setVisible(isVisible);
     }
 
     setActive(isActive) {
-        this.private.input.setActive(isActive);
+        this.inner.input.setActive(isActive);
     }
 
     setOnInputEvent(handler) {
-        this.private.input.setEventHandler(EVENTS.INPUT, handler);
+        this.inner.input.setEventHandler(EVENTS.INPUT, handler);
     }
 }
 
@@ -302,11 +302,11 @@ export class UITextOrTextInput extends UIBaseInput {
             super(inputBuilder);
 
             this.getValue = function () {
-                return this.private.input.getText();
+                return this.inner.input.getText();
             };
 
             this.setValue = function (value) {
-                return this.private.input.setText(value);
+                return this.inner.input.setText(value);
             };
         }
     }
@@ -342,13 +342,13 @@ export class UITextOrNumberInput extends UIBaseInput {
             super(inputBuilder);
 
             this.getValue = function () {
-                const value = this.private.input.getText();
+                const value = this.inner.input.getText();
                 return SIMPLE_TO_NUMBER_MAPPER(value);
             };
 
             this.setValue = function (value) {
                 const mappedValue = SIMPLE_TO_NUMBER_MAPPER(value);
-                return this.private.input.setText(mappedValue);
+                return this.inner.input.setText(mappedValue);
             };
         }
     }

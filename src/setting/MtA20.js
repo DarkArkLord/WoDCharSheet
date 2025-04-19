@@ -409,7 +409,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
             dotsInput: {
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 min: 0,
-                price: (total) => total == 0 ? 10 : total * 8, // Add Affinity/Other Sphere
+                price: (total) => total == 0 ? 10 : total * 8,
+                alternatePrice: (total) => total == 0 ? 10 : total * 7, // Add Affinity/Other Sphere
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {

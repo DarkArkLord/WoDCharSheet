@@ -136,19 +136,24 @@ class CharUiDotsElement {
             validations?.prev,
             validations?.next,
         );
-        const hasAltPrice = !!dotsInputValidations?.alternatePrice;
+
+        const hasAltPrice = !!dotsInputValidations?.altPrice;
         const useAltPriceWrapper = new ValueWrapper(data, ALT_PRICE_FIELD, false);
         const priceWrapper = new DotsValuePriceWrapper(
             wrapper,
             hasAltPrice && useAltPriceWrapper.getValue()
-                ? dotsInputValidations?.alternatePrice
+                ? dotsInputValidations.altPrice
                 : dotsInputValidations?.price,
         );
 
         // Elements
         const altPriceCheckBox = new UIСheckBoxInput();
-        altPriceCheckBox.setVisible(hasAltPrice);
-        if (isEditable && hasAltPrice) {
+        altPriceCheckBox.setVisible(dotsInputValidations.showAltPrice);
+
+        const isAltPriceCheckBoxEditable = isEditable && dotsInputValidations.editableAltPrice;
+        altPriceCheckBox.setReadOnly(!isAltPriceCheckBoxEditable);
+
+        if (isAltPriceCheckBoxEditable) {
             altPriceCheckBox.setOnInputEvent(() => {
                 const flag = altPriceCheckBox.getValue();
                 useAltPriceWrapper.setValue(flag);
@@ -220,11 +225,12 @@ class CharUiDotsElement {
         const wrapper = data.wrapper;
         const elements = this.inner.elements;
 
+        const useAltPrice = data.useAltPriceWrapper.getValue();
+        elements.altPriceCheckBox.setValue(useAltPrice);
+
         if (data.hasAltPrice) {
             data.priceWrapper.setPriceFunc(
-                data.useAltPriceWrapper.getValue()
-                    ? dotsInfo.alternatePrice
-                    : dotsInfo.price
+                useAltPrice ? dotsInfo.altPrice : dotsInfo.price
             );
         }
 

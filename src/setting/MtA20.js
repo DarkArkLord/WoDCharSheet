@@ -260,6 +260,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 min: 0,
                 price: (total) => 1,
+                showAltPrice: true,
+                editableAltPrice: true,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
@@ -329,6 +331,8 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 min: 0,
                 price: (total) => 7,
+                showAltPrice: true,
+                editableAltPrice: true,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
@@ -410,7 +414,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 min: 0,
                 price: (total) => total == 0 ? 10 : total * 8,
-                alternatePrice: (total) => total == 0 ? 10 : total * 7, // Add Affinity/Other Sphere
+                showAltPrice: true,
+                editableAltPrice: true,
+                altPrice: (total) => total == 0 ? 10 : total * 7,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
@@ -478,6 +484,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 dotsCount: DEFAULT_POINTS_COUNT_5,
                 totalMin: 0,
                 totalMax: 5,
+                showAltPrice: true,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {

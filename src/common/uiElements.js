@@ -204,9 +204,11 @@ export class UIDropdown {
 const InputType = Object.freeze({
     Text: 'text',
     Number: 'number',
+    CheckBox: 'checkbox',
 });
 
 const SIMPLE_TO_NUMBER_MAPPER = value => +value;
+const SIMPLE_TO_BOOL_MAPPER = value => !!value;
 
 class UIBaseInput {
     constructor(inputBuilder) {
@@ -278,6 +280,18 @@ export class UINumberInput extends UIBaseInput {
 
         inputBuilder.setMapper(ACTIONS.GET, SIMPLE_TO_NUMBER_MAPPER);
         inputBuilder.setMapper(ACTIONS.SET, SIMPLE_TO_NUMBER_MAPPER);
+
+        super(inputBuilder);
+    }
+}
+
+export class UIСheckBoxInput extends UIBaseInput {
+    constructor() {
+        const inputBuilder = DElementBuilder.initInput()
+            .setAttribute(ATTRIBUTES.TYPE, InputType.CheckBox);
+
+        inputBuilder.setMapper(ACTIONS.GET, SIMPLE_TO_BOOL_MAPPER);
+        inputBuilder.setMapper(ACTIONS.SET, SIMPLE_TO_BOOL_MAPPER);
 
         super(inputBuilder);
     }

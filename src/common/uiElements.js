@@ -208,7 +208,6 @@ const InputType = Object.freeze({
 });
 
 const SIMPLE_TO_NUMBER_MAPPER = value => +value;
-const SIMPLE_TO_BOOL_MAPPER = value => !!value;
 
 class UIBaseInput {
     constructor(inputBuilder) {
@@ -290,10 +289,15 @@ export class UIСheckBoxInput extends UIBaseInput {
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.CheckBox);
 
-        inputBuilder.setMapper(ACTIONS.GET, SIMPLE_TO_BOOL_MAPPER);
-        inputBuilder.setMapper(ACTIONS.SET, SIMPLE_TO_BOOL_MAPPER);
-
         super(inputBuilder);
+    }
+
+    getValue() {
+        return this.inner.input.getAttribute(ATTRIBUTES.CHECKED);
+    }
+
+    setValue(value) {
+        return this.inner.input.setAttribute(ATTRIBUTES.CHECKED, value);
     }
 }
 

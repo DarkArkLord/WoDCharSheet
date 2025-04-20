@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput, UIDropdown, UIIconButton } from './uiElements.js'
+import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput, UIDropdown, UIIconButton, UIСheckBoxInput } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -95,6 +95,11 @@ class DotsValuePriceWrapper {
 
         return this.price;
     }
+
+    setPriceFunc(priceFunc) {
+        this.priceFunc = priceFunc;
+        this.isDirty = true;
+    }
 }
 
 const DEFAULT_DOTS_COUNT = 5;
@@ -106,6 +111,7 @@ const DEFAULT_COMPARATOR = (a, b) => b - a;
 const SPECIALTY_FIELD = 'specialty'
 const TEXT_FIELD = 'text';
 const TYPE_FIELD = 'type';
+const ALT_PRICE_FIELD = 'useAltPrice';
 
 class CharUiDotsElement {
     constructor(input) {
@@ -130,9 +136,27 @@ class CharUiDotsElement {
             validations?.prev,
             validations?.next,
         );
-        const priceWrapper = new DotsValuePriceWrapper(wrapper, dotsInputValidations?.price);
+        const hasAltPrice = !!dotsInputValidations?.alternatePrice;
+        const useAltPriceWrapper = new ValueWrapper(data, ALT_PRICE_FIELD, false);
+        const priceWrapper = new DotsValuePriceWrapper(
+            wrapper,
+            hasAltPrice && useAltPriceWrapper.getValue()
+                ? dotsInputValidations?.alternatePrice
+                : dotsInputValidations?.price,
+        );
 
         // Elements
+        const altPriceCheckBox = new UIСheckBoxInput();
+        altPriceCheckBox.setVisible(hasAltPrice);
+        if (isEditable && hasAltPrice) {
+            altPriceCheckBox.setOnInputEvent(() => {
+                const flag = altPriceCheckBox.getValue();
+                useAltPriceWrapper.setValue(flag);
+
+                updateEvent.invoke();
+            });
+        }
+
         const dots = new UIPointsLine(dotsCount, isEditable);
         const subButton = dots.getSubButton();
         const addButton = dots.getAddButton();
@@ -170,9 +194,12 @@ class CharUiDotsElement {
             data: {
                 data,
                 wrapper,
+                hasAltPrice,
+                useAltPriceWrapper,
                 priceWrapper,
             },
             elements: {
+                altPriceCheckBox,
                 dots,
                 subButton,
                 addButton,
@@ -180,13 +207,26 @@ class CharUiDotsElement {
         };
     }
 
-    getElement() {
+    getAltPriceElement() {
+        return this.inner.elements.altPriceCheckBox.getElement();
+    }
+    getDotsElement() {
         return this.inner.elements.dots.getElement();
     }
 
     update() {
-        const wrapper = this.inner.data.wrapper;
+        const data = this.inner.data;
+        const dotsInfo = this.inner.validations.dots;
+        const wrapper = data.wrapper;
         const elements = this.inner.elements;
+
+        if (data.hasAltPrice) {
+            data.priceWrapper.setPriceFunc(
+                data.useAltPriceWrapper.getValue()
+                    ? dotsInfo.alternatePrice
+                    : dotsInfo.price
+            );
+        }
 
         if (this.inner.isEditable) {
             const prevValue = wrapper.getPrevValue();
@@ -290,11 +330,14 @@ class CharUiTextWithDotsElement {
         };
     }
 
+    getAltPriceElement() {
+        return this.inner.elements.dots.getAltPriceElement();
+    }
     getTextElement() {
         return this.inner.elements.text.getElement();
     }
     getDotsElement() {
-        return this.inner.elements.dots.getElement();
+        return this.inner.elements.dots.getDotsElement();
     }
 
     update() {
@@ -393,6 +436,8 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     }
 
     update() {
+        super.update();
+
         const data = this.inner.data;
         const elements = this.inner.elements;
         const validations = this.inner.validations;
@@ -428,8 +473,6 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
                 : data.info.translation
             elements.text.setText(text);
         }
-
-        super.update();
     }
 }
 
@@ -472,11 +515,12 @@ class CharUiLineDotsSectionElement {
 
         containerBuilder.addRow().addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .setAttribute(ATTRIBUTES.COLSPAN, 4)
+            .setAttribute(ATTRIBUTES.COLSPAN, 5)
             .appendChilds(header.getElement());
 
         for (const item of items) {
             const row = containerBuilder.addRow();
+            row.addData().appendChilds(item.getAltPriceElement());
             row.addData().appendChilds(item.getTextElement());
             row.addData().appendChilds(item.getSpecialtyElement());
             row.addData().appendChilds(item.getDotsElement());
@@ -933,7 +977,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
     }
 
     getDotsElement() {
-        return this.inner.elements.dots.getElement();
+        return this.inner.elements.dots.getDotsElement();
     }
 
     getPriceElement() {
@@ -990,9 +1034,9 @@ class CharUiLineInputDotsWithVariantsItemElement {
     setDotsHighlight(isVisible) {
         const element = this.inner.elements.dots;
         if (isVisible) {
-            element.getElement().addClass(CSS.BORDER_RED_1);
+            element.getDotsElement().addClass(CSS.BORDER_RED_1);
         } else {
-            element.getElement().removeClass(CSS.BORDER_RED_1);
+            element.getDotsElement().removeClass(CSS.BORDER_RED_1);
         }
     }
 

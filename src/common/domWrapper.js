@@ -21,6 +21,7 @@ export const ATTRIBUTES = Object.freeze({
     COLSPAN: 'colspan',
     COLS: 'cols',
     ROWS: 'rows',
+    CHECKED: 'checked',
 });
 
 export const EVENTS = Object.freeze({

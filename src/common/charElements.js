@@ -536,9 +536,12 @@ class CharUiLineDotsSectionElement {
         }
 
         const hasCustomItems = !!sectionInfo.variants;
-        const customItemsData = keeper[CUSTOM_ITEMS_FIELD] = keeper[CUSTOM_ITEMS_FIELD] ?? {};
-        const customItems = hasCustomItems
-            ? new CharUiLineInputDotsWithVariantsListElement({
+        let customItems = undefined;
+
+        if (hasCustomItems) {
+            const customItemsData = keeper[CUSTOM_ITEMS_FIELD] = keeper[CUSTOM_ITEMS_FIELD] ?? {};
+
+            customItems = new CharUiLineInputDotsWithVariantsListElement({
                 data: {
                     keeper: customItemsData,
                     valueInfo: sectionInfo,
@@ -550,9 +553,7 @@ class CharUiLineDotsSectionElement {
                 },
                 updateEvent: updateEvent,
             })
-            : undefined;
 
-        if (hasCustomItems) {
             containerBuilder.addRow().addData()
                 .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
                 .setAttribute(ATTRIBUTES.COLSPAN, columnsCount)

@@ -518,10 +518,11 @@ class CharUiLineDotsSectionElement {
         }));
 
         const containerBuilder = DTableBuilder.init();
+        const columnsCount = 5;
 
         containerBuilder.addRow().addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .setAttribute(ATTRIBUTES.COLSPAN, 5)
+            .setAttribute(ATTRIBUTES.COLSPAN, columnsCount)
             .appendChilds(header.getElement());
 
         for (const item of items) {
@@ -531,6 +532,29 @@ class CharUiLineDotsSectionElement {
             row.addData().appendChilds(item.getSpecialtyElement());
             row.addData().appendChilds(item.getDotsElement());
             row.addData().appendChilds(item.getPriceElement());
+        }
+
+        const hasCustomItems = !!sectionInfo.variants;
+        const customItems = hasCustomItems
+            ? new CharUiLineInputDotsWithVariantsListElement({
+                data: {
+                    keeper,
+                    valueInfo: sectionInfo,
+                },
+                validations: {
+                    validations,
+                    partValidations,
+                    dataForValidations: validationsInfo,
+                },
+                updateEvent: updateEvent,
+            })
+            : undefined;
+
+        if (hasCustomItems) {
+            containerBuilder.addRow().addData()
+                .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+                .setAttribute(ATTRIBUTES.COLSPAN, columnsCount)
+                .appendChilds(customItems.getElement());
         }
 
         this.inner = {
@@ -548,6 +572,7 @@ class CharUiLineDotsSectionElement {
             elements: {
                 header,
                 items,
+                customItems,
                 container: containerBuilder.create(),
             }
         };
@@ -563,13 +588,19 @@ class CharUiLineDotsSectionElement {
             item.update();
         }
 
+        inner.elements.customItems?.update();
+
         if (inner.isEditable) {
             inner.elements.header.setText(`${inner.data.sectionTitle} (${this.getPrice()})`);
         }
     }
 
     validate() {
-        const errors = this.inner.elements.items.flatMap(item => item.validate() ?? []) ?? [];
+        const elements = this.inner.elements;
+        const errors = [
+            ...(elements.items.flatMap(item => item.validate() ?? []) ?? []),
+            ...(elements.customItems?.validate() ?? []),
+        ];
 
         this.setHighlight(errors.length > 0);
 
@@ -586,7 +617,10 @@ class CharUiLineDotsSectionElement {
     }
 
     getPrice() {
-        return this.inner.elements.items.reduce((acc, cur) => acc += cur.getPrice(), 0);
+        const elements = this.inner.elements;
+        const itemsPrice = elements.items?.reduce((acc, cur) => acc += cur.getPrice(), 0) ?? 0;
+        const customItemsPrice = elements.customItems?.getPrice() ?? 0;
+        return itemsPrice + customItemsPrice;
     }
 }
 

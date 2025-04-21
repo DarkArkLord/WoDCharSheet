@@ -94,7 +94,10 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                     { id: 'Leadership', translation: 'Лидерство', },
                     { id: 'Streetwise', translation: 'Знание улиц', },
                     { id: 'Subterfuge', translation: 'Хитрость', },
-                ]
+                ],
+                variants: [
+                    { id: 'TestTalent1', translation: 'ТестТалант1', },
+                ],
             },
             {
                 id: 'Skills', translation: 'Навыки',
@@ -110,7 +113,10 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                     { id: 'Stealth', translation: 'Скрытность', },
                     { id: 'Survival', translation: 'Выживание', },
                     { id: 'Technology', translation: 'Электроника', },
-                ]
+                ],
+                variants: [
+                    { id: 'TestSkill1', translation: 'ТестНавык1', },
+                ],
             },
             {
                 id: 'Knowledges', translation: 'Знания',
@@ -126,7 +132,10 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                     { id: 'Occult', translation: 'Оккультизм', },
                     { id: 'Politics', translation: 'Политика', },
                     { id: 'Science', translation: 'Наука', },
-                ]
+                ],
+                variants: [
+                    { id: 'TestKnowledge1', translation: 'ТестЗнание1', },
+                ],
             },
         ],
     },

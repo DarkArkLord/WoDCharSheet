@@ -112,6 +112,7 @@ const SPECIALTY_FIELD = 'specialty'
 const TEXT_FIELD = 'text';
 const TYPE_FIELD = 'type';
 const ALT_PRICE_FIELD = 'useAltPrice';
+const CUSTOM_ITEMS_FIELD = 'customItems';
 
 class CharUiDotsElement {
     constructor(input) {
@@ -535,10 +536,11 @@ class CharUiLineDotsSectionElement {
         }
 
         const hasCustomItems = !!sectionInfo.variants;
+        const customItemsData = keeper[CUSTOM_ITEMS_FIELD] = keeper[CUSTOM_ITEMS_FIELD] ?? {};
         const customItems = hasCustomItems
             ? new CharUiLineInputDotsWithVariantsListElement({
                 data: {
-                    keeper,
+                    keeper: customItemsData,
                     valueInfo: sectionInfo,
                 },
                 validations: {

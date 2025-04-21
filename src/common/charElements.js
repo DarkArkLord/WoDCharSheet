@@ -1186,8 +1186,8 @@ export class CharUiLineInputDotsWithVariantsListElement {
 
             rowBuilder.addData().appendChilds(item.getRemoveButtonElement());
             rowBuilder.addData().appendChilds(item.getTextElement());
-            rowBuilder.addData().appendChilds(item.getDotsElement());
             rowBuilder.addData().appendChilds(item.getVariantsElement());
+            rowBuilder.addData().appendChilds(item.getDotsElement());
             rowBuilder.addData().appendChilds(item.getPriceElement());
 
             container.appendChilds(rowBuilder.create());
@@ -1705,8 +1705,8 @@ export class CharUiLineInputPointsWithVariantsListElement {
             rowBuilder.addData().appendChilds(item.getRemoveButtonElement());
             rowBuilder.addData().appendChilds(item.getTextElement());
             rowBuilder.addData().appendChilds(item.getTypeElement());
-            rowBuilder.addData().appendChilds(item.getPointsElement());
             rowBuilder.addData().appendChilds(item.getVariantsElement());
+            rowBuilder.addData().appendChilds(item.getPointsElement());
 
             container.appendChilds(rowBuilder.create());
         }

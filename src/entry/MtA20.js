@@ -152,6 +152,7 @@ class CharacterMtAState {
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.BACKGROUNDS],
+                    showHeader: true,
                 },
                 validations: {
                     validations: validations,

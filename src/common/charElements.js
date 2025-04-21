@@ -545,6 +545,7 @@ class CharUiLineDotsSectionElement {
                 data: {
                     keeper: customItemsData,
                     valueInfo: sectionInfo,
+                    showHeader: false,
                 },
                 validations: {
                     validations,
@@ -1094,6 +1095,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
             data: {
                 keeper,
                 valueInfo,
+                showHeader,
             },
             validations: {
                 validations,
@@ -1117,15 +1119,18 @@ export class CharUiLineInputDotsWithVariantsListElement {
         // Elements
         const COLS_IN_ROW = 5;
 
-        const header = new UIText(valueInfo.translation, {});
-        const headerRow = DElementBuilder.initTableRow()
-            .appendChilds(
-                DElementBuilder.initTableData()
-                    .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-                    .setAttribute(ATTRIBUTES.COLSPAN, COLS_IN_ROW)
-                    .appendChilds(header.getElement())
-                    .create()
-            ).create();
+        let header, headerRow;
+        if (showHeader) {
+            header = new UIText(valueInfo.translation, {});
+            headerRow = DElementBuilder.initTableRow()
+                .appendChilds(
+                    DElementBuilder.initTableData()
+                        .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+                        .setAttribute(ATTRIBUTES.COLSPAN, COLS_IN_ROW)
+                        .appendChilds(header.getElement())
+                        .create()
+                ).create();
+        }
 
         const addButton = new UIIconButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
         addButton.setVisible(isEditable);
@@ -1150,6 +1155,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
         this.inner = {
             updateEvent,
             isEditable,
+            showHeader,
             validations: {
                 info: validationsInfo,
                 main: validations,
@@ -1212,7 +1218,9 @@ export class CharUiLineInputDotsWithVariantsListElement {
         const container = inner.elements.container;
         container.setText(EMPTY_STRING);
 
-        container.appendChilds(inner.elements.headerRow);
+        if (inner.showHeader) {
+            container.appendChilds(inner.elements.headerRow);
+        }
 
         for (const itemData of this.inner.data.data) {
             const item = this.createItemWrapper(itemData);
@@ -1245,7 +1253,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
             item.update();
         }
 
-        if (inner.isEditable) {
+        if (inner.isEditable && inner.showHeader) {
             inner.elements.header.setText(`${inner.data.info.translation} (${this.getPrice()})`);
         }
     }

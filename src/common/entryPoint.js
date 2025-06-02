@@ -179,7 +179,7 @@ export class CharacterBaseState {
 }
 
 class ConfigTab {
-    constructor(dataKeeper, updateEvent, tabText) {
+    constructor(dataKeeper, updateEvent, tabText, entryPoint) {
         const instance = this;
         updateEvent.addHandler(() => instance.update());
 
@@ -203,10 +203,16 @@ class ConfigTab {
                 const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING;
                 try {
                     const parsed = JSON.parse(input);
-                    debugger;
-                    // Object.assign(dataKeeper.charData, parsed);
-                    // В компонентах ссылки на старые данные, нужно пересоздавать весь character = new CharacterBase
                     dataKeeper.charData = parsed;
+
+                    // Внутри Character поля создаются через
+                    // const value = keeper[key] = keeper[key] ?? {}
+                    // из-за чего при загрузке новых данных в keeper
+                    // внутри Character остаются старые ссылки.
+                    // Для решения проблемы требуется пересоздание Character.
+                    entryPoint.reCreateCharacter();
+                    entryPoint.rebind();
+
                     updateEvent.invoke();
                 } catch (ex) {
                     alert(ex)
@@ -243,6 +249,7 @@ class ConfigTab {
         this.inner = {
             dataKeeper,
             updateEvent,
+            entryPoint,
             elements: {
                 inner: {
                     export: exportTextElement,
@@ -349,7 +356,7 @@ export class CharSheetEntryPoint {
 
         const updateEvent = new DarkEvent();
 
-        const character = new CharacterBase({
+        const characterInput = {
             dataKeeper,
             updateEvent,
             statesOrder,
@@ -357,11 +364,13 @@ export class CharSheetEntryPoint {
             validations,
             translations,
             version,
-        });
+        };
+        const character = new CharacterBase(characterInput);
 
-        const configTab = new ConfigTab(dataKeeper, updateEvent, configTabHeader);
+        const configTab = new ConfigTab(dataKeeper, updateEvent, configTabHeader, this);
 
         this.inner = {
+            characterInput,
             dataKeeper,
             updateEvent,
             elements: {
@@ -370,6 +379,12 @@ export class CharSheetEntryPoint {
             },
             htmlBody
         };
+    }
+
+    reCreateCharacter() {
+        const character = new CharacterBase(this.inner.characterInput);
+        this.inner.elements.character = character;
+        return character;
     }
 
     updateInvoke() {

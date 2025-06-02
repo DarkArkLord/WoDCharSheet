@@ -602,9 +602,9 @@ const main = new CharSheetEntryPoint({
     CharStateClass: CharacterMtAState,
     validations: CHAR_VALIDATIONS,
     translations: CHAR_VALUES_TRANSLATIONS,
-    htmlBody: document.body,
+    htmlBody: document.getElementById('main-container'),
     configTabHeader: CHAR_SETTINGS_TRANSLATION,
 });
 
 main.updateInvoke();
-// main.rebind();
+main.rebind();

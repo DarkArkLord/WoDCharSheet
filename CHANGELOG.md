@@ -60,9 +60,9 @@
 
 ## [Unreleased]
 
-## [In Progress]
-
 - Универсализировать точку входа
+
+## [In Progress]
 
 ## [To Do]
 

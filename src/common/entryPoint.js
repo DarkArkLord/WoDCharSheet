@@ -341,15 +341,6 @@ export class CharSheetEntryPoint {
         const tabsContainer = DElementBuilder.initDiv()
             .create();
 
-        this.inner.htmlBody.innerHTML = EMPTY_STRING;
-        this.inner.htmlBody.append(
-            headersContainer.getElement(),
-            tabsContainer.getElement(),
-        );
-
-        // containers.headersContainer.setText(EMPTY_STRING);
-        // containers.tabsContainer.setText(EMPTY_STRING);
-
         const elements = this.inner.elements;
         const tabs = elements.character.getTabsInfo();
         tabs.push({
@@ -361,6 +352,13 @@ export class CharSheetEntryPoint {
             headersContainer.appendChilds(tab.button);
             tabsContainer.appendChilds(tab.content);
         }
+
+        const htmlBody = this.inner.htmlBody;
+        htmlBody.innerHTML = EMPTY_STRING;
+        htmlBody.append(
+            headersContainer.getElement(),
+            tabsContainer.getElement(),
+        );
 
         configureDarkTabsAndButtons({
             tabs: tabs,

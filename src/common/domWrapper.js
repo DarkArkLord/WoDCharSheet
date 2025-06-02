@@ -37,12 +37,18 @@ export const ACTIONS = Object.freeze({
 
 export class DarkHtmlElement {
     constructor(tag, { attributes = {}, isActive = true, events = {}, mappers = {} } = {}, ...childs) {
+        const instance = this;
+
         this.inner = {
             element: render(tag, attributes, ...childs),
             isActive,
-            events,
+            events: {},
             mappers,
         };
+
+        for (const eventName of Object.keys(events)) {
+            instance.setEventHandler(eventName, events[eventName]);
+        }
     }
 
     getElement() {

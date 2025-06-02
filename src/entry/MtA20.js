@@ -7,10 +7,12 @@ const CHAR_SHEET_TITLE = `${CHAR_SHEET_NAME} ${CHAR_SHEET_VERSION}`;
 document.title = CHAR_SHEET_TITLE;
 document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
+import { DTableBuilder } from '../common/domWrapper.js'
 import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
 import { CharacterBaseState, CharSheetEntryPoint } from '../common/entryPoint.js'
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
+
 
 const editStatesForTabsOrder = [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP, CHAR_EDIT_STATES.TOTAL];
 

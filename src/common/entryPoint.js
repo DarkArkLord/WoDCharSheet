@@ -13,6 +13,7 @@ const CSS = Object.freeze({
     BORDER_BLACK_1: 'border-black-1',
     BORDER_RED_1: 'border-red-1',
     TAB_BUTTONS_CONTAINER: 'tab-buttons-container',
+    MAGICK_BUTTON: 'magick-button magick-button-two',
 });
 
 const EMPTY_STRING = '';
@@ -208,7 +209,12 @@ class ConfigTab {
             .appendChilds('Экспорт');
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds(importButton);
+            .appendChilds(
+                DElementBuilder.initDiv()
+                    .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
+                    .appendChilds(importButton)
+                    .create()
+            );
 
         const textRow = contentTable.addRow();
         textRow.addData().appendChilds(exportTextElement);

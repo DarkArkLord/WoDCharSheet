@@ -329,6 +329,12 @@ class CharacterBase {
             error.state, error.part, error.section, error.value, error.commonValue, error.text
         ].filter(x => x).join(': ')) ?? [];
 
+        const charVersion = this.inner.dataKeeper.charData?.version;
+        const appVersion = this.inner.version;
+        if(charVersion !== appVersion) {
+            errorTexts.push(`Несоответствие версий! Персонаж создан в версии ${charVersion}, текущая версия ${appVersion}. Для персонажей, загруженных из иных версий, корректная работа не гарантируется.`)
+        }
+
         for (const state of states) {
             const errorsList = state.getErrorsList();
             errorsList.clear();

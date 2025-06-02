@@ -182,16 +182,42 @@ class ConfigTab {
         const instance = this;
         updateEvent.addHandler(() => instance.update());
 
-        const charTextElement = DElementBuilder.initTextArea()
+        // Content
+        const exportTextElement = DElementBuilder.initTextArea()
             .setAttribute(ATTRIBUTES.COLS, 45)
             .setAttribute(ATTRIBUTES.ROWS, 45)
             .setAttribute(ATTRIBUTES.READ_ONLY, true)
             .setAttribute(ATTRIBUTES.DISABLED, true)
             .create();
 
+        const importTextElement = DElementBuilder.initTextArea()
+            .setAttribute(ATTRIBUTES.COLS, 45)
+            .setAttribute(ATTRIBUTES.ROWS, 45)
+            .create();
+
+        const importButton = DElementBuilder.initDiv()
+            .appendChilds('Импорт')
+            .create();
+
+        // Configure table
+        const contentTable = DTableBuilder.init();
+
+        const headersRow = contentTable.addRow();
+        headersRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds('Экспорт');
+        headersRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(importButton);
+
+        const textRow = contentTable.addRow();
+        textRow.addData().appendChilds(exportTextElement);
+        textRow.addData().appendChilds(importTextElement);
+
+        // Finalize
         const tabContent = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_CONTENT)
-            .appendChilds(charTextElement)
+            .appendChilds(contentTable.create())
             .create();
 
         const tabButton = DElementBuilder.initDiv()
@@ -203,7 +229,9 @@ class ConfigTab {
             dataKeeper,
             updateEvent,
             elements: {
-                charTextElement,
+                inner: {
+                    export: exportTextElement,
+                },
                 tabButton,
                 tabContent,
             },
@@ -220,7 +248,7 @@ class ConfigTab {
 
     update() {
         const text = JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
-        this.inner.elements.charTextElement.setValue(text);
+        this.inner.elements.inner.export.setValue(text);
     }
 }
 

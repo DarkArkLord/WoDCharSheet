@@ -605,3 +605,6 @@ const main = new CharSheetEntryPoint({
     htmlBody: document.body,
     configTabHeader: CHAR_SETTINGS_TRANSLATION,
 });
+
+main.updateInvoke();
+// main.rebind();

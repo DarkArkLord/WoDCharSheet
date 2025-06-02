@@ -318,8 +318,6 @@ export class CharSheetEntryPoint {
 
         const configTab = new ConfigTab(dataKeeper, updateEvent, configTabHeader);
 
-        updateEvent.invoke();
-
         const headersContainer = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTONS_CONTAINER)
             .create();
@@ -345,8 +343,10 @@ export class CharSheetEntryPoint {
                 tabsContainer,
             }
         };
+    }
 
-        this.rebind();
+    updateInvoke() {
+        this.inner.updateEvent.invoke();
     }
 
     rebind() {

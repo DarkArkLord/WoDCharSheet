@@ -318,18 +318,6 @@ export class CharSheetEntryPoint {
 
         const configTab = new ConfigTab(dataKeeper, updateEvent, configTabHeader);
 
-        const headersContainer = DElementBuilder.initDiv()
-            .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTONS_CONTAINER)
-            .create();
-
-        const tabsContainer = DElementBuilder.initDiv()
-            .create();
-
-        htmlBody.append(
-            headersContainer.getElement(),
-            tabsContainer.getElement(),
-        );
-
         this.inner = {
             dataKeeper,
             updateEvent,
@@ -337,11 +325,7 @@ export class CharSheetEntryPoint {
                 character,
                 configTab,
             },
-            containers: {
-                htmlBody,
-                headersContainer,
-                tabsContainer,
-            }
+            htmlBody
         };
     }
 
@@ -350,9 +334,21 @@ export class CharSheetEntryPoint {
     }
 
     rebind() {
-        const containers = this.inner.containers;
-        containers.headersContainer.setText(EMPTY_STRING);
-        containers.tabsContainer.setText(EMPTY_STRING);
+        const headersContainer = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTONS_CONTAINER)
+            .create();
+
+        const tabsContainer = DElementBuilder.initDiv()
+            .create();
+
+        this.inner.htmlBody.innerHTML = EMPTY_STRING;
+        this.inner.htmlBody.append(
+            headersContainer.getElement(),
+            tabsContainer.getElement(),
+        );
+
+        // containers.headersContainer.setText(EMPTY_STRING);
+        // containers.tabsContainer.setText(EMPTY_STRING);
 
         const elements = this.inner.elements;
         const tabs = elements.character.getTabsInfo();
@@ -362,8 +358,8 @@ export class CharSheetEntryPoint {
         });
 
         for (const tab of tabs) {
-            containers.headersContainer.appendChilds(tab.button);
-            containers.tabsContainer.appendChilds(tab.content);
+            headersContainer.appendChilds(tab.button);
+            tabsContainer.appendChilds(tab.content);
         }
 
         configureDarkTabsAndButtons({

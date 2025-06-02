@@ -197,7 +197,21 @@ class ConfigTab {
             .create();
 
         const importButton = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт')
+            .setEvent(EVENTS.CLICK, () => {
+                const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING;
+                try {
+                    const parsed = JSON.parse(input);
+                    debugger;
+                    // Object.assign(dataKeeper.charData, parsed);
+                    // В компонентах ссылки на старые данные, нужно пересоздавать весь character = new CharacterBase
+                    dataKeeper.charData = parsed;
+                    updateEvent.invoke();
+                } catch (ex) {
+                    alert(ex)
+                }
+            })
             .create();
 
         // Configure table
@@ -209,12 +223,7 @@ class ConfigTab {
             .appendChilds('Экспорт');
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds(
-                DElementBuilder.initDiv()
-                    .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
-                    .appendChilds(importButton)
-                    .create()
-            );
+            .appendChilds(importButton);
 
         const textRow = contentTable.addRow();
         textRow.addData().appendChilds(exportTextElement);

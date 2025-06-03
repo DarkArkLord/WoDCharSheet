@@ -17,6 +17,7 @@ const CSS = Object.freeze({
 });
 
 const EMPTY_STRING = '';
+const NOTES_FIELD = 'notes';
 
 export class CharacterBaseState {
     constructor(input) {
@@ -183,7 +184,7 @@ class ConfigTab {
         const instance = this;
         updateEvent.addHandler(() => instance.update());
 
-        // Content
+        // Text elements
         const exportTextElement = DElementBuilder.initTextArea()
             .setAttribute(ATTRIBUTES.COLS, 45)
             .setAttribute(ATTRIBUTES.ROWS, 45)
@@ -196,6 +197,17 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.ROWS, 45)
             .create();
 
+        const notesTextElement = DElementBuilder.initTextArea()
+            .setAttribute(ATTRIBUTES.COLS, 45)
+            .setAttribute(ATTRIBUTES.ROWS, 45)
+            .setEvent(EVENTS.INPUT, input => {
+                const text = input?.target?.value?.trim() ?? EMPTY_STRING;
+                entryPoint.setNotes(text);
+                updateEvent.invoke();
+            })
+            .create();
+
+        // Buttons
         const importButton = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт')
@@ -230,10 +242,14 @@ class ConfigTab {
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(importButton);
+        headersRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds('Заметки');
 
         const textRow = contentTable.addRow();
         textRow.addData().appendChilds(exportTextElement);
         textRow.addData().appendChilds(importTextElement);
+        textRow.addData().appendChilds(notesTextElement);
 
         // Finalize
         const tabContent = DElementBuilder.initDiv()
@@ -251,8 +267,13 @@ class ConfigTab {
             updateEvent,
             entryPoint,
             elements: {
-                inner: {
-                    export: exportTextElement,
+                text: {
+                    exportElement: exportTextElement,
+                    import: importTextElement,
+                    notes: notesTextElement,
+                },
+                buttons: {
+                    import: importButton,
                 },
                 tabButton,
                 tabContent,
@@ -269,8 +290,13 @@ class ConfigTab {
     }
 
     update() {
-        const text = JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
-        this.inner.elements.inner.export.setValue(text);
+        const textElements = this.inner.elements.text;
+
+        const charText = JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+        textElements.exportElement.setValue(charText);
+
+        const notes = this.inner.entryPoint.getNotes();
+        textElements.notes.setValue(notes);
     }
 }
 
@@ -331,7 +357,7 @@ class CharacterBase {
 
         const charVersion = this.inner.dataKeeper.charData?.version;
         const appVersion = this.inner.version;
-        if(charVersion !== appVersion) {
+        if (charVersion !== appVersion) {
             errorTexts.push(`Несоответствие версий! Персонаж создан в версии ${charVersion}, текущая версия ${appVersion}. Для персонажей, загруженных из иных версий, корректная работа не гарантируется.`)
         }
 
@@ -429,5 +455,13 @@ export class CharSheetEntryPoint {
             activeTabIndex: 0,
             activeStyleClass: 'active',
         });
+    }
+
+    getNotes() {
+        return this.inner.dataKeeper.charData[NOTES_FIELD] ?? EMPTY_STRING;
+    }
+
+    setNotes(text) {
+        this.inner.dataKeeper.charData[NOTES_FIELD] = text;
     }
 }

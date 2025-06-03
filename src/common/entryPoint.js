@@ -208,6 +208,30 @@ class ConfigTab {
             .create();
 
         // Buttons
+        const exportButton = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
+            .appendChilds('Экспорт в файл')
+            .setEvent(EVENTS.CLICK, () => {
+                const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING;
+                try {
+                    const parsed = JSON.parse(input);
+                    dataKeeper.charData = parsed;
+
+                    // Внутри Character поля создаются через
+                    // const value = keeper[key] = keeper[key] ?? {}
+                    // из-за чего при загрузке новых данных в keeper
+                    // внутри Character остаются старые ссылки.
+                    // Для решения проблемы требуется пересоздание Character.
+                    entryPoint.reCreateCharacter();
+                    entryPoint.rebind();
+
+                    updateEvent.invoke();
+                } catch (ex) {
+                    alert(ex)
+                }
+            })
+            .create();
+
         const importButton = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт')
@@ -238,24 +262,18 @@ class ConfigTab {
         const headersRow = contentTable.addRow();
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .setAttribute(ATTRIBUTES.COLSPAN, 2)
             .appendChilds('Экспорт');
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .setAttribute(ATTRIBUTES.COLSPAN, 2)
             .appendChilds(importButton);
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .setAttribute(ATTRIBUTES.COLSPAN, 2)
             .appendChilds('Заметки');
 
         const contentRow = contentTable.addRow();
-        contentRow.addData().setAttribute(ATTRIBUTES.COLSPAN, 2)
-            .appendChilds(exportTextElement);
-        contentRow.addData().setAttribute(ATTRIBUTES.COLSPAN, 2)
-            .appendChilds(importTextElement);
-        contentRow.addData().setAttribute(ATTRIBUTES.COLSPAN, 2)
-            .appendChilds(notesTextElement);
+        contentRow.addData().appendChilds(exportTextElement);
+        contentRow.addData().appendChilds(importTextElement);
+        contentRow.addData().appendChilds(notesTextElement);
 
         // Finalize
         const tabContent = DElementBuilder.initDiv()

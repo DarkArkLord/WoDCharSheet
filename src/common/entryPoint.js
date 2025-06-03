@@ -17,6 +17,7 @@ const CSS = Object.freeze({
 });
 
 const EMPTY_STRING = '';
+const NOTES_FIELD = 'notes';
 
 export class CharacterBaseState {
     constructor(input) {
@@ -331,7 +332,7 @@ class CharacterBase {
 
         const charVersion = this.inner.dataKeeper.charData?.version;
         const appVersion = this.inner.version;
-        if(charVersion !== appVersion) {
+        if (charVersion !== appVersion) {
             errorTexts.push(`Несоответствие версий! Персонаж создан в версии ${charVersion}, текущая версия ${appVersion}. Для персонажей, загруженных из иных версий, корректная работа не гарантируется.`)
         }
 
@@ -429,5 +430,13 @@ export class CharSheetEntryPoint {
             activeTabIndex: 0,
             activeStyleClass: 'active',
         });
+    }
+
+    getNotes() {
+        return this.inner.dataKeeper.charData[NOTES_FIELD] ?? EMPTY_STRING;
+    }
+
+    setNotes(text) {
+        this.inner.dataKeeper.charData[NOTES_FIELD] = text;
     }
 }

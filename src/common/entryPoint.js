@@ -14,6 +14,7 @@ const CSS = Object.freeze({
     BORDER_RED_1: 'border-red-1',
     TAB_BUTTONS_CONTAINER: 'tab-buttons-container',
     MAGICK_BUTTON: 'magick-button magick-button-two',
+    WIDTH_100: 'width-100',
 });
 
 const EMPTY_STRING = '';
@@ -208,6 +209,26 @@ class ConfigTab {
             .create();
 
         // Buttons
+        const exportButton = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
+            .appendChilds('Экспорт в файл')
+            .setEvent(EVENTS.CLICK, () => {
+                // Для импорта: https://sky.pro/wiki/html/otkrytie-dialoga-vybora-fayla-v-js-alternativnye-metody/
+                const data = instance.getCharDataJSON();
+                const blob = new Blob([data], { type: 'text/plain' });
+
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                // Нужен генератор имени, мб от даты + версии
+                link.download = 'wodCharSheet.txt';
+
+                link.click();
+
+                URL.revokeObjectURL(link.href);
+                link.remove();
+            })
+            .create();
+
         const importButton = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт')
@@ -233,12 +254,21 @@ class ConfigTab {
             .create();
 
         // Configure table
+        const exportTable = DTableBuilder.init();
+        const exportTableRow = exportTable.addRow();
+        exportTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, `${CSS.TEXT_ALIGN_CENTER} ${CSS.WIDTH_100}`)
+            .appendChilds('Экспорт');
+        exportTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(exportButton);
+
         const contentTable = DTableBuilder.init();
 
         const headersRow = contentTable.addRow();
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds('Экспорт');
+            .appendChilds(exportTable.create());
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(importButton);
@@ -246,10 +276,10 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds('Заметки');
 
-        const textRow = contentTable.addRow();
-        textRow.addData().appendChilds(exportTextElement);
-        textRow.addData().appendChilds(importTextElement);
-        textRow.addData().appendChilds(notesTextElement);
+        const contentRow = contentTable.addRow();
+        contentRow.addData().appendChilds(exportTextElement);
+        contentRow.addData().appendChilds(importTextElement);
+        contentRow.addData().appendChilds(notesTextElement);
 
         // Finalize
         const tabContent = DElementBuilder.initDiv()
@@ -289,10 +319,14 @@ class ConfigTab {
         return this.inner.elements.tabContent;
     }
 
+    getCharDataJSON() {
+        return JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+    }
+
     update() {
         const textElements = this.inner.elements.text;
 
-        const charText = JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+        const charText = this.getCharDataJSON();
         textElements.exportElement.setValue(charText);
 
         const notes = this.inner.entryPoint.getNotes();

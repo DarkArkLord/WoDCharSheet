@@ -14,6 +14,7 @@ const CSS = Object.freeze({
     BORDER_RED_1: 'border-red-1',
     TAB_BUTTONS_CONTAINER: 'tab-buttons-container',
     MAGICK_BUTTON: 'magick-button magick-button-two',
+    WIDTH_100: 'width-100',
 });
 
 const EMPTY_STRING = '';
@@ -212,23 +213,8 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Экспорт в файл')
             .setEvent(EVENTS.CLICK, () => {
-                const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING;
-                try {
-                    const parsed = JSON.parse(input);
-                    dataKeeper.charData = parsed;
-
-                    // Внутри Character поля создаются через
-                    // const value = keeper[key] = keeper[key] ?? {}
-                    // из-за чего при загрузке новых данных в keeper
-                    // внутри Character остаются старые ссылки.
-                    // Для решения проблемы требуется пересоздание Character.
-                    entryPoint.reCreateCharacter();
-                    entryPoint.rebind();
-
-                    updateEvent.invoke();
-                } catch (ex) {
-                    alert(ex)
-                }
+                // Экспорт в файл
+                alert('Экспорт в файл');
             })
             .create();
 
@@ -257,12 +243,21 @@ class ConfigTab {
             .create();
 
         // Configure table
+        const exportTable = DTableBuilder.init();
+        const exportTableRow = exportTable.addRow();
+        exportTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, `${CSS.TEXT_ALIGN_CENTER} ${CSS.WIDTH_100}`)
+            .appendChilds('Экспорт');
+        exportTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(exportButton);
+
         const contentTable = DTableBuilder.init();
 
         const headersRow = contentTable.addRow();
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds('Экспорт');
+            .appendChilds(exportTable.create());
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(importButton);

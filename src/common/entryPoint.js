@@ -219,6 +219,7 @@ class ConfigTab {
 
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
+                // Нужен генератор имени, мб от даты + версии
                 link.download = 'wodCharSheet.txt';
 
                 link.click();

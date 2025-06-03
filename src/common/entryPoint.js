@@ -246,10 +246,10 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds('Заметки');
 
-        const textRow = contentTable.addRow();
-        textRow.addData().appendChilds(exportTextElement);
-        textRow.addData().appendChilds(importTextElement);
-        textRow.addData().appendChilds(notesTextElement);
+        const contentRow = contentTable.addRow();
+        contentRow.addData().appendChilds(exportTextElement);
+        contentRow.addData().appendChilds(importTextElement);
+        contentRow.addData().appendChilds(notesTextElement);
 
         // Finalize
         const tabContent = DElementBuilder.initDiv()

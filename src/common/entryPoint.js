@@ -213,8 +213,18 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Экспорт в файл')
             .setEvent(EVENTS.CLICK, () => {
-                // Экспорт в файл
-                alert('Экспорт в файл');
+                // Для импорта: https://sky.pro/wiki/html/otkrytie-dialoga-vybora-fayla-v-js-alternativnye-metody/
+                const data = instance.getCharDataJSON();
+                const blob = new Blob([data], { type: 'text/plain' });
+
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'wodCharSheet.txt';
+
+                link.click();
+
+                URL.revokeObjectURL(link.href);
+                link.remove();
             })
             .create();
 
@@ -308,10 +318,14 @@ class ConfigTab {
         return this.inner.elements.tabContent;
     }
 
+    getCharDataJSON() {
+        return JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+    }
+
     update() {
         const textElements = this.inner.elements.text;
 
-        const charText = JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+        const charText = this.getCharDataJSON();
         textElements.exportElement.setValue(charText);
 
         const notes = this.inner.entryPoint.getNotes();

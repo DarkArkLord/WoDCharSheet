@@ -544,6 +544,8 @@ export class CharSheetEntryPoint {
             entryPoint.reCreateCharacter();
             entryPoint.getUpdateEvent().invoke();
             entryPoint.rebind();
+
+            alert('Импорт успешно завершен');
         } catch (ex) {
             alert(ex);
         }

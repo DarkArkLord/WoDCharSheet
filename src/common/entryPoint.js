@@ -15,6 +15,7 @@ const CSS = Object.freeze({
     TAB_BUTTONS_CONTAINER: 'tab-buttons-container',
     MAGICK_BUTTON: 'magick-button magick-button-two',
     WIDTH_100: 'width-100',
+    NO_PADDING: 'no-padding',
 });
 
 const EMPTY_STRING = '';
@@ -253,6 +254,30 @@ class ConfigTab {
             })
             .create();
 
+        const importFileButton = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
+            .appendChilds('Импорт в файл')
+            .setEvent(EVENTS.CLICK, () => {
+                const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING; // todo
+                try {
+                    const parsed = JSON.parse(input);
+                    dataKeeper.charData = parsed;
+
+                    // Внутри Character поля создаются через
+                    // const value = keeper[key] = keeper[key] ?? {}
+                    // из-за чего при загрузке новых данных в keeper
+                    // внутри Character остаются старые ссылки.
+                    // Для решения проблемы требуется пересоздание Character.
+                    entryPoint.reCreateCharacter();
+                    entryPoint.rebind();
+
+                    updateEvent.invoke();
+                } catch (ex) {
+                    alert(ex)
+                }
+            })
+            .create();
+
         // Configure table
         const exportTable = DTableBuilder.init();
         const exportTableRow = exportTable.addRow();
@@ -263,6 +288,20 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(exportButton);
 
+        const importTable = DTableBuilder.init();
+        importTable.getBuilder()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.NO_PADDING);
+
+        const importTableRow = importTable.addRow();
+        importTableRow.getBuilder()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.NO_PADDING);
+        importTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, `${CSS.TEXT_ALIGN_CENTER} ${CSS.WIDTH_100} ${CSS.NO_PADDING}`)
+            .appendChilds(importButton);
+        importTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(importFileButton);
+
         const contentTable = DTableBuilder.init();
 
         const headersRow = contentTable.addRow();
@@ -271,7 +310,7 @@ class ConfigTab {
             .appendChilds(exportTable.create());
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds(importButton);
+            .appendChilds(importTable.create());
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds('Заметки');
@@ -303,7 +342,9 @@ class ConfigTab {
                     notes: notesTextElement,
                 },
                 buttons: {
+                    exportFile: exportButton,
                     import: importButton,
+                    importFile: importFileButton,
                 },
                 tabButton,
                 tabContent,

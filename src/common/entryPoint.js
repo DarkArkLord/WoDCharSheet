@@ -325,18 +325,18 @@ class ConfigTab {
         const headersRow = contentTable.addRow();
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds('Заметки');
+        headersRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(exportTable.create());
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(importTable.create());
-        headersRow.addData()
-            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds('Заметки');
 
         const contentRow = contentTable.addRow();
+        contentRow.addData().appendChilds(notesTextElement);
         contentRow.addData().appendChilds(exportTextElement);
         contentRow.addData().appendChilds(importTextElement);
-        contentRow.addData().appendChilds(notesTextElement);
 
         // Finalize
         const tabContent = DElementBuilder.initDiv()
@@ -355,9 +355,9 @@ class ConfigTab {
             entryPoint,
             elements: {
                 text: {
+                    notes: notesTextElement,
                     exportElement: exportTextElement,
                     import: importTextElement,
-                    notes: notesTextElement,
                 },
                 buttons: {
                     exportFile: exportButton,

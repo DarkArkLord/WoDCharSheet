@@ -173,5 +173,5 @@ const main = new CharSheetEntryPoint({
     configTabHeader: CHAR_SETTINGS_TRANSLATION,
 });
 
-main.updateInvoke();
+main.getUpdateEvent().invoke();
 main.rebind();

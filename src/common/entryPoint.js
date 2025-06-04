@@ -240,7 +240,7 @@ class ConfigTab {
 
         const importFileButton = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
-            .appendChilds('Импорт в файл')
+            .appendChilds('Импорт из файла')
             .setEvent(EVENTS.CLICK, () => {
                 const fileElement = document.createElement('input');
                 fileElement.type = 'file';

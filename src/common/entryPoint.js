@@ -248,14 +248,19 @@ class ConfigTab {
 
                 fileElement.click();
 
-                fileElement.onchange = (e) => {
-                    const file = e.target.files?.[0];
+                fileElement.onchange = (fileEvent) => {
+                    const file = fileEvent.target.files?.[0];
                     if (file) {
                         const reader = new FileReader();
 
                         reader.onload = (readerEvent) => {
                             const input = readerEvent.target.result ?? EMPTY_STRING;
                             entryPoint.exportCharacter(input);
+                        };
+
+                        reader.onerror = (readerEvent) => {
+                            alert('Ошибка загрузки');
+                            alert(readerEvent);
                         };
 
                         reader.readAsText(file, 'UTF-8');

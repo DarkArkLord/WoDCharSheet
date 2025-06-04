@@ -234,22 +234,7 @@ class ConfigTab {
             .appendChilds('Импорт')
             .setEvent(EVENTS.CLICK, () => {
                 const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING;
-                try {
-                    const parsed = JSON.parse(input);
-                    dataKeeper.charData = parsed;
-
-                    // Внутри Character поля создаются через
-                    // const value = keeper[key] = keeper[key] ?? {}
-                    // из-за чего при загрузке новых данных в keeper
-                    // внутри Character остаются старые ссылки.
-                    // Для решения проблемы требуется пересоздание Character.
-                    entryPoint.reCreateCharacter();
-                    entryPoint.rebind();
-
-                    updateEvent.invoke();
-                } catch (ex) {
-                    alert(ex)
-                }
+                entryPoint.exportCharacter(input);
             })
             .create();
 
@@ -270,22 +255,7 @@ class ConfigTab {
 
                         reader.onload = (readerEvent) => {
                             const input = readerEvent.target.result ?? EMPTY_STRING;
-                            try {
-                                const parsed = JSON.parse(input);
-                                dataKeeper.charData = parsed;
-
-                                // Внутри Character поля создаются через
-                                // const value = keeper[key] = keeper[key] ?? {}
-                                // из-за чего при загрузке новых данных в keeper
-                                // внутри Character остаются старые ссылки.
-                                // Для решения проблемы требуется пересоздание Character.
-                                entryPoint.reCreateCharacter();
-                                entryPoint.rebind();
-
-                                updateEvent.invoke();
-                            } catch (ex) {
-                                alert(ex)
-                            }
+                            entryPoint.exportCharacter(input);
                         };
 
                         reader.readAsText(file, 'UTF-8');
@@ -512,8 +482,8 @@ export class CharSheetEntryPoint {
         return character;
     }
 
-    updateInvoke() {
-        this.inner.updateEvent.invoke();
+    getUpdateEvent() {
+        return this.inner.updateEvent;
     }
 
     rebind() {
@@ -556,5 +526,26 @@ export class CharSheetEntryPoint {
 
     setNotes(text) {
         this.inner.dataKeeper.charData[NOTES_FIELD] = text;
+    }
+
+    exportCharacter(textData) {
+        const dataKeeper = this.inner.dataKeeper;
+        const entryPoint = this;
+
+        try {
+            const parsed = JSON.parse(textData);
+            dataKeeper.charData = parsed;
+
+            // Внутри Character поля создаются через
+            // const value = keeper[key] = keeper[key] ?? {}
+            // из-за чего при загрузке новых данных в keeper
+            // внутри Character остаются старые ссылки.
+            // Для решения проблемы требуется пересоздание Character.
+            entryPoint.reCreateCharacter();
+            entryPoint.getUpdateEvent().invoke();
+            entryPoint.rebind();
+        } catch (ex) {
+            alert(ex);
+        }
     }
 }

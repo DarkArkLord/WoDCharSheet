@@ -242,6 +242,7 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт из файла')
             .setEvent(EVENTS.CLICK, () => {
+                // Всю эту магию надо вынести в отдельные сущности
                 const fileElement = document.createElement('input');
                 fileElement.type = 'file';
                 fileElement.style.display = 'none';

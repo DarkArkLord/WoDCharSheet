@@ -269,7 +269,23 @@ class ConfigTab {
                         const reader = new FileReader();
 
                         reader.onload = (readerEvent) => {
-                            console.log(readerEvent.target.result);
+                            const input = readerEvent.target.result ?? EMPTY_STRING;
+                            try {
+                                const parsed = JSON.parse(input);
+                                dataKeeper.charData = parsed;
+
+                                // Внутри Character поля создаются через
+                                // const value = keeper[key] = keeper[key] ?? {}
+                                // из-за чего при загрузке новых данных в keeper
+                                // внутри Character остаются старые ссылки.
+                                // Для решения проблемы требуется пересоздание Character.
+                                entryPoint.reCreateCharacter();
+                                entryPoint.rebind();
+
+                                updateEvent.invoke();
+                            } catch (ex) {
+                                alert(ex)
+                            }
                         };
 
                         reader.readAsText(file, 'UTF-8');
@@ -277,24 +293,6 @@ class ConfigTab {
 
                     fileElement.remove();
                 };
-
-                // const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING; // todo
-                // try {
-                //     const parsed = JSON.parse(input);
-                //     dataKeeper.charData = parsed;
-
-                //     // Внутри Character поля создаются через
-                //     // const value = keeper[key] = keeper[key] ?? {}
-                //     // из-за чего при загрузке новых данных в keeper
-                //     // внутри Character остаются старые ссылки.
-                //     // Для решения проблемы требуется пересоздание Character.
-                //     entryPoint.reCreateCharacter();
-                //     entryPoint.rebind();
-
-                //     updateEvent.invoke();
-                // } catch (ex) {
-                //     alert(ex)
-                // }
             })
             .create();
 

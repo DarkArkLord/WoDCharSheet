@@ -214,7 +214,6 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Экспорт в файл')
             .setEvent(EVENTS.CLICK, () => {
-                // Для импорта: https://sky.pro/wiki/html/otkrytie-dialoga-vybora-fayla-v-js-alternativnye-metody/
                 const data = instance.getCharDataJSON();
                 const blob = new Blob([data], { type: 'text/plain' });
 
@@ -258,23 +257,44 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт в файл')
             .setEvent(EVENTS.CLICK, () => {
-                const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING; // todo
-                try {
-                    const parsed = JSON.parse(input);
-                    dataKeeper.charData = parsed;
+                const fileElement = document.createElement('input');
+                fileElement.type = 'file';
+                fileElement.style.display = 'none';
 
-                    // Внутри Character поля создаются через
-                    // const value = keeper[key] = keeper[key] ?? {}
-                    // из-за чего при загрузке новых данных в keeper
-                    // внутри Character остаются старые ссылки.
-                    // Для решения проблемы требуется пересоздание Character.
-                    entryPoint.reCreateCharacter();
-                    entryPoint.rebind();
+                fileElement.click();
 
-                    updateEvent.invoke();
-                } catch (ex) {
-                    alert(ex)
-                }
+                fileElement.onchange = (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                        const reader = new FileReader();
+
+                        reader.onload = (readerEvent) => {
+                            console.log(readerEvent.target.result);
+                        };
+
+                        reader.readAsText(file, 'UTF-8');
+                    }
+
+                    fileElement.remove();
+                };
+
+                // const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING; // todo
+                // try {
+                //     const parsed = JSON.parse(input);
+                //     dataKeeper.charData = parsed;
+
+                //     // Внутри Character поля создаются через
+                //     // const value = keeper[key] = keeper[key] ?? {}
+                //     // из-за чего при загрузке новых данных в keeper
+                //     // внутри Character остаются старые ссылки.
+                //     // Для решения проблемы требуется пересоздание Character.
+                //     entryPoint.reCreateCharacter();
+                //     entryPoint.rebind();
+
+                //     updateEvent.invoke();
+                // } catch (ex) {
+                //     alert(ex)
+                // }
             })
             .create();
 

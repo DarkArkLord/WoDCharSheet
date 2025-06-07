@@ -214,7 +214,7 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Экспорт в файл')
             .setEvent(EVENTS.CLICK, () => {
-                const fileName = 'wodCharSheet.txt';
+                const fileName = instance.getExportFileName();
                 const data = instance.getCharDataJSON();
                 downloadTextAsFile(fileName, data);
             })
@@ -327,6 +327,29 @@ class ConfigTab {
         }
 
         return JSON.stringify(this.inner.dataKeeper?.charData ?? {});
+    }
+
+    getExportFileName() {
+        const name = `wodCharSheet`;
+        const version = this.inner.entryPoint.getVersion();
+        const today = getTodayDate();
+        const ext = `txt`;
+
+        return `${name}_${version}_${today}.${ext}`;
+
+        function getTodayDate(separator = '-') {
+            const today = new Date(Date.now());
+
+            const day = today.getDate();
+            const dayString = day < 10 ? `0${day}` : day.toString();
+
+            const month = today.getMonth() + 1;
+            const monthString = month < 10 ? `0${month}` : month.toString();
+
+            const yearString = today.getFullYear().toString();
+
+            return [dayString, monthString, yearString].join(separator);
+        }
     }
 
     update() {
@@ -445,6 +468,7 @@ export class CharSheetEntryPoint {
             characterInput,
             dataKeeper,
             updateEvent,
+            version,
             elements: {
                 character,
                 configTab,
@@ -526,5 +550,9 @@ export class CharSheetEntryPoint {
         } catch (ex) {
             alert(ex);
         }
+    }
+
+    getVersion() {
+        return this.inner.version;
     }
 }

@@ -1,7 +1,7 @@
 import '../common/styles.js'
 
 const CHAR_SHEET_NAME = 'Dark MtA 20th Char Sheet'
-const CHAR_SHEET_VERSION = 'v0.9.4';
+const CHAR_SHEET_VERSION = 'v0.9.5';
 const CHAR_SHEET_TITLE = `${CHAR_SHEET_NAME} ${CHAR_SHEET_VERSION}`;
 
 document.title = CHAR_SHEET_TITLE;
@@ -173,5 +173,5 @@ const main = new CharSheetEntryPoint({
     configTabHeader: CHAR_SETTINGS_TRANSLATION,
 });
 
-main.updateInvoke();
+main.getUpdateEvent().invoke();
 main.rebind();

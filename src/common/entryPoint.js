@@ -1,7 +1,7 @@
 import { configureDarkTabsAndButtons } from '../common/tabs.js'
 
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
-import { DarkEvent, } from '../common/utilities.js'
+import { DarkEvent, downloadTextAsFile, loadFileAsText } from '../common/utilities.js'
 import { UIText, UITextList, } from '../common/uiElements.js'
 import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
@@ -15,6 +15,7 @@ const CSS = Object.freeze({
     TAB_BUTTONS_CONTAINER: 'tab-buttons-container',
     MAGICK_BUTTON: 'magick-button magick-button-two',
     WIDTH_100: 'width-100',
+    NO_PADDING: 'no-padding',
 });
 
 const EMPTY_STRING = '';
@@ -213,19 +214,9 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Экспорт в файл')
             .setEvent(EVENTS.CLICK, () => {
-                // Для импорта: https://sky.pro/wiki/html/otkrytie-dialoga-vybora-fayla-v-js-alternativnye-metody/
+                const fileName = instance.getExportFileName();
                 const data = instance.getCharDataJSON();
-                const blob = new Blob([data], { type: 'text/plain' });
-
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                // Нужен генератор имени, мб от даты + версии
-                link.download = 'wodCharSheet.txt';
-
-                link.click();
-
-                URL.revokeObjectURL(link.href);
-                link.remove();
+                downloadTextAsFile(fileName, data);
             })
             .create();
 
@@ -234,22 +225,17 @@ class ConfigTab {
             .appendChilds('Импорт')
             .setEvent(EVENTS.CLICK, () => {
                 const input = importTextElement.getValue()?.trim() ?? EMPTY_STRING;
-                try {
-                    const parsed = JSON.parse(input);
-                    dataKeeper.charData = parsed;
+                entryPoint.exportCharacter(input);
+            })
+            .create();
 
-                    // Внутри Character поля создаются через
-                    // const value = keeper[key] = keeper[key] ?? {}
-                    // из-за чего при загрузке новых данных в keeper
-                    // внутри Character остаются старые ссылки.
-                    // Для решения проблемы требуется пересоздание Character.
-                    entryPoint.reCreateCharacter();
-                    entryPoint.rebind();
-
-                    updateEvent.invoke();
-                } catch (ex) {
-                    alert(ex)
-                }
+        const importFileButton = DElementBuilder.initDiv()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
+            .appendChilds('Импорт из файла')
+            .setEvent(EVENTS.CLICK, () => {
+                loadFileAsText((input) => {
+                    entryPoint.exportCharacter(input);
+                });
             })
             .create();
 
@@ -263,23 +249,37 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(exportButton);
 
+        const importTable = DTableBuilder.init();
+        importTable.getBuilder()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.NO_PADDING);
+
+        const importTableRow = importTable.addRow();
+        importTableRow.getBuilder()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.NO_PADDING);
+        importTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, `${CSS.TEXT_ALIGN_CENTER} ${CSS.WIDTH_100} ${CSS.NO_PADDING}`)
+            .appendChilds(importButton);
+        importTableRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds(importFileButton);
+
         const contentTable = DTableBuilder.init();
 
         const headersRow = contentTable.addRow();
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .appendChilds('Заметки');
+        headersRow.addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
             .appendChilds(exportTable.create());
         headersRow.addData()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds(importButton);
-        headersRow.addData()
-            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
-            .appendChilds('Заметки');
+            .appendChilds(importTable.create());
 
         const contentRow = contentTable.addRow();
+        contentRow.addData().appendChilds(notesTextElement);
         contentRow.addData().appendChilds(exportTextElement);
         contentRow.addData().appendChilds(importTextElement);
-        contentRow.addData().appendChilds(notesTextElement);
 
         // Finalize
         const tabContent = DElementBuilder.initDiv()
@@ -298,12 +298,14 @@ class ConfigTab {
             entryPoint,
             elements: {
                 text: {
+                    notes: notesTextElement,
                     exportElement: exportTextElement,
                     import: importTextElement,
-                    notes: notesTextElement,
                 },
                 buttons: {
+                    exportFile: exportButton,
                     import: importButton,
+                    importFile: importFileButton,
                 },
                 tabButton,
                 tabContent,
@@ -319,14 +321,41 @@ class ConfigTab {
         return this.inner.elements.tabContent;
     }
 
-    getCharDataJSON() {
-        return JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+    getCharDataJSON(mustBeFormated = false) {
+        if (mustBeFormated) {
+            return JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+        }
+
+        return JSON.stringify(this.inner.dataKeeper?.charData ?? {});
+    }
+
+    getExportFileName() {
+        const name = `wodCharSheet`;
+        const version = this.inner.entryPoint.getVersion();
+        const today = getTodayDate();
+        const ext = `txt`;
+
+        return `${name}_${version}_${today}.${ext}`;
+
+        function getTodayDate(separator = '-') {
+            const today = new Date(Date.now());
+
+            const day = today.getDate();
+            const dayString = day < 10 ? `0${day}` : day.toString();
+
+            const month = today.getMonth() + 1;
+            const monthString = month < 10 ? `0${month}` : month.toString();
+
+            const yearString = today.getFullYear().toString();
+
+            return [dayString, monthString, yearString].join(separator);
+        }
     }
 
     update() {
         const textElements = this.inner.elements.text;
 
-        const charText = this.getCharDataJSON();
+        const charText = this.getCharDataJSON(true);
         textElements.exportElement.setValue(charText);
 
         const notes = this.inner.entryPoint.getNotes();
@@ -439,6 +468,7 @@ export class CharSheetEntryPoint {
             characterInput,
             dataKeeper,
             updateEvent,
+            version,
             elements: {
                 character,
                 configTab,
@@ -453,8 +483,8 @@ export class CharSheetEntryPoint {
         return character;
     }
 
-    updateInvoke() {
-        this.inner.updateEvent.invoke();
+    getUpdateEvent() {
+        return this.inner.updateEvent;
     }
 
     rebind() {
@@ -497,5 +527,32 @@ export class CharSheetEntryPoint {
 
     setNotes(text) {
         this.inner.dataKeeper.charData[NOTES_FIELD] = text;
+    }
+
+    exportCharacter(textData) {
+        const dataKeeper = this.inner.dataKeeper;
+        const entryPoint = this;
+
+        try {
+            const parsed = JSON.parse(textData);
+            dataKeeper.charData = parsed;
+
+            // Внутри Character поля создаются через
+            // const value = keeper[key] = keeper[key] ?? {}
+            // из-за чего при загрузке новых данных в keeper
+            // внутри Character остаются старые ссылки.
+            // Для решения проблемы требуется пересоздание Character.
+            entryPoint.reCreateCharacter();
+            entryPoint.getUpdateEvent().invoke();
+            entryPoint.rebind();
+
+            alert('Импорт успешно завершен');
+        } catch (ex) {
+            alert(ex);
+        }
+    }
+
+    getVersion() {
+        return this.inner.version;
     }
 }

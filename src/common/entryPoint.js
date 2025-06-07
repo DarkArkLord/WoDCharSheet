@@ -214,13 +214,14 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Экспорт в файл')
             .setEvent(EVENTS.CLICK, () => {
+                const fileName = 'wodCharSheet.txt';
                 const data = instance.getCharDataJSON();
+
                 const blob = new Blob([data], { type: 'text/plain' });
 
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                // Нужен генератор имени, мб от даты + версии
-                link.download = 'wodCharSheet.txt';
+                link.download = fileName;
 
                 link.click();
 

@@ -45,3 +45,32 @@ export function downloadTextAsFile(fileName, data) {
     URL.revokeObjectURL(link.href);
     link.remove();
 }
+
+export function loadFileAsText(onLoadHandler) {
+    const fileElement = document.createElement('input');
+    fileElement.type = 'file';
+    fileElement.style.display = 'none';
+
+    fileElement.onchange = (fileEvent) => {
+        const file = fileEvent.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = (readerEvent) => {
+                const input = readerEvent.target.result ?? EMPTY_STRING;
+                onLoadHandler(input);
+            };
+
+            reader.onerror = (readerEvent) => {
+                alert('Ошибка загрузки');
+                alert(readerEvent);
+            };
+
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        fileElement.remove();
+    };
+
+    fileElement.click();
+}

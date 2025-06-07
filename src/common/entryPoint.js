@@ -1,7 +1,7 @@
 import { configureDarkTabsAndButtons } from '../common/tabs.js'
 
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
-import { DarkEvent, downloadTextAsFile } from '../common/utilities.js'
+import { DarkEvent, downloadTextAsFile, loadFileAsText } from '../common/utilities.js'
 import { UIText, UITextList, } from '../common/uiElements.js'
 import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
@@ -233,33 +233,9 @@ class ConfigTab {
             .setAttribute(ATTRIBUTES.CLASS, CSS.MAGICK_BUTTON)
             .appendChilds('Импорт из файла')
             .setEvent(EVENTS.CLICK, () => {
-                // Всю эту магию надо вынести в отдельные сущности
-                const fileElement = document.createElement('input');
-                fileElement.type = 'file';
-                fileElement.style.display = 'none';
-
-                fileElement.click();
-
-                fileElement.onchange = (fileEvent) => {
-                    const file = fileEvent.target.files?.[0];
-                    if (file) {
-                        const reader = new FileReader();
-
-                        reader.onload = (readerEvent) => {
-                            const input = readerEvent.target.result ?? EMPTY_STRING;
-                            entryPoint.exportCharacter(input);
-                        };
-
-                        reader.onerror = (readerEvent) => {
-                            alert('Ошибка загрузки');
-                            alert(readerEvent);
-                        };
-
-                        reader.readAsText(file, 'UTF-8');
-                    }
-
-                    fileElement.remove();
-                };
+                loadFileAsText((input) => {
+                    entryPoint.exportCharacter(input);
+                });
             })
             .create();
 

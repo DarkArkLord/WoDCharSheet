@@ -321,14 +321,18 @@ class ConfigTab {
         return this.inner.elements.tabContent;
     }
 
-    getCharDataJSON() {
-        return JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+    getCharDataJSON(mustBeFormated = false) {
+        if (mustBeFormated) {
+            return JSON.stringify(this.inner.dataKeeper?.charData ?? {}, null, 2);
+        }
+
+        return JSON.stringify(this.inner.dataKeeper?.charData ?? {});
     }
 
     update() {
         const textElements = this.inner.elements.text;
 
-        const charText = this.getCharDataJSON();
+        const charText = this.getCharDataJSON(true);
         textElements.exportElement.setValue(charText);
 
         const notes = this.inner.entryPoint.getNotes();

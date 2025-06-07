@@ -32,3 +32,16 @@ export class ValueWrapper {
         this.data[this.field] = value;
     }
 }
+
+export function downloadTextAsFile(fileName, data) {
+    const blob = new Blob([data], { type: 'text/plain' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+
+    link.click();
+
+    URL.revokeObjectURL(link.href);
+    link.remove();
+}

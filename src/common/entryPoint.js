@@ -1,7 +1,7 @@
 import { configureDarkTabsAndButtons } from '../common/tabs.js'
 
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
-import { DarkEvent, } from '../common/utilities.js'
+import { DarkEvent, downloadTextAsFile } from '../common/utilities.js'
 import { UIText, UITextList, } from '../common/uiElements.js'
 import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
 
@@ -216,17 +216,7 @@ class ConfigTab {
             .setEvent(EVENTS.CLICK, () => {
                 const fileName = 'wodCharSheet.txt';
                 const data = instance.getCharDataJSON();
-
-                const blob = new Blob([data], { type: 'text/plain' });
-
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = fileName;
-
-                link.click();
-
-                URL.revokeObjectURL(link.href);
-                link.remove();
+                downloadTextAsFile(fileName, data);
             })
             .create();
 

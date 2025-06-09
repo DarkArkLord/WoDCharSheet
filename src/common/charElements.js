@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UIPointsLine, UIText, UITextInput, UITextOrTextInput, UITextOrNumberInput, UIDropdown, UIIconButton, UIСheckBoxInput } from './uiElements.js'
+import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -148,7 +148,7 @@ class CharUiDotsElement {
         );
 
         // Elements
-        const altPriceCheckBox = new UIСheckBoxInput();
+        const altPriceCheckBox = new UI_Input_СheckBox();
         altPriceCheckBox.setVisible(dotsInputValidations.showAltPrice);
 
         const isAltPriceCheckBoxEditable = isEditable && dotsInputValidations.editableAltPrice;
@@ -163,7 +163,7 @@ class CharUiDotsElement {
             });
         }
 
-        const dots = new UIPointsLine(dotsCount, isEditable);
+        const dots = new UI_PointsLine(dotsCount, isEditable);
         const subButton = dots.getSubButton();
         const addButton = dots.getAddButton();
 
@@ -305,7 +305,7 @@ class CharUiTextWithDotsElement {
         const data = keeper[valueInfo.id] = keeper[valueInfo.id] ?? {};
 
         // Elements
-        const text = new UIText(valueInfo.translation, {});
+        const text = new UI_Text(valueInfo.translation, {});
         const dots = new CharUiDotsElement({
             data,
             validations: {
@@ -401,7 +401,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
         const specialtyWrapper = new ValueWrapper(data, SPECIALTY_FIELD, EMPTY_STRING);
 
         // Elements
-        const specialty = new UITextInput(DEFAULT_INPUT_SIZE);
+        const specialty = new UI_Input_Text(DEFAULT_INPUT_SIZE);
 
         if (isEditable) {
             specialty.setOnInputEvent(() => {
@@ -413,7 +413,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
             });
         }
 
-        const priceText = new UIText(EMPTY_STRING, {});
+        const priceText = new UI_Text(EMPTY_STRING, {});
         priceText.setVisible(isEditable);
 
         this.inner = {
@@ -503,7 +503,7 @@ class CharUiLineDotsSectionElement {
         const validationsInfo = { ...dataForValidations, section: sectionInfo.translation, };
 
         const sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
-        const header = new UIText(sectionTitle, {});
+        const header = new UI_Text(sectionTitle, {});
 
         const items = Array.from(sectionInfo?.values ?? []).map(valueInfo => new CharUiLineDotsElement({
             data: {
@@ -650,7 +650,7 @@ export class CharUiLineDotsSectionsPartElement {
         const data = keeper[partInfo.id] = keeper[partInfo.id] ?? {};
 
         const partTitle = partInfo.translation ?? EMPTY_STRING;
-        const header = new UIText(partTitle, {});
+        const header = new UI_Text(partTitle, {});
 
         const sections = Array.from(partInfo.sections ?? []).map(section => new CharUiLineDotsSectionElement({
             data: {
@@ -830,7 +830,7 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
 }
 
 class BaseTextOrInputElement {
-    constructor(input, ElementConstructor = UITextOrTextInput) {
+    constructor(input, ElementConstructor = UI_Input_TextOrText) {
         const {
             data: {
                 data,
@@ -899,7 +899,7 @@ class CharUiTextOrInputElement extends BaseTextOrInputElement {
             inputConfig: { size, },
             isEditable,
             updateEvent,
-        }, UITextOrTextInput);
+        }, UI_Input_TextOrText);
     }
 }
 
@@ -925,7 +925,7 @@ class CharUiTextOrNumberInputElement extends BaseTextOrInputElement {
             inputConfig: { min, max, inputStyle },
             isEditable,
             updateEvent,
-        }, UITextOrNumberInput);
+        }, UI_Input_TextOrNumber);
     }
 }
 
@@ -948,7 +948,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
         const validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
 
         // Elements
-        const removeButton = new UIIconButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        const removeButton = new UI_Icon_Button(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         removeButton.setVisible(isEditable);
 
         const text = new CharUiTextOrInputElement({
@@ -960,7 +960,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
             updateEvent,
         });
 
-        const variants = new UIDropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
+        const variants = new UI_Dropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
         variants.setVisible(isEditable);
         if (isEditable) {
             variants.setOnChangeEvent(eventInput => {
@@ -982,7 +982,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
             updateEvent,
         });
 
-        const price = new UIText(EMPTY_STRING, {});
+        const price = new UI_Text(EMPTY_STRING, {});
         price.setVisible(isEditable);
 
         this.inner = {
@@ -1121,7 +1121,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
 
         let header, headerRow;
         if (showHeader) {
-            header = new UIText(valueInfo.translation, {});
+            header = new UI_Text(valueInfo.translation, {});
             headerRow = DElementBuilder.initTableRow()
                 .appendChilds(
                     DElementBuilder.initTableData()
@@ -1132,7 +1132,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
                 ).create();
         }
 
-        const addButton = new UIIconButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        const addButton = new UI_Icon_Button(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
         addButton.setVisible(isEditable);
         if (isEditable) {
             addButton.setOnClickEvent(() => {
@@ -1317,7 +1317,7 @@ class CharUiPointsByStateElement {
             validations?.next,
         );
 
-        const prevValueText = new UIText(EMPTY_STRING, {});
+        const prevValueText = new UI_Text(EMPTY_STRING, {});
         const points = new CharUiTextOrNumberInputElement({
             data: {
                 data,
@@ -1331,7 +1331,7 @@ class CharUiPointsByStateElement {
             isEditable,
             updateEvent,
         });
-        const nextValueText = new UIText(EMPTY_STRING, {});
+        const nextValueText = new UI_Text(EMPTY_STRING, {});
 
         const containerBuilder = DTableBuilder.init();
         const rowBuilder = containerBuilder.addRow();
@@ -1339,7 +1339,7 @@ class CharUiPointsByStateElement {
         rowBuilder.addData().appendChilds(points.getElement());
         rowBuilder.addData().appendChilds(nextValueText.getElement());
 
-        const totalText = new UIText(EMPTY_STRING, {});
+        const totalText = new UI_Text(EMPTY_STRING, {});
 
         this.inner = {
             updateEvent,
@@ -1410,7 +1410,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
         const validationsInfo = { ...dataForValidations, commonValue: EMPTY_STRING };
 
         // Elements
-        const removeButton = new UIIconButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        const removeButton = new UI_Icon_Button(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         removeButton.setVisible(this.isEditable);
 
         const text = new CharUiTextOrInputElement({
@@ -1446,7 +1446,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
             updateEvent,
         });
         debugger;
-        const variants = new UIDropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
+        const variants = new UI_Dropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
         variants.setVisible(isEditable);
         if (isEditable) {
             variants.setOnChangeEvent(eventInput => {
@@ -1642,7 +1642,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
         // Elements
         const COLS_IN_ROW = 5;
 
-        const header = new UIText(valueInfo.translation, {});
+        const header = new UI_Text(valueInfo.translation, {});
         const headerRow = DElementBuilder.initTableRow()
             .appendChilds(
                 DElementBuilder.initTableData()
@@ -1652,7 +1652,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
                     .create()
             ).create();
 
-        const addButton = new UIIconButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        const addButton = new UI_Icon_Button(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
         addButton.setVisible(isEditable);
         if (isEditable) {
             addButton.setOnClickEvent(() => {
@@ -1831,7 +1831,7 @@ export class CharUiBlockPointsElement {
         const validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
 
         // Elements
-        const text = new UIText(valueInfo.translation, {});
+        const text = new UI_Text(valueInfo.translation, {});
         const points = new CharUiTextOrNumberInputElement({
             data: {
                 data: keeper,

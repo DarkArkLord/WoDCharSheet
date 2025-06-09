@@ -240,6 +240,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
         stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.BASE],
         prev: [],
         next: [CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
+        [CHAR_PARTS.HEADER]: {
+            editable: true,
+        },
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: true,
             sectionPoints: [7 + 3, 5 + 3, 3 + 3],
@@ -315,6 +318,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE],
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
+        [CHAR_PARTS.HEADER]: {
+            editable: false,
+        },
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: true,
             specialtyEditableFrom: 4,
@@ -398,6 +404,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS],
         next: [],
         freePointsField: CHAR_PARTS.EXPERIENCE,
+        [CHAR_PARTS.HEADER]: {
+            editable: false,
+        },
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: true,
             specialtyEditableFrom: 4,
@@ -471,6 +480,9 @@ export const CHAR_VALIDATIONS = Object.freeze({
         stateTranslation: CHAR_EDIT_STATES_TRANSLATIONS[CHAR_EDIT_STATES.TOTAL],
         prev: [CHAR_EDIT_STATES.BASE, CHAR_EDIT_STATES.POINTS, CHAR_EDIT_STATES.EXP],
         next: [],
+        [CHAR_PARTS.HEADER]: {
+            editable: false,
+        },
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: false,
             dotsInput: {

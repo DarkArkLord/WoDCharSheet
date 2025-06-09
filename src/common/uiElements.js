@@ -7,7 +7,7 @@ const CSS = Object.freeze({
     NOWRAP: 'nowrap',
 });
 
-export class UIIcon {
+export class UI_Icon {
     constructor(baseImage) {
         this.inner = {
             element: DElementBuilder.initImg()
@@ -25,7 +25,7 @@ export class UIIcon {
     }
 }
 
-export class UIIconPoint extends UIIcon {
+export class UI_Icon_Point extends UI_Icon {
     constructor() {
         super(SVGIcons.POINT_EMPTY);
     }
@@ -43,7 +43,7 @@ export class UIIconPoint extends UIIcon {
     }
 }
 
-export class UIIconButton extends UIIcon {
+export class UI_Icon_Button extends UI_Icon {
     constructor(enableImage, disableImage) {
         super(enableImage);
 
@@ -65,11 +65,11 @@ export class UIIconButton extends UIIcon {
     }
 }
 
-export class UIPointsLine {
+export class UI_PointsLine {
     constructor(pointsCount, showButtons) {
-        const subButton = new UIIconButton(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
-        const points = Array.from(Array(pointsCount)).map(_ => new UIIconPoint());
-        const addButton = new UIIconButton(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
+        const subButton = new UI_Icon_Button(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
+        const points = Array.from(Array(pointsCount)).map(_ => new UI_Icon_Point());
+        const addButton = new UI_Icon_Button(SVGIcons.BUTTON_ADD_ENABLED, SVGIcons.BUTTON_ADD_DISABLED);
 
         subButton.setVisible(showButtons);
         addButton.setVisible(showButtons);
@@ -116,7 +116,7 @@ export class UIPointsLine {
     }
 }
 
-export class UIText {
+export class UI_Text {
     constructor(text, wrapAttrubutes = {}) {
         this.inner = { element: DElementBuilder.initDiv(wrapAttrubutes).create(), };
         this.inner.element.setText(text);
@@ -135,7 +135,7 @@ export class UIText {
     }
 }
 
-export class UITextList {
+export class UI_TextList {
     constructor() {
         const list = DElementBuilder.initUnorderedList().create();
         const container = DElementBuilder.initDiv()
@@ -159,7 +159,7 @@ export class UITextList {
     }
 }
 
-export class UIDropdown {
+export class UI_Dropdown {
     constructor({ selectAttrubutes = {}, addEmptyOption = false, emptyOptionAttrubutes = {}, defaultOptions = [] } = {}) {
         const element = DElementBuilder.initSelect(selectAttrubutes).create();
 
@@ -209,7 +209,7 @@ const InputType = Object.freeze({
 
 const SIMPLE_TO_NUMBER_MAPPER = value => +value;
 
-class UIBaseInput {
+class UI_Input_Base {
     constructor(inputBuilder) {
         const input = DElementBuilder.use(inputBuilder).create();
         const container = DElementBuilder.initDiv()
@@ -247,7 +247,7 @@ class UIBaseInput {
     }
 }
 
-export class UITextInput extends UIBaseInput {
+export class UI_Input_Text extends UI_Input_Base {
     constructor(size = undefined) {
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
@@ -260,7 +260,7 @@ export class UITextInput extends UIBaseInput {
     }
 }
 
-export class UINumberInput extends UIBaseInput {
+export class UI_Input_Number extends UI_Input_Base {
     constructor(min = undefined, max = undefined, inputStyle = undefined) {
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.Number);
@@ -284,7 +284,7 @@ export class UINumberInput extends UIBaseInput {
     }
 }
 
-export class UIСheckBoxInput extends UIBaseInput {
+export class UI_Input_СheckBox extends UI_Input_Base {
     constructor() {
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.CheckBox);
@@ -301,7 +301,8 @@ export class UIСheckBoxInput extends UIBaseInput {
     }
 }
 
-export class UITextOrTextInput extends UIBaseInput {
+// Возможо стоит завернуть это в что-то типа Either
+export class UI_Input_TextOrText extends UI_Input_Base {
     constructor(isInput, inputConfig = {}) {
         if (isInput) {
             const inputBuilder = DElementBuilder.initInput()
@@ -330,7 +331,7 @@ export class UITextOrTextInput extends UIBaseInput {
     }
 }
 
-export class UITextOrNumberInput extends UIBaseInput {
+export class UI_Input_TextOrNumber extends UI_Input_Base {
     constructor(isInput, inputConfig = {}) {
         if (isInput) {
             const inputBuilder = DElementBuilder.initInput()
@@ -367,6 +368,38 @@ export class UITextOrNumberInput extends UIBaseInput {
             this.setValue = function (value) {
                 const mappedValue = SIMPLE_TO_NUMBER_MAPPER(value);
                 return this.inner.input.setText(mappedValue);
+            };
+        }
+    }
+}
+
+export class UI_Input_TextOrTextArea extends UI_Input_Base {
+    constructor(isInput, inputConfig = {}) {
+        if (isInput) {
+            const inputBuilder = DElementBuilder.initTextArea();
+
+            const { cols, rows } = inputConfig;
+
+            if (cols) {
+                inputBuilder.setAttribute(ATTRIBUTES.COLS, cols);
+            }
+
+            if (rows) {
+                inputBuilder.setAttribute(ATTRIBUTES.ROWS, rows);
+            }
+
+            super(inputBuilder);
+        } else {
+            const inputBuilder = DElementBuilder.initDiv();
+
+            super(inputBuilder);
+
+            this.getValue = function () {
+                return this.inner.input.getText();
+            };
+
+            this.setValue = function (value) {
+                return this.inner.input.setText(value);
             };
         }
     }

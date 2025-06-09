@@ -2,8 +2,8 @@ import { configureDarkTabsAndButtons } from '../common/tabs.js'
 
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
 import { DarkEvent, downloadTextAsFile, loadFileAsText } from '../common/utilities.js'
-import { UIText, UITextList, } from '../common/uiElements.js'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
+import { UI_Text, UI_TextList, } from '../common/uiElements.js'
+import { CharUi_Part_LineDots, CharUi_Element_BlockDots, CharUi_Element_LineInputDotsWithVariantsList, CharUi_Element_LineInputPointsWithVariantsList, CharUi_Element_BlockPoints } from '../common/charElements.js'
 
 const CSS = Object.freeze({
     TAB_BUTTON: 'tab-button',
@@ -34,7 +34,7 @@ export class CharacterBaseState {
         const parts = this.createPartsElements({ keeper, validations, updateEvent, validationsInfo });
         const characterUi = this.createCharacterUi(parts);
 
-        const errorsList = new UITextList();
+        const errorsList = new UI_TextList();
         const errorsElement = this.createErrorsElement(errorsList);
 
         const tabContent = this.createTabContent(characterUi, errorsElement);
@@ -44,7 +44,7 @@ export class CharacterBaseState {
             .appendChilds(tabContent)
             .create();
 
-        const tabButtonText = new UIText(validations.stateTranslation, {});
+        const tabButtonText = new UI_Text(validations.stateTranslation, {});
         const tabButtonContainer = DElementBuilder.initDiv()
             .setAttribute(ATTRIBUTES.CLASS, CSS.TAB_BUTTON)
             .appendChilds(tabButtonText.getElement())

@@ -114,7 +114,7 @@ const TYPE_FIELD = 'type';
 const ALT_PRICE_FIELD = 'useAltPrice';
 const CUSTOM_ITEMS_FIELD = 'customItems';
 
-class CharUiDotsElement {
+class CharUi_Element_Dots {
     constructor(input) {
         const {
             data,
@@ -283,7 +283,7 @@ class CharUiDotsElement {
     }
 }
 
-class CharUiTextWithDotsElement {
+class CharUi_Element_TextWithDots {
     constructor(input) {
         const {
             data: {
@@ -306,7 +306,7 @@ class CharUiTextWithDotsElement {
 
         // Elements
         const text = new UI_Text(valueInfo.translation, {});
-        const dots = new CharUiDotsElement({
+        const dots = new CharUi_Element_Dots({
             data,
             validations: {
                 validations,
@@ -377,7 +377,7 @@ class CharUiTextWithDotsElement {
     }
 }
 
-class CharUiLineDotsElement extends CharUiTextWithDotsElement {
+class CharUi_Element_LineDots extends CharUi_Element_TextWithDots {
     constructor(input) {
         super(input);
         const oldinner = this.inner;
@@ -483,7 +483,7 @@ class CharUiLineDotsElement extends CharUiTextWithDotsElement {
     }
 }
 
-class CharUiLineDotsSectionElement {
+class CharUi_Section_LineDots {
     constructor(input) {
         const {
             data: {
@@ -505,7 +505,7 @@ class CharUiLineDotsSectionElement {
         const sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
         const header = new UI_Text(sectionTitle, {});
 
-        const items = Array.from(sectionInfo?.values ?? []).map(valueInfo => new CharUiLineDotsElement({
+        const items = Array.from(sectionInfo?.values ?? []).map(valueInfo => new CharUi_Element_LineDots({
             data: {
                 keeper,
                 valueInfo,
@@ -541,7 +541,7 @@ class CharUiLineDotsSectionElement {
         if (hasCustomItems) {
             const customItemsData = keeper[CUSTOM_ITEMS_FIELD] = keeper[CUSTOM_ITEMS_FIELD] ?? {};
 
-            customItems = new CharUiLineInputDotsWithVariantsListElement({
+            customItems = new CharUi_Element_LineInputDotsWithVariantsList({
                 data: {
                     keeper: customItemsData,
                     valueInfo: sectionInfo,
@@ -628,7 +628,7 @@ class CharUiLineDotsSectionElement {
     }
 }
 
-export class CharUiLineDotsSectionsPartElement {
+export class CharUi_Part_LineDots {
     constructor(input) {
         const {
             data: {
@@ -652,7 +652,7 @@ export class CharUiLineDotsSectionsPartElement {
         const partTitle = partInfo.translation ?? EMPTY_STRING;
         const header = new UI_Text(partTitle, {});
 
-        const sections = Array.from(partInfo.sections ?? []).map(section => new CharUiLineDotsSectionElement({
+        const sections = Array.from(partInfo.sections ?? []).map(section => new CharUi_Section_LineDots({
             data: {
                 keeper: data,
                 sectionInfo: section,
@@ -762,7 +762,7 @@ export class CharUiLineDotsSectionsPartElement {
     }
 }
 
-export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
+export class CharUi_Element_BlockDots extends CharUi_Element_TextWithDots {
     constructor(input) {
         super(input);
         const oldinner = this.inner;
@@ -829,7 +829,7 @@ export class CharUiBlockDotsElement extends CharUiTextWithDotsElement {
     }
 }
 
-class BaseTextOrInputElement {
+class CharUi_Element_BaseTextOrInput {
     constructor(input, ElementConstructor = UI_Input_TextOrText) {
         const {
             data: {
@@ -879,7 +879,7 @@ class BaseTextOrInputElement {
     }
 }
 
-class CharUiTextOrInputElement extends BaseTextOrInputElement {
+class CharUi_Element_TextOrInput extends CharUi_Element_BaseTextOrInput {
     constructor(input) {
         const {
             data: {
@@ -903,7 +903,7 @@ class CharUiTextOrInputElement extends BaseTextOrInputElement {
     }
 }
 
-class CharUiTextOrNumberInputElement extends BaseTextOrInputElement {
+class CharUi_Element_TextOrNumberInput extends CharUi_Element_BaseTextOrInput {
     constructor(input) {
         const {
             data: {
@@ -929,7 +929,7 @@ class CharUiTextOrNumberInputElement extends BaseTextOrInputElement {
     }
 }
 
-class CharUiLineInputDotsWithVariantsItemElement {
+class CharUi_Item_LineInputDotsWithVariants {
     constructor(input) {
         const {
             data: {
@@ -951,7 +951,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
         const removeButton = new UI_Icon_Button(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         removeButton.setVisible(isEditable);
 
-        const text = new CharUiTextOrInputElement({
+        const text = new CharUi_Element_TextOrInput({
             data: {
                 data,
                 fieldName: TEXT_FIELD,
@@ -972,7 +972,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
             });
         }
 
-        const dots = new CharUiDotsElement({
+        const dots = new CharUi_Element_Dots({
             data,
             validations: {
                 validations,
@@ -1089,7 +1089,7 @@ class CharUiLineInputDotsWithVariantsItemElement {
     }
 }
 
-export class CharUiLineInputDotsWithVariantsListElement {
+export class CharUi_Element_LineInputDotsWithVariantsList {
     constructor(input) {
         const {
             data: {
@@ -1186,7 +1186,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
     createItemWrapper(itemData) {
         const inner = this.inner;
 
-        const item = new CharUiLineInputDotsWithVariantsItemElement({
+        const item = new CharUi_Item_LineInputDotsWithVariants({
             data: {
                 data: itemData,
                 defaultOptions: inner.data.dropDownOptions,
@@ -1292,7 +1292,7 @@ export class CharUiLineInputDotsWithVariantsListElement {
     }
 }
 
-class CharUiPointsByStateElement {
+class CharUi_Element_PointsByState {
     constructor(input) {
         const {
             data: {
@@ -1318,7 +1318,7 @@ class CharUiPointsByStateElement {
         );
 
         const prevValueText = new UI_Text(EMPTY_STRING, {});
-        const points = new CharUiTextOrNumberInputElement({
+        const points = new CharUi_Element_TextOrNumberInput({
             data: {
                 data,
                 fieldName: validations?.state,
@@ -1391,7 +1391,7 @@ class CharUiPointsByStateElement {
     }
 }
 
-class CharUiLineInputPointsWithVariantsItemElement {
+class CharUi_Item_LineInputPointsWithVariants {
     constructor(input) {
         const {
             data: {
@@ -1413,7 +1413,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
         const removeButton = new UI_Icon_Button(SVGIcons.BUTTON_SUB_ENABLED, SVGIcons.BUTTON_SUB_DISABLED);
         removeButton.setVisible(this.isEditable);
 
-        const text = new CharUiTextOrInputElement({
+        const text = new CharUi_Element_TextOrInput({
             data: {
                 data,
                 fieldName: TEXT_FIELD,
@@ -1422,7 +1422,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
             updateEvent,
         });
 
-        const type = new CharUiTextOrInputElement({
+        const type = new CharUi_Element_TextOrInput({
             data: {
                 data,
                 fieldName: TYPE_FIELD,
@@ -1434,7 +1434,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
             updateEvent,
         });
 
-        const points = new CharUiPointsByStateElement({
+        const points = new CharUi_Element_PointsByState({
             data: {
                 data,
                 inputStyle: 'width: 50px',
@@ -1604,7 +1604,7 @@ class CharUiLineInputPointsWithVariantsItemElement {
     }
 }
 
-export class CharUiLineInputPointsWithVariantsListElement {
+export class CharUi_Element_LineInputPointsWithVariantsList {
     constructor(input) {
         const {
             data: {
@@ -1706,7 +1706,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
 
     createItemWrapper(itemData) {
         const inner = this.inner;
-        const item = new CharUiLineInputPointsWithVariantsItemElement({
+        const item = new CharUi_Item_LineInputPointsWithVariants({
             data: {
                 data: itemData,
                 defaultOptions: inner.data.dropDownOptions,
@@ -1810,7 +1810,7 @@ export class CharUiLineInputPointsWithVariantsListElement {
     }
 }
 
-export class CharUiBlockPointsElement {
+export class CharUi_Element_BlockPoints {
     constructor(input) {
         const {
             data: {
@@ -1832,7 +1832,7 @@ export class CharUiBlockPointsElement {
 
         // Elements
         const text = new UI_Text(valueInfo.translation, {});
-        const points = new CharUiTextOrNumberInputElement({
+        const points = new CharUi_Element_TextOrNumberInput({
             data: {
                 data: keeper,
                 fieldName: valueInfo.id,

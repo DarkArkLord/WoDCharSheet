@@ -8,7 +8,7 @@ document.title = CHAR_SHEET_TITLE;
 document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
 import { DTableBuilder } from '../common/domWrapper.js'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
+import { CharUi_Part_LineDots, CharUi_Element_BlockDots, CharUi_Element_LineInputDotsWithVariantsList, CharUi_Element_LineInputPointsWithVariantsList, CharUi_Element_BlockPoints } from '../common/charElements.js'
 
 import { CharacterBaseState, CharSheetEntryPoint } from '../common/entryPoint.js'
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
@@ -22,7 +22,7 @@ class CharacterMtAState extends CharacterBaseState {
     createPartsElements(input) {
         const { keeper, validations, updateEvent, validationsInfo } = input;
         return {
-            [CHAR_PARTS.ATTRIBUTES]: new CharUiLineDotsSectionsPartElement({
+            [CHAR_PARTS.ATTRIBUTES]: new CharUi_Part_LineDots({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ATTRIBUTES],
@@ -33,7 +33,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.ABILITIES]: new CharUiLineDotsSectionsPartElement({
+            [CHAR_PARTS.ABILITIES]: new CharUi_Part_LineDots({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ABILITIES],
@@ -44,7 +44,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.SPHERES]: new CharUiLineDotsSectionsPartElement({
+            [CHAR_PARTS.SPHERES]: new CharUi_Part_LineDots({
                 data: {
                     keeper,
                     partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.SPHERES],
@@ -55,7 +55,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.ARETE]: new CharUiBlockDotsElement({
+            [CHAR_PARTS.ARETE]: new CharUi_Element_BlockDots({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.ARETE],
@@ -67,7 +67,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.WILLPOWER]: new CharUiBlockDotsElement({
+            [CHAR_PARTS.WILLPOWER]: new CharUi_Element_BlockDots({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.WILLPOWER],
@@ -79,7 +79,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.EXPERIENCE]: new CharUiBlockPointsElement({
+            [CHAR_PARTS.EXPERIENCE]: new CharUi_Element_BlockPoints({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.EXPERIENCE],
@@ -91,7 +91,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.BACKGROUNDS]: new CharUiLineInputDotsWithVariantsListElement({
+            [CHAR_PARTS.BACKGROUNDS]: new CharUi_Element_LineInputDotsWithVariantsList({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.BACKGROUNDS],
@@ -104,7 +104,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.MERITS]: new CharUiLineInputPointsWithVariantsListElement({
+            [CHAR_PARTS.MERITS]: new CharUi_Element_LineInputPointsWithVariantsList({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.MERITS],
@@ -116,7 +116,7 @@ class CharacterMtAState extends CharacterBaseState {
                 },
                 updateEvent: updateEvent,
             }),
-            [CHAR_PARTS.FLAWS]: new CharUiLineInputPointsWithVariantsListElement({
+            [CHAR_PARTS.FLAWS]: new CharUi_Element_LineInputPointsWithVariantsList({
                 data: {
                     keeper,
                     valueInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.FLAWS],

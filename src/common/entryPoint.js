@@ -3,7 +3,7 @@ import { configureDarkTabsAndButtons } from '../common/tabs.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from '../common/domWrapper.js'
 import { DarkEvent, downloadTextAsFile, loadFileAsText } from '../common/utilities.js'
 import { UI_Text, UI_TextList, } from '../common/uiElements.js'
-import { CharUiLineDotsSectionsPartElement, CharUiBlockDotsElement, CharUiLineInputDotsWithVariantsListElement, CharUiLineInputPointsWithVariantsListElement, CharUiBlockPointsElement } from '../common/charElements.js'
+import { CharUi_Part_LineDots, CharUi_Element_BlockDots, CharUi_Element_LineInputDotsWithVariantsList, CharUi_Element_LineInputPointsWithVariantsList, CharUi_Element_BlockPoints } from '../common/charElements.js'
 
 const CSS = Object.freeze({
     TAB_BUTTON: 'tab-button',

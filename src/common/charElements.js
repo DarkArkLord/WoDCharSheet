@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox } from './uiElements.js'
+import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextOrTextArea } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -1889,5 +1889,30 @@ export class CharUi_Element_BlockPoints {
 
     getPrice() {
         return 0;
+    }
+}
+
+class CharUi_Element_TextOrTextArea extends CharUi_Element_BaseTextOrInput {
+    constructor(input) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue = EMPTY_STRING,
+            } = {},
+            inputConfig: {
+                cols = 10,
+                rows = 2,
+            } = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        super({
+            data: { data, fieldName, defaultValue, },
+            inputConfig: { cols, rows },
+            isEditable,
+            updateEvent,
+        }, UI_Input_TextOrTextArea);
     }
 }

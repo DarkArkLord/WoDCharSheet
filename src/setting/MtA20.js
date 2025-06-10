@@ -319,7 +319,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [CHAR_EDIT_STATES.EXP],
         freePoints: 15,
         [CHAR_PARTS.HEADER]: {
-            editable: true,
+            editable: false,
         },
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: true,
@@ -405,7 +405,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
         next: [],
         freePointsField: CHAR_PARTS.EXPERIENCE,
         [CHAR_PARTS.HEADER]: {
-            editable: true,
+            editable: false,
         },
         [CHAR_PARTS.ATTRIBUTES]: {
             editable: true,

@@ -1916,3 +1916,89 @@ class CharUi_Element_TextOrTextArea extends CharUi_Element_BaseTextOrInput {
         }, UI_Input_TextOrTextArea);
     }
 }
+
+class CharUi_Element_TextArea {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+        const validationsInfo = { ...dataForValidations, value: valueInfo.translation, };
+
+        // Elements
+        const text = new UI_Text(valueInfo.translation, {});
+        const inputElement = new CharUi_Element_TextOrTextArea({
+            data: {
+                data: keeper,
+                fieldName: valueInfo.id,
+                defaultValue: EMPTY_STRING,
+            },
+            inputConfig: {
+                cols: 10,
+                rows: 2,
+            },
+            isEditable,
+            updateEvent,
+        });
+
+        this.inner = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                info: valueInfo,
+                data: keeper,
+            },
+            elements: {
+                text,
+                input: inputElement,
+            }
+        };
+    }
+
+    getTextElement() {
+        return this.inner.elements.text.getElement();
+    }
+    getInputElement() {
+        return this.inner.elements.input.getElement();
+    }
+
+    update() {
+        this.inner.elements.input.update();
+    }
+
+    validate() {
+        return [];
+    }
+
+    setHighlight(isVisible) {
+        const text = this.getTextElement();
+        const input = this.getInputElement();
+
+        if (isVisible) {
+            text.addClass(CSS.BORDER_RED_1);
+            input.addClass(CSS.BORDER_RED_1);
+        } else {
+            text.removeClass(CSS.BORDER_RED_1);
+            input.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return 0;
+    }
+}

@@ -104,6 +104,8 @@ class DotsValuePriceWrapper {
 
 const DEFAULT_DOTS_COUNT = 5;
 const DEFAULT_INPUT_SIZE = 10;
+const DEFAULT_TEXT_AREA_COLS = 30;
+const DEFAULT_TEXT_AREA_ROWS = 2;
 const EMPTY_STRING = '';
 
 const DEFAULT_COMPARATOR = (a, b) => b - a;
@@ -1944,8 +1946,8 @@ class CharUi_Element_TextArea {
                 defaultValue: EMPTY_STRING,
             },
             inputConfig: {
-                cols: 10,
-                rows: 2,
+                cols: DEFAULT_TEXT_AREA_COLS,
+                rows: DEFAULT_TEXT_AREA_ROWS,
             },
             isEditable,
             updateEvent,

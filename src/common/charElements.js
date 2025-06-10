@@ -2108,3 +2108,108 @@ class CharUi_Section_TextArea {
         return itemsPrice;
     }
 }
+
+export class CharUi_Part_TextArea {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                partInfo,
+            },
+            validations: {
+                validations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const partValidations = validations?.[partInfo.id];
+        const isEditable = validations?.editable && partValidations?.editable;
+
+        const validationsInfo = { ...dataForValidations, part: partInfo.translation, };
+
+        const data = keeper[partInfo.id] = keeper[partInfo.id] ?? {};
+
+        const partTitle = partInfo.translation ?? EMPTY_STRING;
+        const header = new UI_Text(partTitle, {});
+
+        const sections = Array.from(partInfo.sections ?? []).map(section => new CharUi_Section_TextArea({
+            data: {
+                keeper: data,
+                sectionInfo: section,
+            },
+            validations: {
+                validations,
+                partValidations: partValidations,
+                dataForValidations: validationsInfo,
+            },
+            updateEvent,
+        })) ?? [];
+
+        const containerBuilder = DTableBuilder.init();
+
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .setAttribute(ATTRIBUTES.COLSPAN, partInfo.sections.length)
+            .appendChilds(header.getElement());
+
+        const sectionsRow = containerBuilder.addRow();
+        for (const section of sections) {
+            sectionsRow.addData().appendChilds(section.getElement());
+        }
+
+        this.inner = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                info: partInfo,
+                data,
+                partTitle,
+            },
+            elements: {
+                header,
+                sections,
+                container: containerBuilder.create(),
+            }
+        };
+    }
+
+    getElement() {
+        return this.inner.elements.container;
+    }
+
+    update() {
+        const inner = this.inner;
+        for (const section of inner.elements.sections) {
+            section.update();
+        }
+    }
+
+    validate() {
+        const sections = this.inner.elements.sections;
+        const validations = this.inner.validations
+        const errors = sections.flatMap(item => item.validate() ?? []) ?? [];
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        const container = this.inner.elements.container;
+        if (isVisible) {
+            container.addClass(CSS.BORDER_RED_1);
+        } else {
+            container.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        return this.inner.elements.sections.reduce((acc, cur) => acc += cur.getPrice(), 0);
+    }
+}

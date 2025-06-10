@@ -8,7 +8,7 @@ document.title = CHAR_SHEET_TITLE;
 document.getElementById('page-title').innerHTML = CHAR_SHEET_TITLE;
 
 import { DTableBuilder } from '../common/domWrapper.js'
-import { CharUi_Part_LineDots, CharUi_Element_BlockDots, CharUi_Element_LineInputDotsWithVariantsList, CharUi_Element_LineInputPointsWithVariantsList, CharUi_Element_BlockPoints } from '../common/charElements.js'
+import { CharUi_Part_TextArea, CharUi_Part_LineDots, CharUi_Element_BlockDots, CharUi_Element_LineInputDotsWithVariantsList, CharUi_Element_LineInputPointsWithVariantsList, CharUi_Element_BlockPoints } from '../common/charElements.js'
 
 import { CharacterBaseState, CharSheetEntryPoint } from '../common/entryPoint.js'
 import { CHAR_PARTS, CHAR_VALUES_TRANSLATIONS, CHAR_EDIT_STATES, CHAR_SETTINGS_TRANSLATION, CHAR_VALIDATIONS } from '../setting/MtA20.js'
@@ -22,6 +22,17 @@ class CharacterMtAState extends CharacterBaseState {
     createPartsElements(input) {
         const { keeper, validations, updateEvent, validationsInfo } = input;
         return {
+            [CHAR_PARTS.HEADER]: new CharUi_Part_TextArea({
+                data: {
+                    keeper,
+                    partInfo: CHAR_VALUES_TRANSLATIONS[CHAR_PARTS.HEADER],
+                },
+                validations: {
+                    validations: validations,
+                    dataForValidations: validationsInfo,
+                },
+                updateEvent: updateEvent,
+            }),
             [CHAR_PARTS.ATTRIBUTES]: new CharUi_Part_LineDots({
                 data: {
                     keeper,
@@ -134,6 +145,8 @@ class CharacterMtAState extends CharacterBaseState {
     createCharacterUi(parts) {
         const resultBuilder = DTableBuilder.init();
 
+        resultBuilder.addRow().addData()
+            .appendChilds(parts[CHAR_PARTS.HEADER].getElement());
         resultBuilder.addRow().addData()
             .appendChilds(parts[CHAR_PARTS.ATTRIBUTES].getElement());
         resultBuilder.addRow().addData()

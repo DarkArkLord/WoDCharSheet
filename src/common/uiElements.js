@@ -371,3 +371,35 @@ export class UI_Input_TextOrNumber extends UI_Input_Base {
         }
     }
 }
+
+export class UI_Input_TextOrTextArea extends UI_Input_Base {
+    constructor(isInput, inputConfig = {}) {
+        if (isInput) {
+            const inputBuilder = DElementBuilder.initTextArea();
+
+            const { cols, rows } = inputConfig;
+
+            if (cols) {
+                inputBuilder.setAttribute(ATTRIBUTES.COLS, cols);
+            }
+
+            if (rows) {
+                inputBuilder.setAttribute(ATTRIBUTES.ROWS, rows);
+            }
+
+            super(inputBuilder);
+        } else {
+            const inputBuilder = DElementBuilder.initDiv();
+
+            super(inputBuilder);
+
+            this.getValue = function () {
+                return this.inner.input.getText();
+            };
+
+            this.setValue = function (value) {
+                return this.inner.input.setText(value);
+            };
+        }
+    }
+}

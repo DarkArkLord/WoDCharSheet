@@ -2002,3 +2002,109 @@ class CharUi_Element_TextArea {
         return 0;
     }
 }
+
+class CharUi_Section_TextArea {
+    constructor(input) {
+        const {
+            data: {
+                keeper,
+                sectionInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations,
+            },
+            updateEvent,
+        } = input;
+
+        const isEditable = validations?.editable && partValidations?.editable;
+        const validationsInfo = { ...dataForValidations, section: sectionInfo.translation, };
+
+        const sectionTitle = sectionInfo.translation ?? EMPTY_STRING;
+        const header = new UI_Text(sectionTitle, {});
+
+        const items = Array.from(sectionInfo?.values ?? []).map(valueInfo => new CharUi_Element_TextArea({
+            data: {
+                keeper,
+                valueInfo,
+            },
+            validations: {
+                validations,
+                partValidations,
+                dataForValidations: validationsInfo,
+            },
+            updateEvent,
+        }));
+
+        const containerBuilder = DTableBuilder.init();
+        const columnsCount = 2;
+
+        containerBuilder.addRow().addData()
+            .setAttribute(ATTRIBUTES.CLASS, CSS.TEXT_ALIGN_CENTER)
+            .setAttribute(ATTRIBUTES.COLSPAN, columnsCount)
+            .appendChilds(header.getElement());
+
+        for (const item of items) {
+            const row = containerBuilder.addRow();
+            row.addData().appendChilds(item.getTextElement());
+            row.addData().appendChilds(item.getInputElement());
+        }
+
+        this.inner = {
+            updateEvent,
+            isEditable,
+            validations: {
+                info: validationsInfo,
+                main: validations,
+                part: partValidations,
+            },
+            data: {
+                info: sectionInfo,
+                sectionTitle,
+            },
+            elements: {
+                header,
+                items,
+                container: containerBuilder.create(),
+            }
+        };
+    }
+
+    getElement() {
+        return this.inner.elements.container;
+    }
+
+    update() {
+        const inner = this.inner;
+        for (const item of inner.elements.items) {
+            item.update();
+        }
+    }
+
+    validate() {
+        const elements = this.inner.elements;
+        const errors = [
+            ...(elements.items.flatMap(item => item.validate() ?? []) ?? []),
+        ];
+
+        this.setHighlight(errors.length > 0);
+
+        return errors;
+    }
+
+    setHighlight(isVisible) {
+        const container = this.inner.elements.container;
+        if (isVisible) {
+            container.addClass(CSS.BORDER_RED_1);
+        } else {
+            container.removeClass(CSS.BORDER_RED_1);
+        }
+    }
+
+    getPrice() {
+        const elements = this.inner.elements;
+        const itemsPrice = elements.items?.reduce((acc, cur) => acc += cur.getPrice(), 0) ?? 0;
+        return itemsPrice;
+    }
+}

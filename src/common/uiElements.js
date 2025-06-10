@@ -301,6 +301,7 @@ export class UI_Input_СheckBox extends UI_Input_Base {
     }
 }
 
+// Возможо стоит завернуть это в что-то типа Either
 export class UI_Input_TextOrText extends UI_Input_Base {
     constructor(isInput, inputConfig = {}) {
         if (isInput) {

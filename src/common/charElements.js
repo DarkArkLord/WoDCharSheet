@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextOrTextArea, UI_Input_TextArea, UI_Input_Number } from './uiElements.js'
+import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextArea, UI_Input_Number } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({

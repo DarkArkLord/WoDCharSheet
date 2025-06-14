@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextOrTextArea, UI_Input_TextArea } from './uiElements.js'
+import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextOrTextArea, UI_Input_TextArea, UI_Input_Number } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -954,32 +954,6 @@ class CharUi_Element_TextOrInput extends CharUi_Element_BaseTextOrInput_OLD {
     }
 }
 
-class CharUi_Element_TextOrNumberInput extends CharUi_Element_BaseTextOrInput_OLD {
-    constructor(input) {
-        const {
-            data: {
-                data,
-                fieldName,
-                defaultValue = 0,
-            } = {},
-            inputConfig: {
-                min,
-                max,
-                inputStyle,
-            } = {},
-            isEditable = false,
-            updateEvent,
-        } = input;
-
-        super({
-            data: { data, fieldName, defaultValue, },
-            inputConfig: { min, max, inputStyle },
-            isEditable,
-            updateEvent,
-        }, UI_Input_TextOrNumber);
-    }
-}
-
 class CharUi_Item_LineInputDotsWithVariants {
     constructor(input) {
         const {
@@ -1369,7 +1343,7 @@ class CharUi_Element_PointsByState {
         );
 
         const prevValueText = new UI_Text(EMPTY_STRING, {});
-        const points = new CharUi_Element_TextOrNumberInput({
+        const points = new CharUi_Element_BaseInput({
             data: {
                 data,
                 fieldName: validations?.state,
@@ -1381,7 +1355,7 @@ class CharUi_Element_PointsByState {
             },
             isEditable,
             updateEvent,
-        });
+        }, UI_Input_Number);
         const nextValueText = new UI_Text(EMPTY_STRING, {});
 
         const containerBuilder = DTableBuilder.init();
@@ -1883,7 +1857,7 @@ export class CharUi_Element_BlockPoints {
 
         // Elements
         const text = new UI_Text(valueInfo.translation, {});
-        const points = new CharUi_Element_TextOrNumberInput({
+        const points = new CharUi_Element_BaseInput({
             data: {
                 data: keeper,
                 fieldName: valueInfo.id,
@@ -1895,7 +1869,7 @@ export class CharUi_Element_BlockPoints {
             },
             isEditable,
             updateEvent,
-        });
+        }, UI_Input_Number);
 
         const containerBuilder = DTableBuilder.init();
         containerBuilder.addRow().addData()

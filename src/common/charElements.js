@@ -403,7 +403,7 @@ class CharUi_Element_LineDots extends CharUi_Element_TextWithDots {
         const specialtyWrapper = new ValueWrapper(data, SPECIALTY_FIELD, EMPTY_STRING);
 
         // Elements
-        const specialty = new UI_Input_Text(DEFAULT_INPUT_SIZE);
+        const specialty = new UI_Input_Text({ size: DEFAULT_INPUT_SIZE });
 
         if (isEditable) {
             specialty.setOnInputEvent(() => {

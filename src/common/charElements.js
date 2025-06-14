@@ -1,6 +1,6 @@
 import { SVGIcons } from './svg.js'
 import { ValueWrapper } from './utilities.js'
-import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextOrTextArea } from './uiElements.js'
+import { UI_PointsLine, UI_Text, UI_Input_Text, UI_Input_TextOrText, UI_Input_TextOrNumber, UI_Dropdown, UI_Icon_Button, UI_Input_СheckBox, UI_Input_TextOrTextArea, UI_Input_TextArea } from './uiElements.js'
 import { DElementBuilder, ATTRIBUTES, EVENTS, ACTIONS, DTableBuilder, DTableRowBuilder } from './domWrapper.js'
 
 const CSS = Object.freeze({
@@ -826,7 +826,7 @@ export class CharUi_Element_BlockDots extends CharUi_Element_TextWithDots {
     }
 }
 
-class CharUi_Element_BaseTextOrInput {
+class CharUi_Element_BaseTextOrInput_OLD {
     constructor(input, ElementConstructor = UI_Input_TextOrText) {
         const {
             data: {
@@ -876,7 +876,61 @@ class CharUi_Element_BaseTextOrInput {
     }
 }
 
-class CharUi_Element_TextOrInput extends CharUi_Element_BaseTextOrInput {
+class CharUi_Element_BaseInput {
+    constructor(input, InputElementConstructor = UI_Input_Text) {
+        const {
+            data: {
+                data,
+                fieldName,
+                defaultValue,
+            } = {},
+            inputConfig = {},
+            isEditable = false,
+            updateEvent,
+        } = input;
+
+        const wrapper = new ValueWrapper(data, fieldName, defaultValue);
+
+        const element = new InputElementConstructor(inputConfig);
+
+        element.setReadOnly(!isEditable);
+        element.setActive(isEditable);
+
+        if (isEditable) {
+            element.setOnInputEvent(() => {
+                const value = element.getValue();
+                wrapper.setValue(value);
+                updateEvent.invoke();
+            });
+        }
+
+        this.inner = {
+            updateEvent,
+            isEditable,
+            wrapper,
+            element,
+        };
+    }
+
+    getElement() {
+        return this.inner.element.getElement();
+    }
+
+    getValue() {
+        return this.inner.wrapper.getValue();
+    }
+
+    setValue(text) {
+        this.inner.wrapper.setValue(text);
+        this.inner.element.setValue(text);
+    }
+
+    update() {
+        this.setValue(this.getValue());
+    }
+}
+
+class CharUi_Element_TextOrInput extends CharUi_Element_BaseTextOrInput_OLD {
     constructor(input) {
         const {
             data: {
@@ -900,7 +954,7 @@ class CharUi_Element_TextOrInput extends CharUi_Element_BaseTextOrInput {
     }
 }
 
-class CharUi_Element_TextOrNumberInput extends CharUi_Element_BaseTextOrInput {
+class CharUi_Element_TextOrNumberInput extends CharUi_Element_BaseTextOrInput_OLD {
     constructor(input) {
         const {
             data: {
@@ -1889,31 +1943,6 @@ export class CharUi_Element_BlockPoints {
     }
 }
 
-class CharUi_Element_TextOrTextArea extends CharUi_Element_BaseTextOrInput {
-    constructor(input) {
-        const {
-            data: {
-                data,
-                fieldName,
-                defaultValue = EMPTY_STRING,
-            } = {},
-            inputConfig: {
-                cols = 10,
-                rows = 2,
-            } = {},
-            isEditable = false,
-            updateEvent,
-        } = input;
-
-        super({
-            data: { data, fieldName, defaultValue, },
-            inputConfig: { cols, rows },
-            isEditable,
-            updateEvent,
-        }, UI_Input_TextOrTextArea);
-    }
-}
-
 class CharUi_Element_TextArea {
     constructor(input) {
         const {
@@ -1934,7 +1963,7 @@ class CharUi_Element_TextArea {
 
         // Elements
         const text = new UI_Text(valueInfo.translation, {});
-        const inputElement = new CharUi_Element_TextOrTextArea({
+        const inputElement = new CharUi_Element_BaseInput({
             data: {
                 data: keeper,
                 fieldName: valueInfo.id,
@@ -1946,7 +1975,7 @@ class CharUi_Element_TextArea {
             },
             isEditable,
             updateEvent,
-        });
+        }, UI_Input_TextArea);
 
         this.inner = {
             updateEvent,

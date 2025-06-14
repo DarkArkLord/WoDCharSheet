@@ -410,7 +410,6 @@ class CharUi_Element_LineDots extends CharUi_Element_TextWithDots {
                 const text = specialty.getValue();
                 specialtyWrapper.setValue(text);
 
-                // instance.update();
                 updateEvent.invoke();
             });
         }
@@ -474,13 +473,9 @@ class CharUi_Element_LineDots extends CharUi_Element_TextWithDots {
 
             elements.text.setText(data.info.translation);
         } else {
-            elements.specialty.setVisible(false);
-
-            const crudeText = data.specialtyWrapper.getValue().trim();
-            const text = crudeText.length > 0
-                ? `${data.info.translation} (${crudeText})`
-                : data.info.translation
-            elements.text.setText(text);
+            elements.specialty.setReadOnly(true);
+            elements.specialty.setActive(false);
+            elements.specialty.setValue(data.specialtyWrapper.getValue(EMPTY_STRING));
         }
     }
 }

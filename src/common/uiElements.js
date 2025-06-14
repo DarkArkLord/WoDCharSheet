@@ -248,7 +248,9 @@ class UI_Input_Base {
 }
 
 export class UI_Input_Text extends UI_Input_Base {
-    constructor(size = undefined) {
+    constructor(inputConfig = {}) {
+        const { size } = inputConfig;
+
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
 
@@ -261,7 +263,9 @@ export class UI_Input_Text extends UI_Input_Base {
 }
 
 export class UI_Input_Number extends UI_Input_Base {
-    constructor(min = undefined, max = undefined, inputStyle = undefined) {
+    constructor(inputConfig = {}) {
+        const { min, max, inputStyle } = inputConfig;
+
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.Number);
 
@@ -302,7 +306,7 @@ export class UI_Input_СheckBox extends UI_Input_Base {
 }
 
 export class UI_Input_TextArea extends UI_Input_Base {
-    constructor(inputConfig) {
+    constructor(inputConfig = {}) {
         const { cols, rows } = inputConfig;
 
         const inputBuilder = DElementBuilder.initTextArea();

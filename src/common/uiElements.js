@@ -248,7 +248,9 @@ class UI_Input_Base {
 }
 
 export class UI_Input_Text extends UI_Input_Base {
-    constructor(size = undefined) {
+    constructor(inputConfig = {}) {
+        const { size } = inputConfig;
+
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.Text);
 
@@ -261,7 +263,9 @@ export class UI_Input_Text extends UI_Input_Base {
 }
 
 export class UI_Input_Number extends UI_Input_Base {
-    constructor(min = undefined, max = undefined, inputStyle = undefined) {
+    constructor(inputConfig = {}) {
+        const { min, max, inputStyle } = inputConfig;
+
         const inputBuilder = DElementBuilder.initInput()
             .setAttribute(ATTRIBUTES.TYPE, InputType.Number);
 
@@ -301,7 +305,26 @@ export class UI_Input_СheckBox extends UI_Input_Base {
     }
 }
 
+export class UI_Input_TextArea extends UI_Input_Base {
+    constructor(inputConfig = {}) {
+        const { cols, rows } = inputConfig;
+
+        const inputBuilder = DElementBuilder.initTextArea();
+
+        if (cols) {
+            inputBuilder.setAttribute(ATTRIBUTES.COLS, cols);
+        }
+
+        if (rows) {
+            inputBuilder.setAttribute(ATTRIBUTES.ROWS, rows);
+        }
+
+        super(inputBuilder);
+    }
+}
+
 // Возможо стоит завернуть это в что-то типа Either
+// ... Или удалить ...
 export class UI_Input_TextOrText extends UI_Input_Base {
     constructor(isInput, inputConfig = {}) {
         if (isInput) {

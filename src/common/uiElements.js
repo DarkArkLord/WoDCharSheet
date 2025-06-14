@@ -324,6 +324,7 @@ export class UI_Input_TextArea extends UI_Input_Base {
 }
 
 // Возможо стоит завернуть это в что-то типа Either
+// ... Или удалить ...
 export class UI_Input_TextOrText extends UI_Input_Base {
     constructor(isInput, inputConfig = {}) {
         if (isInput) {

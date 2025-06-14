@@ -301,6 +301,24 @@ export class UI_Input_СheckBox extends UI_Input_Base {
     }
 }
 
+export class UI_Input_TextArea extends UI_Input_Base {
+    constructor(inputConfig) {
+        const { cols, rows } = inputConfig;
+
+        const inputBuilder = DElementBuilder.initTextArea();
+
+        if (cols) {
+            inputBuilder.setAttribute(ATTRIBUTES.COLS, cols);
+        }
+
+        if (rows) {
+            inputBuilder.setAttribute(ATTRIBUTES.ROWS, rows);
+        }
+
+        super(inputBuilder);
+    }
+}
+
 // Возможо стоит завернуть это в что-то типа Either
 export class UI_Input_TextOrText extends UI_Input_Base {
     constructor(isInput, inputConfig = {}) {

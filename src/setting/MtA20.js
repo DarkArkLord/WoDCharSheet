@@ -274,6 +274,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 price: (total) => 1,
                 showAltPrice: true,
                 editableAltPrice: true,
+                maxAltPriceCount: 1,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
@@ -348,6 +349,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 price: (total) => 7,
                 showAltPrice: true,
                 editableAltPrice: true,
+                maxAltPriceCount: 1,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {
@@ -435,6 +437,7 @@ export const CHAR_VALIDATIONS = Object.freeze({
                 showAltPrice: true,
                 editableAltPrice: true,
                 altPrice: (total) => total == 0 ? 10 : total * 7,
+                maxAltPriceCount: 1,
             },
         },
         [CHAR_PARTS.BACKGROUNDS]: {

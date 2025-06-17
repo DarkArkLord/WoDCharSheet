@@ -121,7 +121,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
             {
                 id: 'Knowledges', translation: 'Знания',
                 values: [
-                    { id: 'Academics', translation: 'Академизм', },
+                    { id: 'Academics', translation: 'Академизм', specialtyEditableFrom: 1, },
                     { id: 'Computer', translation: 'Информатика', },
                     { id: 'Cosmology', translation: 'Космология', },
                     { id: 'Enigmas', translation: 'Загадки', },
@@ -131,7 +131,7 @@ export const CHAR_VALUES_TRANSLATIONS = Object.freeze({
                     { id: 'Medicine', translation: 'Медицина', },
                     { id: 'Occult', translation: 'Оккультизм', },
                     { id: 'Politics', translation: 'Политика', },
-                    { id: 'Science', translation: 'Наука', },
+                    { id: 'Science', translation: 'Наука', specialtyEditableFrom: 1, },
                 ],
                 variants: [
                     { id: 'TestKnowledge1', translation: 'ТестЗнание1', },

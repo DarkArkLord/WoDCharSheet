@@ -222,6 +222,10 @@ class CharUi_Element_Dots {
         return this.inner.elements.dots.getElement();
     }
 
+    isUseAltPrice() {
+        return this.inner.data.useAltPriceWrapper.getValue();
+    }
+
     update() {
         const data = this.inner.data;
         const dotsInfo = this.inner.validations.dots;
@@ -347,6 +351,10 @@ class CharUi_Element_TextWithDots {
     }
     getDotsElement() {
         return this.inner.elements.dots.getDotsElement();
+    }
+
+    isUseAltPrice() {
+        return this.inner.elements.dots.isUseAltPrice();
     }
 
     update() {
@@ -583,6 +591,16 @@ class CharUi_Section_LineDots {
         return this.inner.elements.container;
     }
 
+    getAltPriceCount() {
+        return this.inner.elements.items.reduce((acc, cur) => {
+            if (cur.isUseAltPrice()) {
+                return acc + 1;
+            }
+
+            return acc;
+        }, 0);
+    }
+
     update() {
         const inner = this.inner;
         for (const item of inner.elements.items) {
@@ -736,6 +754,18 @@ export class CharUi_Part_LineDots {
                 errors.push({
                     ...validations.info,
                     text: `Должно быть распределено ${validations.part.freePoints} точек (сейчас ${price})`,
+                });
+            }
+        }
+
+        const maxAltPriceCount = validations.part?.dotsInput?.maxAltPriceCount
+        if (validations.part?.dotsInput?.maxAltPriceCount !== undefined) {
+            debugger;
+            const altPriceCount = sections.reduce((acc, cur) => acc + cur.getAltPriceCount(), 0);
+            if (altPriceCount > maxAltPriceCount) {
+                errors.push({
+                    ...validations.info,
+                    text: `Альтернативная цена доступна только для ${maxAltPriceCount} элементов (сейчас ${altPriceCount})`,
                 });
             }
         }

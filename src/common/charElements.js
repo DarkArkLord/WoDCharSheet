@@ -1405,7 +1405,7 @@ class CharUi_Item_LineInputPointsWithVariants {
             },
             updateEvent,
         });
-        debugger;
+
         const variants = new UI_Dropdown({ selectAttrubutes: { class: CSS.DROPDOWN_AS_BUTTON }, addEmptyOption: true, defaultOptions });
         variants.setVisible(isEditable);
         if (isEditable) {
